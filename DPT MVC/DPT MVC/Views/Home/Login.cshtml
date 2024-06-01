@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+    var msg = ViewBag.msg as string;
+}
+<style>
+    #main {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        opacity: 0; /* Initial opacity set to 0 */
+        transition: opacity 1s ease-in-out; /* Add a transition for opacity */
+    }
+</style>
+<body style="background-image: url('../../themes/images/DHL_Background.jpg');
+             background-repeat: no-repeat; background-size: cover;
+             margin: 50px; display: flex; justify-content: center; align-items: flex-start;
+             min-height: 100vh; height: auto; background-attachment: fixed;
+             overflow-x: hidden; overflow-y: hidden;background-position:center center" class="sidebar-mini layout-fixed">
+    <div class="wrapper" style="width: 290px;">
+        <div id="root">
+            <form asp-action="Login" asp-controller="Home" method="post" style="display: flex; align-items: center; justify-content: center; ">
+                <div style="margin-top:45%;background-color: white;height: 530px; border-top-left-radius: 5px; border-top-right-radius: 5px;" class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4" id="main" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);background-color:#ffffffeb;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);border-radius:10px;border:1px solid">
+                            <div class="card shadow-lg">
+                                <div class="card-header text-white bg-warning d-flex">
+                                    <div class="col-lg-12">
+                                        <h3 class="text-lg-start" style="background-color: rgb(255, 204, 0);border-top-left-radius:10px; border-top-right-radius: 10px;margin: 0px; padding: 20px; margin-bottom: 30px; font-size: 20px; width: 360px;padding-left: 30px;  ">
+
+                                            <center style="font-family: system-ui;color: #1a1a1ac4;">
+                                                LOGIN DPT
+                                            </center>
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="card-body bg-light" style="margin-top: 17%;display:grid;justify-content:center">
+                                    <div class="d-flex flex-row ps-5 pt-2">
+
+                                        <img src="../themes/images/DHL Logo.png" width="280" height="75">
+                                    </div> <br><br>
+                                    <div style="font-weight: bold;" class="d-flex flex-column justify-content-center h-custom-2 w-75 pt-4">
+                                        <input style="width: 275px; height: 28px; margin-top: 10px; padding: 5px; border: 1px solid #ccc; border-radius: 3px;" class="form-control" name="Email" type="email" placeholder="Email Address" autofocus required />
+                                        <br><br>
+                                        <input style="width: 275px; height: 28px; margin-top: 10px; padding: 5px; border: 1px solid #ccc; border-radius: 3px;" class="form-control" name="Password" type="password" placeholder="Password"  required />
+                                        <br><br>
+                                        <button style="width: 275px; height: 40px; border-radius: 5px; color: #fff; background-color: #007bff; border: none; font-size: 16px; cursor: pointer;" class="btn btn-primary mt-3">
+                                            Login
+                                        </button>
+                                        <p class="small mb-5 pb-lg-3 ms-5" style="margin-top: 0px;">
+                                            @*<a style="text-decoration: none; color: #6c757d; font-size: 12px;" class="text-muted" href="#!">
+                                            Forgot
+                                            password?
+                                            </a>*@
+                                        </p><label class="form-label text-danger"></label><br>
+                                    </div>
+                                </div>
+                            </div> <br><br><br>
+                        </div>
+                        <div class="col-sm-4"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var mainDiv = document.getElementById("main");
+        mainDiv.style.opacity = "1"; // Change opacity to 1 to trigger the animation
+    });
+    @if (!string.IsNullOrEmpty(msg))
+    {
+        @:alert('@msg');
+    }
+</script>

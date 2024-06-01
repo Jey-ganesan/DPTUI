@@ -1,0 +1,30 @@
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\DPT MVC.GeneratedMSBuildEditorConfig.editorconfig
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\DPT MVC.AssemblyInfoInputs.cache
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\DPT MVC.AssemblyInfo.cs
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\DPT MVC.csproj.CoreCompileInputs.cache
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\DPT MVC.MvcApplicationPartsAssemblyInfo.cache
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\DPT MVC.RazorAssemblyInfo.cache
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\DPT MVC.RazorAssemblyInfo.cs
+D:\DPT Project\DPT MVC\DPT MVC\bin\Debug\net8.0\appsettings.Development.json
+D:\DPT Project\DPT MVC\DPT MVC\bin\Debug\net8.0\appsettings.json
+D:\DPT Project\DPT MVC\DPT MVC\bin\Debug\net8.0\DPT MVC.staticwebassets.runtime.json
+D:\DPT Project\DPT MVC\DPT MVC\bin\Debug\net8.0\DPT MVC.exe
+D:\DPT Project\DPT MVC\DPT MVC\bin\Debug\net8.0\DPT MVC.deps.json
+D:\DPT Project\DPT MVC\DPT MVC\bin\Debug\net8.0\DPT MVC.runtimeconfig.json
+D:\DPT Project\DPT MVC\DPT MVC\bin\Debug\net8.0\DPT MVC.dll
+D:\DPT Project\DPT MVC\DPT MVC\bin\Debug\net8.0\DPT MVC.pdb
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\staticwebassets.build.json
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\staticwebassets.development.json
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\staticwebassets\msbuild.DPT MVC.Microsoft.AspNetCore.StaticWebAssets.props
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\staticwebassets\msbuild.build.DPT MVC.props
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.DPT MVC.props
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.DPT MVC.props
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\staticwebassets.pack.json
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\scopedcss\bundle\DPT MVC.styles.css
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\scopedcss\projectbundle\DPT MVC.bundle.scp.css
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\DPT MVC.dll
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\refint\DPT MVC.dll
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\DPT MVC.pdb
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\DPT MVC.genruntimeconfig.cache
+D:\DPT Project\DPT MVC\DPT MVC\obj\Debug\net8.0\ref\DPT MVC.dll

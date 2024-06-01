@@ -1,0 +1,424 @@
+@{
+    // Get the ViewBag.Mode value
+    string mode = ViewBag.mode;
+    string url = ViewBag.url;
+}
+
+<style>
+    #loader {
+        display: none;
+    }
+
+    #loader1 {
+        display: none;
+    }
+
+    .modal-busy {
+        position: fixed;
+        z-index: 999;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        background-color: Black;
+        /*filter: alpha(opacity=60);*/
+        opacity: 0.6;
+        /*-moz-opacity: 0.8;*/
+    }
+
+    .center-busy {
+        z-index: 1000;
+        margin: 300px auto;
+        padding: 0px;
+        width: 130px;
+        /*filter: alpha(opacity=100);*/
+        opacity: 1;
+        /*-moz-opacity: 1;*/
+    }
+
+        .center-busy img {
+            height: 128px;
+            width: 128px;
+        }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mx-auto col-lg-12">
+            <div class="card shadow-lg">
+                <div class="card-header text-white bg-warning d-flex">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-lg-start">
+                            @if (mode == "Edit")
+                            {
+                                @:Edit Customer
+                            }
+                            else if (mode == "View")
+                            {
+                                @:View Customer
+                            }
+                            else
+                            {
+                                @:Add Customer
+                            }
+                        </h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <span class="text-danger"> * Required fields</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="customerForm">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <input type="text" name="Id" value="@(mode == "Edit" ? @ViewBag.paramID : 0)" id="Id" hidden />
+                                        <label class="form-label" for="name">Name<span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="name" id="name" type="text" placeholder="Enter customer name" required value="" />
+                                        <input type="text" name="isActive" value="true" id="isActive" hidden />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="shortName">Short Name<span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="shortName" id="shortName" type="text" placeholder="Enter customer short name" required value="" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="code1">Code 1 <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="code1" id="code1" type="text" placeholder="Enter code 1" required value="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="address1">Address 1 <span class="text-danger"> *</span></label>
+                                        <textarea class="form-control rounded-0" name="address1" rows="3" id="address1" type="text" placeholder="Enter address 1" required value=""></textarea>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="address2">Address 2 <span class="text-danger"> *</span></label>
+                                        <textarea class="form-control rounded-0" name="address2" rows="3" id="address2" type="text" placeholder="Enter address 2" required value=""></textarea>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="address3">Address 3 <span class="text-danger"> *</span></label>
+                                        <textarea class="form-control rounded-0" name="address3" rows="3" id="address3" type="text" placeholder="Enter address 3" required value=""></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="city">City <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="city" id="city" type="text" placeholder="Enter city" required value="" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="postalCode">Zip Code <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="postalCode" id="postalCode" type="text" placeholder="Enter zip code" required value="" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="countryId">Select Country  <span class="text-danger"> *</span></label>
+                                        <select class="form-control rounded-0 is-valid" name="countryId" id="countryId" required="">
+                                            <option value="">Select a country</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="primaryContactName">Primary Contact <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="primaryContactName" id="primaryContactName" type="text" placeholder="Enter primary contact" required value="" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="primaryContactNo">Primary Contact No <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="primaryContactNo" id="primaryContactNo" type="text" placeholder="Enter primary contact no" required value="" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="primaryContactMailId">Primary Contact Mail Id <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="primaryContactMailId" id="primaryContactMailId" type="text" placeholder="Enter primary contact mail id" required value="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="city">Secondary Contact <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="secondaryContactName" id="secondaryContactName" type="text" placeholder="Enter secondary contact" required value="" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="secondaryContactNo">Secondary Contact No <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="secondaryContactNo" id="secondaryContactNo" type="text" placeholder="Enter secondary contact no" required value="" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="secondaryContactMailId">Secondary Contact Mail Id <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="secondaryContactMailId" id="SecondaryContactMailId" type="text" placeholder="Enter secondary contact mail id" required value="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="creditDays">Credit Days <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="creditDays" id="creditDays" type="text" placeholder="" required value="" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="creditLimit">Credit Limit <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="creditLimit" id="creditLimit" type="text" placeholder="" required value="" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="parentCustomerId">Select Parent / Group Customer <span class="text-danger"> *</span></label>
+                                        <select class="form-control rounded-0" name="parentCustomerId" id="parentCustomerId" required="">
+                                            <option>-- Select Parent / Group Customer --</option>
+
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="code2">Enter Code 2 <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="code2" id="code2" type="text" placeholder="" required value="" />
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="code3">Enter Code 3 <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0" name="code3" id="code3" type="text" placeholder="" required value="" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </fieldset>
+                        <div class="row">
+                            <div class="col-sm-12">
+
+                                @if (mode == "Edit")
+                                {
+                                    @:<button id="submitBtn" class="btn btn-primary rounded-0 me-2 mt-4">Update</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    @:<button id="deleteBtn" class="btn btn-danger rounded-0 mt-4">Delete</button>
+                                }
+                                else
+                                {
+                                    @:<button id="submitBtn" class="btn btn-primary rounded-0 me-2 mt-4">Add</button>
+                                }
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <a class="btn btn-warning rounded-0 me-2 mt-4" href="#" onclick="loadPageWithParams('GridMasters', '', '', @ViewBag.pageId)">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    //$.when(first(), second()).done(function () {
+    //    debugger
+    //    if (@ViewBag.paramID) {
+
+    //        //fetch("@url/api/customers/@ViewBag.paramID")
+
+    //        //    .then(response => response.json())
+    //        //    .then(data => bindCustomer(data))
+    //        //    .catch(error => console.error("Error fetching Currency data:", error));
+    //    }
+
+    //});
+    //function first() {
+    //    //fetch("@url/api/customers")
+    //    //    .then(response => response.json())
+    //    //    .then(data => SelectParentDropdown(data))
+    //    //    .catch(error => console.error("Error fetching customer data:", error));
+    //}
+
+    SelectParentDropdown(customerDDData);
+
+    second();
+
+    function SelectParentDropdown(data) {
+        $('#parentCustomerId').select2();
+        const dropdown = document.getElementById("parentCustomerId");
+
+        data.forEach(customer => {
+            const option = document.createElement("option");
+            option.value = customer.id;
+            option.text = customer.shortName + ' - [' + customer.name + ']'
+            dropdown.appendChild(option);
+        });
+    }
+
+    function second() {
+        fetch("/Home/GetCountries")
+            .then(response => response.json())
+            .then(data => CountryDropdown(data))
+            .catch(error => console.error("Error fetching Country data:", error));
+    }
+
+    function CountryDropdown(data) {
+        const dropdown = document.getElementById("countryId");
+
+        data.forEach(customer => {
+            const option = document.createElement("option");
+            option.value = customer.id;
+            option.text = customer.name;
+            dropdown.appendChild(option);
+
+        });
+
+        if (@ViewBag.paramID) {
+
+            fetch("/Home/GetCustomersById/@ViewBag.paramID")
+
+                .then(response => response.json())
+                .then(data => bindCustomer(data))
+                .catch(error => console.error("Error fetching Currency data:", error));
+        }
+    }
+
+    //if (@ViewBag.paramID) {
+
+    //    fetch("/Home/GetCustomersById/@ViewBag.paramID")
+
+    //        .then(response => response.json())
+    //        .then(data => bindCustomer(data))
+    //        .catch(error => console.error("Error fetching Currency data:", error));
+    //}
+    if ('@ViewBag.mode' === "View") {
+        disableForm();
+    }
+
+    function bindCustomer(data) {
+
+
+        $('#Id').val(data.id);
+        $('#name').val(data.name);
+        $('#shortName').val(data.shortName);
+        $('#code1').val(data.code1)
+        $('#code2').val(data.code2)
+        $('#code3').val(data.code3)
+        $('#address1').val(data.address1)
+        $('#address2').val(data.address2)
+        $('#address3').val(data.address3)
+        $('#city').val(data.city)
+        $('#countryId').val(data.countryId);
+        $('#postalCode').val(data.postalCode)
+        $('#creditDays').val(data.creditDays)
+        $('#creditLimit').val(data.creditLimit)
+        $('#creditDays').val(data.creditDays)
+        $('#primaryContactName').val(data.primaryContactName);
+        $('#primaryContactNo').val(data.primaryContactNo);
+        $('#primaryContactMailId').val(data.primaryContactMailId);
+        $('#secondaryContactName').val(data.secondaryContactName);
+        $('#secondaryContactNo').val(data.secondaryContactNo);
+        $('#secondaryContactMailId').val(data.secondaryContactMailId);
+        $('#displayName').val(data.displayName)
+        $('#parentCustomerName').val(data.parentCustomerName)
+        $('#parentCustomerId').val(data.parentCustomerId)
+
+        $('#isActive').val(data.isActive);
+
+        $('#parentCustomerId').val(data.parentCustomerId)
+
+        $('#countryName').val(data.countryName);
+    }
+
+    $('#submitBtn').click(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveCustomer", "Home")',
+            data: $('#customerForm').serialize(),
+            async: false,
+            dataType: 'json',
+            success: function (response) {
+                CustomerGetData();
+                loadPageWithParams('GridMasters', '', '', @ViewBag.pageId)
+            },
+            failure: function (response) {
+                alert(response.d);
+            },
+            error: function (response) {
+                alert(response.d);
+            }
+        });
+
+    });
+
+    $('#deleteBtn').click(function (e) {
+        e.preventDefault();
+
+        const confirmed = confirm('Are you sure you want to delete?');
+
+        if (!confirmed) {
+            return;
+        }
+
+        const apiUrl = '/Home/DeleteCustomer/@ViewBag.paramID';
+
+        fetch(apiUrl, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log('Deletion successful:', data);
+            })
+            .catch((error) => {
+                console.error('Error deleting data:', error);
+            });
+
+    });
+
+    function disableForm() {
+        const form = document.getElementById('customerForm');
+        const formElements = form.elements;
+        for (let i = 0; i < formElements.length; i++) {
+            formElements[i].disabled = true;
+        }
+        document.getElementById('submitBtn').style.display = 'none';
+    }
+</script>
