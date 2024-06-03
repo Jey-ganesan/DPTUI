@@ -1,0 +1,523 @@
+@using DPT.MVC.Models
+@{
+    // Get the ViewBag.Mode value
+    string mode = ViewBag.mode;
+    string url = ViewBag.url;
+    int pageId = ViewBag.pageId;
+    Access access = ViewBag.access;
+}
+
+<style>
+    #loader {
+        display: none;
+    }
+
+    #loader1 {
+        display: none;
+    }
+
+    .modal-busy {
+        position: fixed;
+        z-index: 999;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        background-color: Black;
+        /*filter: alpha(opacity=60);*/
+        opacity: 0.6;
+        /*-moz-opacity: 0.8;*/
+    }
+
+    .center-busy {
+        z-index: 1000;
+        margin: 300px auto;
+        padding: 0px;
+        width: 130px;
+        /*filter: alpha(opacity=100);*/
+        opacity: 1;
+        /*-moz-opacity: 1;*/
+    }
+
+        .center-busy img {
+            height: 128px;
+            width: 128px;
+        }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mx-auto col-lg-12">
+            <div class="card shadow-lg">
+                <div class="card-header text-white bg-warning d-flex">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-lg-start">
+                            @if (mode == "Edit")
+                            {
+                                @:Edit Customer
+                            }
+                            else if (mode == "View")
+                            {
+                                @:View Customer
+                            }
+                            else
+                            {
+                                @:Add Customer
+                            }
+                        </h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <span class="text-danger"> * Required fields</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="customerForm">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <input type="text" name="Id" value="@(mode == "Edit" ? @ViewBag.paramID : 0)" id="Id" hidden />
+                                        <label class="form-label" for="name">Name<span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="100" name="name" id="name" type="text" placeholder="Enter customer name" required value="" />
+                                        <input type="text" name="isActive" value="true" id="isActive" hidden />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="shortName">Short Name<span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="15" name="shortName" id="shortName" type="text" placeholder="Enter customer short name" required value="" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="code1">Code 1 <span class="text-danger"> *</span></label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="15" name="code1" id="code1" type="text" placeholder="Enter code 1" required value="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="address1">Address 1 @*<span class="text-danger"> *</span>*@</label>
+                                        <textarea class="form-control rounded-0 maxLengthValidation" maxlength="255" name="address1" rows="3" id="address1" type="text" placeholder="Enter address 1" required value=""></textarea>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="address2">Address 2@* <span class="text-danger"> *</span>*@</label>
+                                        <textarea class="form-control rounded-0 maxLengthValidation" maxlength="255" name="address2" rows="3" id="address2" type="text" placeholder="Enter address 2" required value=""></textarea>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="address3">Address 3@* <span class="text-danger"> *</span>*@</label>
+                                        <textarea class="form-control rounded-0 maxLengthValidation" maxlength="255" name="address3" rows="3" id="address3" type="text" placeholder="Enter address 3" required value=""></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="city">City @*<span class="text-danger"> *</span>*@</label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="100" name="city" id="city" type="text" placeholder="Enter city" required value="" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="postalCode">Zip Code@* <span class="text-danger"> *</span>*@</label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="10" name="postalCode" id="postalCode" type="text" placeholder="Enter zip code" required value="" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="countryId">Select Country  @*<span class="text-danger"> *</span>*@</label>
+                                        <select class="form-control rounded-0" name="countryId" id="countryId" required="">
+                                            <option value="">Select a country</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="primaryContactName">Primary Contact@* <span class="text-danger"> *</span>*@</label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="100" name="primaryContactName" id="primaryContactName" type="text" placeholder="Enter primary contact" required value="" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="primaryContactNo">Primary Contact No @*<span class="text-danger"> *</span>*@</label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="50" name="primaryContactNo" id="primaryContactNo" type="text" placeholder="Enter primary contact no" required value="" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="primaryContactMailId">Primary Contact Mail Id @*<span class="text-danger"> *</span>*@</label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="255" name="primaryContactMailId" id="primaryContactMailId" type="text" placeholder="Enter primary contact mail id" required value="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="city">Secondary Contact @*<span class="text-danger"> *</span>*@</label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="100" name="secondaryContactName" id="secondaryContactName" type="text" placeholder="Enter secondary contact" required value="" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="secondaryContactNo">Secondary Contact No @*<span class="text-danger"> *</span>*@</label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="50" name="secondaryContactNo" id="secondaryContactNo" type="text" placeholder="Enter secondary contact no" required value="" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="secondaryContactMailId">Secondary Contact Mail Id @*<span class="text-danger"> *</span>*@</label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="255" name="secondaryContactMailId" id="SecondaryContactMailId" type="text" placeholder="Enter secondary contact mail id" required value="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="creditDays">Credit Days @*<span class="text-danger"> *</span>*@</label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="4" name="creditDays" id="creditDays" type="number" placeholder="" required value="" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="creditLimit">Credit Limit@* <span class="text-danger"> *</span>*@</label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="8" name="creditLimit" id="creditLimit" type="text" placeholder="" required value="" oninput="enforceMaxLength(this)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="parentCustomerId">Select Parent / Group Customer @*<span class="text-danger"> *</span>*@</label>
+                                        <select class="form-control rounded-0" name="parentCustomerId" id="parentCustomerId" required="">
+                                            <option>-- Select Parent / Group Customer --</option>
+
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="code2">Enter Code 2@* <span class="text-danger"> *</span>*@</label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="15" name="code2" id="code2" type="text" placeholder="" required value="" />
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="code3">Enter Code 3@* <span class="text-danger"> *</span>*@</label>
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="15" name="code3" id="code3" type="text" placeholder="" required value="" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="cpc">Select CPC @*<span class="text-danger"> *</span>*@</label>
+                                        <select class="form-control rounded-0" name="cpc" id="cpc" required="">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="row">
+                            <div class="col-sm-12">
+
+                                @if (mode == "Edit")
+                                {
+                                    @:<button id="submitBtn" class="btn btn-primary rounded-0 me-2 mt-4">Update</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    @if (access.delete)
+                                    {
+                                        @:<button id="deleteBtn" class="btn btn-danger rounded-0 mt-4">Delete</button>
+                                    }
+                                }
+                                else
+                                {
+                                    @:<button id="submitBtn" class="btn btn-primary rounded-0 me-2 mt-4">Add</button>
+                                }
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <a class="btn btn-warning rounded-0 me-2 mt-4" href="#" onclick="loadPageWithParams('GridMasters', '', '', @ViewBag.pageId)">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    //$.when(first(), second()).done(function () {
+    //    debugger
+    //    if (@ViewBag.paramID) {
+
+    //        //fetch("@url/api/customers/@ViewBag.paramID")
+
+    //        //    .then(response => response.json())
+    //        //    .then(data => bindCustomer(data))
+    //        //    .catch(error => console.error("Error fetching Currency data:", error));
+    //    }
+
+    //});
+    //function first() {
+    //    //fetch("@url/api/customers")
+    //    //    .then(response => response.json())
+    //    //    .then(data => SelectParentDropdown(data))
+    //    //    .catch(error => console.error("Error fetching customer data:", error));
+    //}
+
+    SelectParentDropdown(customerDDData);
+    $('#parentCustomerId').chosen();
+    second();
+    bindEmployees();
+    function SelectParentDropdown(data) {
+        //$('#parentCustomerId').select2();
+        const dropdown = document.getElementById("parentCustomerId");
+
+        data.forEach(customer => {
+            const option = document.createElement("option");
+            option.value = customer.id;
+            option.text = customer.name + ' - [' + customer.shortName + ']'
+            dropdown.appendChild(option);
+        });
+
+        $('#parentCustomerId').trigger('chosen:updated');
+    }
+
+    function second() {
+        fetch("/Countries/GetCountries")
+            .then(response => response.json())
+            .then(data => CountryDropdown(data))
+            .catch(error => console.error("Error fetching Country data:", error));
+    }
+
+    function CountryDropdown(data) {
+        const dropdown = document.getElementById("countryId");
+            
+        data.forEach(customer => {
+            const option = document.createElement("option");
+            option.value = customer.id;
+            option.text = customer.name;
+            dropdown.appendChild(option);
+
+        });
+
+        if (@ViewBag.paramID) {
+
+            fetch("/Customers/GetCustomersById/@ViewBag.paramID")
+
+                .then(response => response.json())
+                .then(data => bindCustomer(data))
+                .catch(error => console.error("Error fetching Currency data:", error));
+        }
+    }
+
+    //if (@ViewBag.paramID) {
+
+    //    fetch("/Home/GetCustomersById/@ViewBag.paramID")
+
+    //        .then(response => response.json())
+    //        .then(data => bindCustomer(data))
+    //        .catch(error => console.error("Error fetching Currency data:", error));
+    //}
+    if ('@ViewBag.mode' === "View") {
+        disableForm();
+    }
+
+    function bindCustomer(data) {
+
+        console.log(data);
+        $('#Id').val(data.id);
+        $('#name').val(data.name);
+        $('#shortName').val(data.shortName);
+        $('#code1').val(data.code1)
+        $('#code2').val(data.code2)
+        $('#code3').val(data.code3)
+        $('#address1').val(data.address1)
+        $('#address2').val(data.address2)
+        $('#address3').val(data.address3)
+        $('#city').val(data.city)
+        $('#countryId').val(data.countryId);
+        $('#postalCode').val(data.postalCode)
+        $('#creditDays').val(data.creditDays)
+        $('#creditLimit').val(data.creditLimit)
+        $('#creditDays').val(data.creditDays)
+        $('#primaryContactName').val(data.primaryContactName);
+        $('#primaryContactNo').val(data.primaryContactNo);
+        $('#primaryContactMailId').val(data.primaryContactMailId);
+        $('#secondaryContactName').val(data.secondaryContactName);
+        $('#secondaryContactNo').val(data.secondaryContactNo);
+        $('#SecondaryContactMailId').val(data.secondaryContactMailId);
+        $('#displayName').val(data.displayName)
+        $('#parentCustomerName').val(data.parentCustomerName)
+        $('#parentCustomerId').val(data.parentCustomerId)
+        $('#cpc').val(data.cpc)
+
+        $('#isActive').val(data.isActive);
+
+        $('#parentCustomerId').val(data.parentCustomerId)
+        $('#parentCustomerId').trigger('chosen:updated');
+        $('#cpc').trigger('chosen:updated');
+        $('#countryName').val(data.countryName);
+    }
+
+    $('#submitBtn').click(function (e) {
+        e.preventDefault();
+        if (!isValidated()) {
+            showAlert('Please fill all the required fields', 'error');
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveCustomer", "Customers")',
+            data: $('#customerForm').serialize(),
+            async: false,
+            dataType: 'json',
+            success: function (response) {
+
+                debugger;
+                if (response.statusCode === 201) {
+                    // HTTP status code 201 indicates a successful creation
+                    //CustomerGetData();
+                    loadPageWithParams('GridMasters', '', '', @ViewBag.pageId)
+                } else if (response.statusCode === 409) {
+                    alert(response.errorMessage);
+                }
+            },
+            failure: function (response) {
+                alert(response.d);
+            },
+            error: function (response) {
+                alert(response.d);
+            }
+        });
+
+    });
+
+    $('#deleteBtn').click(function (e) {
+        e.preventDefault();
+
+        const confirmed = confirm('Are you sure you want to delete?');
+
+        if (!confirmed) {
+            return;
+        }
+
+        const apiUrl = '/Customers/DeleteCustomer/@ViewBag.paramID';
+
+        fetch(apiUrl, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log('Deletion successful:', data);
+                loadPageWithParams('GridMasters', '', '', @ViewBag.pageId)
+            })
+            .catch((error) => {
+                console.error('Error deleting data:', error);
+                loadPageWithParams('GridMasters', '', '', @ViewBag.pageId)
+            });
+
+    });
+    function bindEmployees() {
+        //debugger;
+        $.ajax({
+            url: '@Url.Action("GetEmployees", "Employees")',
+            type: 'GET',
+            async: true,
+            dataType: 'json',
+            success: function (data) {
+                var dropdown = $('#cpc');
+                dropdown.empty();
+                dropdown.append($('<option>').text("-- Select CPC --").attr('selected', true).attr('disabled', true));
+                for (var i = 0; i < data.length; i++) {
+                    dropdown.append($('<option>').text(data[i].name).attr('value', data[i].name));
+                }
+                dropdown.chosen();
+            }
+        });
+    }
+    function disableForm() {
+        const form = document.getElementById('customerForm');
+        const formElements = form.elements;
+        for (let i = 0; i < formElements.length; i++) {
+            formElements[i].disabled = true;
+        }
+        document.getElementById('submitBtn').style.display = 'none';
+    }
+    function isValidated() {
+        var isValid = true;
+        var nameValue = $('#name').val();
+        var shortNameValue = $('#shortName').val();
+        var code1Value = $('#code1').val();
+        var address1Value = $('#address1').val();
+        var address2Value = $('#address2').val();
+        var address3Value = $('#address3').val();
+        var cityValue = $('#city').val();
+        var postalCodeValue = $('#postalCode').val();
+        var countryIdValue = $('#countryId').val();
+        var primaryContactNameValue = $('#primaryContactName').val();
+        var primaryContactNoValue = $('#primaryContactNo').val();
+        var primaryContactMailIdValue = $('#primaryContactMailId').val();
+        var secondaryContactNameValue = $('#secondaryContactName').val();
+        var secondaryContactNoValue = $('#secondaryContactNo').val();
+        var SecondaryContactMailIdValue = $('#SecondaryContactMailId').val();
+        var creditDaysValue = $('#creditDays').val();
+        var creditLimitValue = $('#creditLimit').val();
+        var parentCustomerIdValue = $('#parentCustomerId').val();
+        var code2Value = $('#code2').val();
+        var code3Value = $('#code3').val();
+        //if(nameValue === '' || shortNameValue === '' || code1Value === '' || address1Value === '' || address2Value === '' || address3Value === '' ||cityValue === '' || postalCodeValue === '' || countryIdValue === '' || primaryContactNameValue === '' || primaryContactNoValue === '' || primaryContactMailIdValue === '' || secondaryContactNameValue === '' || secondaryContactNoValue === ''
+        //|| SecondaryContactMailIdValue === '' || creditDaysValue === '' || creditLimitValue === '' || parentCustomerIdValue === '' || code1Value === '' ||
+        //code2Value === '' || code3Value === '') {
+        //    isValid = false;
+        //}
+        if (nameValue === '' || shortNameValue === '' || code1Value === '') {
+            isValid = false;
+        }
+        if (nameValue.length > 100 || shortNameValue.length > 15 || address1Value.length > 255 || address2Value.length > 255 || address3Value.length > 255 ||
+            cityValue.length > 100 || postalCodeValue.length > 10 || primaryContactNameValue.length > 100 || primaryContactNoValue.length > 50 || primaryContactMailIdValue.length > 255 ||
+            secondaryContactNameValue.length > 100 || secondaryContactNoValue.length > 50 || SecondaryContactMailIdValue.length > 255 ||
+            code1Value.length > 15 || code2Value.length > 15 || code3Value.length > 15) {
+            isValid = false;
+            showAlert('Exceeded the character limit', 'error');
+        }
+
+        return isValid;
+    }
+
+    $('.maxLengthValidation').on('input paste', function () {
+        var maxLength = $(this).attr('maxlength');
+        var currentLength = $(this).val().length;
+        var remaining = (maxLength - 1) - currentLength;
+
+        if (remaining < 0) {
+            // Display validation message or take appropriate action
+            event.preventDefault();
+        } else {
+            // Clear validation message
+        }
+    });
+
+</script>
