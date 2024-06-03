@@ -1,4 +1,4 @@
-﻿namespace DPT_MVC.Helper
+﻿namespace DPT.MVC.Helper
 {
     public class SessionHelper
     {

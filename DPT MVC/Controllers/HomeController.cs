@@ -16,12 +16,12 @@ namespace DPT.MVC.Controllers
 
         private readonly IHttpClientFactory _httpClientFactory;
         public HttpClient HttpClient = new HttpClient();
-        public static string DashboardType = string.Empty;  
+        public static string DashboardType = string.Empty;
         string connection = string.Empty;
         public static List<MenuInfo> menus = new List<MenuInfo>();
 
 
-        public HomeController(ILogger<HomeController> logger   ,  IConfiguration configuration,
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration,
             IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
@@ -132,7 +132,7 @@ namespace DPT.MVC.Controllers
             }
         }
 
-public ActionResult LoadPage(string pageName, int? id = 0, string mode = "", int? pageId = 0)
+        public ActionResult LoadPage(string pageName, int? id = 0, string mode = "", int? pageId = 0)
 
         {
 
