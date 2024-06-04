@@ -42,18 +42,18 @@ namespace DPT.MVC.Controllers
                     if (model.Id != 0)
                     {
                         model.Created = DateTime.Now;
-                        //model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
                         model.LastUpdated = DateTime.Now;
-                        //model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
                         requestBody = new HttpRequestMessage(HttpMethod.Patch, "/api/masters/currency");
 
                     }
                     else
                     {
                         model.Created = DateTime.Now;
-                        //model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
                         model.LastUpdated = DateTime.Now;
-                        //model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
                         requestBody = new HttpRequestMessage(HttpMethod.Post, "/api/masters/currency");
                     }
                     var serializations = JsonConvert.SerializeObject(model);

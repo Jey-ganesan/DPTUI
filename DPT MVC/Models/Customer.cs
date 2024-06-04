@@ -4,7 +4,7 @@ namespace DPT.MVC.Models
 {
     public class Customer:CommonFieldsInfo
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public string? Name { get; set; }
         public string? ShortName { get; set; }
         [NotMapped]
