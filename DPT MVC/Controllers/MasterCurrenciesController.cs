@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Headers;
 using DPT.MVC.Models;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace DPT.MVC.Controllers
 {
@@ -108,6 +110,21 @@ namespace DPT.MVC.Controllers
             var data = System.Text.Json.JsonSerializer.Deserialize<bool>(content);
 
             return Json(data);
+        }
+        public async Task<JsonResult> GetCurrencies()
+        {
+            try
+            {
+                var client = _httpClientFactory.CreateClient("DPTClient");
+                var response = await client.GetAsync($"/api/masters/currency");
+                var content = await response.Content.ReadAsStringAsync();
+                var res = System.Text.Json.JsonSerializer.Deserialize<object>(content);
+                return Json(res);
+            }
+            catch (System.Exception ex)
+            {
+                return Json(ex);
+            }
         }
     }
 }

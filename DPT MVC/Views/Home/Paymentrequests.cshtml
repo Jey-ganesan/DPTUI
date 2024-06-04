@@ -1,0 +1,365 @@
+﻿@using System.Text.Json
+@inject IConfiguration Configuration
+
+@{
+    int decimalRoundOff = Configuration.GetValue<int>("NumberSettings:DecimalRoundOff");
+    int t1TBLength = Configuration.GetValue<int>("CharacterSettings:T1TypeTextbox");
+    int t2TBLength = Configuration.GetValue<int>("CharacterSettings:T2TypeTextbox");
+    int t3TBLength = Configuration.GetValue<int>("CharacterSettings:T3TypeTextbox");
+    string? dateFormat = Configuration.GetValue<string>("Date:dateFormat");
+    string mode = ViewBag.mode;
+    string url = ViewBag.url;
+    int pageId = ViewBag.pageId;
+}
+
+<head>
+    <style>
+        /* Center table headings */
+        th {
+            text-align: center !important;
+        }
+
+        thead{
+            background-color: #ffc107;
+        }
+
+        .chosen-results{
+            background-color: white;
+            width: 300px;
+        }
+
+        .chosen-search{
+            background-color: white;
+            width: 300px;
+        }
+
+        .chosen-drop{
+            width: 300px;
+        }
+
+    </style>
+</head>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mx-auto col-lg-12">
+            <div class="card shadow-lg">
+                <div class="card-header text-white bg-warning d-flex">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-lg-start">
+                            Payment Request
+                        </h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <span class="text-danger"> * Required fields</span>
+                    </div>
+                    <div class='col-md-4 col-sm-6 col-lg-1'>
+                        <a href='#' id="addRowBtn" class='btn btn-outline-primary btn-sm float-sm-center'>
+                            Add Row
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="countryForm">
+                        <fieldset>
+                            <div class="row">
+                            </div>
+                            <br />
+                            <div class="row">
+                                @* <table width="100%" id="requestHdrGrid" class='table dataTable dtr-inline'>
+                                </table> *@
+                                <table id="requestHdrGrid" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Job No</th>
+                                            <th>HAWB</th>
+                                            <th>Customer</th>
+                                            <th>Currency</th>
+                                            <th>Charges 1</th>
+                                            <th>Amount 1</th>
+                                            <th>Charges 2</th>
+                                            <th>Amount 2</th>
+                                            <th>Total Amount</th>
+                                            <th>Bayan No</th>
+                                            <th>Upload Bayan Copy</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button class="btn btn-primary" onclick="SubmitrequestedRecord()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+                @* <div class="card-footer"></div> *@
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(async function () {
+        await Customerdata();
+        await Currencydata();
+        await Chargesdata();
+        for (let i = 0; i < 5; i++) {
+            await addRow();
+        }
+    });
+
+    var CHARGESData;
+    var CurrencyData;
+    var CustomerData;
+    // var initialData = Array(5).fill({});
+
+    async function Chargesdata() {
+        CHARGESData = await $.ajax({
+            url: '@Url.Action("GetCharges", "MasterCHARGES")',
+            type: 'get',
+        });
+    }
+
+    async function Currencydata(){
+        CurrencyData = await $.ajax({
+            url: '@Url.Action("GetCurrencies", "MasterCurrencies")',
+            type: 'get',
+        });
+    }
+
+    async function Customerdata() {
+        CustomerData = await $.ajax({
+            url: '@Url.Action("GetCustomersForRequest", "Customers")',
+            type: 'get',
+        });
+    }
+
+    // function addRow() {
+    //     var newRow = {};
+    //     var table = $('#requestHdrGrid').DataTable();
+    //     table.row.add(newRow).draw();
+    //     $('.chosen-select').chosen();
+    // }
+
+    function addRow() {
+        const table = document.querySelector('#requestHdrGrid tbody');
+        const newRow = document.createElement('tr');
+
+        newRow.innerHTML = `
+                    <td><input type="date" name="reviewerComment" class="form-control rounded-0     date-picker"></td>
+                <td><input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                <td><input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                <td>
+                    <select class="status-dropdown chosen-select" style="width: 100px;">
+                        <option value="">Select</option>
+                        ${CustomerData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                    </select>
+                </td>
+                <td>
+                    <select class="status-dropdown chosen-select" style="width: 100px;">
+                        <option value="">Select</option>
+                        ${CurrencyData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                    </select>
+                </td>
+                <td>
+                    <select class="status-dropdown chosen-select" style="width: 100px;">
+                        <option value="">Select</option>
+                        ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                    </select>
+                </td>
+                <td><input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                <td>
+                    <select class="status-dropdown chosen-select" style="width: 100px;">
+                        <option value="">Select</option>
+                        ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                    </select>
+                </td>
+                <td><input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                <td><input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                <td><input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                <td><input type="file" name="file" class="form-control"></td>
+            `;
+
+        table.appendChild(newRow);
+        $('.chosen-select').chosen();
+        $('.date-picker').flatpickr({
+            dateFormat: "d-M-Y",
+            defaultDate: new Date()
+        });
+    }
+
+    $('#addRowBtn').on('click', addRow);
+
+    // async function BindRequest(initialData) {
+
+    //     var table = new DataTable('#requestHdrGrid', {
+    //         data: initialData,
+    //         columns: [
+    //             {
+    //                 title: 'Date',
+    //                 data: null,
+    //                 render: function (data, type, row) {
+    //                     return '<input type="date" name="reviewerComment" class="form-control rounded-0" />';
+    //                 }
+    //             },
+    //             {
+    //                 title: 'Job No', data: null,
+    //                 render: function (data, type, row) {
+    //                     return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
+    //                 }
+    //             },
+    //             {
+    //                 title: 'HAWB', data: null,
+    //                 render: function (data, type, row) {
+    //                     return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
+    //                 }
+    //             },
+    //             {
+    //                 title: 'Customer', data: null,
+    //                 render: function (data, type, row) {
+    //                     var opt = '<select class="status-dropdown chosen-select" style="width: 100px;"onchange="updateSpaceDropdown(this)">';
+    //                     var tmp = CustomerData;
+    //                     opt += '<option value="">Select</option>';
+    //                     tmp.forEach(item => {
+    //                         opt += `<option value="${item.id}">${item.name}</option>`;
+    //                     });
+    //                     opt += '</select>';
+    //                     return opt;
+    //                 }
+    //             },
+    //             {
+    //                 title: 'Currency', data: null,
+    //                 render: function (data, type, row) {
+    //                     var opt = '<select class="status-dropdown chosen-select" style="width: 100px;"onchange="updateSpaceDropdown(this)">';
+    //                     var tmp = CurrencyData;
+    //                     opt += '<option value="">Select</option>';
+    //                     tmp.forEach(item => {
+    //                         opt += `<option value="${item.id}">${item.name}</option>`;
+    //                     });
+    //                     opt += '</select>';
+    //                     return opt;
+    //                 }
+    //             },
+    //             {
+    //                 title: 'Charges 1', data: null,
+    //                 render: function (data, type, row) {
+    //                     var opt = '<select class="status-dropdown chosen-select" style="width: 100px;"onchange="updateSpaceDropdown(this)">';
+    //                     var tmp = CHARGESData;
+    //                     opt += '<option value="">Select</option>';
+    //                     tmp.forEach(item => {
+    //                         opt += `<option value="${item.id}">${item.name}</option>`;
+    //                     });
+    //                     opt += '</select>';
+    //                     return opt;
+    //                 }
+    //             },
+    //             {
+    //                 title: 'Amount 1', data: null,
+    //                 render: function (data, type, row) {
+    //                     return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
+    //                 }
+    //             },
+    //             {
+    //                 title: 'Charges 2', data: null,
+    //                 render: function (data, type, row) {
+    //                     var opt = '<select class="status-dropdown chosen-select" style="width: 100px;"onchange="updateSpaceDropdown(this)">';
+    //                     var tmp = CHARGESData;
+    //                     opt += '<option value="">Select</option>';
+    //                     tmp.forEach(item => {
+    //                         opt += `<option value="${item.id}">${item.name}</option>`;
+    //                     });
+    //                     opt += '</select>';
+    //                     return opt;
+    //                 }
+    //             },
+    //             {
+    //                 title: 'Amount 2', data: null,
+    //                 render: function (data, type, row) {
+    //                     return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
+    //                 }
+    //             },
+    //             {
+    //                 title: 'Total Amount', data: null,
+    //                 render: function (data, type, row) {
+    //                     return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
+    //                 }
+    //             },
+    //             {
+    //                 title: 'Bayan No',
+    //                 orderable: false,
+    //                 data: null,
+    //                 render: function (data, type, row) {
+    //                     return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
+    //                 }
+    //             },
+    //             {
+    //                 title: 'Upload Bayan Copy',
+    //                 orderable: false,
+    //                 data: null,
+    //                 render: function (data, type, row) {
+    //                     return '<input type="file" name="file' + row.id + '" data-id="' + row.id + '">';
+    //                 }
+    //             },
+    //         ],
+    //         lengthChange: true,
+    //         autoWidth: false,
+    //         paging: true,
+    //         scrollY: 300,
+    //         pagingType: 'full_numbers',
+    //         search: true,
+    //         destroy: true
+    //     })
+    // }
+
+
+    async function SubmitrequestedRecord() {
+        const rows = document.querySelectorAll('#requestHdrGrid tbody tr');
+        const data = [];
+
+        rows.forEach(row => {
+            const rowData = {};
+            row.querySelectorAll('input, select').forEach(input => {
+                if (input.type === 'file') {
+                    rowData[input.name] = input.files[0] ? input.files[0].name : '';
+                } else {
+                    rowData[input.name] = input.value;
+                }
+            });
+            data.push(rowData);
+        });
+        debugger
+
+        $.ajax({
+            url: 'your-server-endpoint-url', // Replace with your server URL
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (response) {
+                console.log('Data successfully submitted', response);
+            },
+            error: function (error) {
+                console.error('Error submitting data', error);
+            }
+        });
+    }
+
+    $('.maxLengthValidation').on('input paste', function () {
+        var maxLength = $(this).attr('maxlength');
+        var currentLength = $(this).val().length;
+        var remaining = (maxLength - 1) - currentLength;
+
+        if (remaining < 0) {
+            // Display validation message or take appropriate action
+            event.preventDefault();
+        } else {
+            // Clear validation message
+        }
+    });
+
+</script>
