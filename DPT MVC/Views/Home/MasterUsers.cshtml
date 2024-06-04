@@ -1,0 +1,472 @@
+﻿@inject IConfiguration Configuration
+
+@{
+    int decimalRoundOff = Configuration.GetValue<int>("NumberSettings:DecimalRoundOff");
+    int t1TBLength = Configuration.GetValue<int>("CharacterSettings:T1TypeTextbox");
+    int t2TBLength = Configuration.GetValue<int>("CharacterSettings:T2TypeTextbox");
+    int t3TBLength = Configuration.GetValue<int>("CharacterSettings:T3TypeTextbox");
+    string? dateFormat = Configuration.GetValue<string>("Date:dateFormat");
+    string mode = ViewBag.mode;
+    string url = ViewBag.url;
+    int pageId = ViewBag.pageId;
+    // Access access = ViewBag.access;
+}
+
+<head>
+    <style>
+        .input-container {
+            position: relative;
+            /* width: max-content; */
+        }
+
+            .input-container input {
+                padding-right: 30px; /* Adjust padding to make room for the icon */
+            }
+
+            .input-container .fa-eye,
+            .input-container .fa-eye-slash {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+                cursor: pointer;
+            }
+
+        .readonly_form {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+    </style>
+</head>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mx-auto col-lg-12">
+            <div class="card shadow-lg">
+                <div class="card-header text-white bg-warning d-flex">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-lg-start">
+                            @if (mode == "Edit")
+                            {
+                                @:Edit User
+                            }
+                            else if (mode == "View")
+                            {
+                                @:View User
+                            }
+                            else
+                            {
+                                @:Add User
+                            }
+                        </h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <span class="text-danger"> * Required fields</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @* Page Content *@
+                    <div class="readonlyPortation">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <label class="form-label" for="name">User Name<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" name="name" id="name" />
+                            </div>
+                            <div class="col-md-1">
+                                <label class="form-label" for="userId">User Id<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" name="userId" id="userId" />
+                            </div>
+                            <div class="col-md-1">
+                                <label class="form-label" for="transPrefix">User Prefix<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control rounded-0 maxLengthValidation" maxlength="5" name="transPrefix" id="transPrefix" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label class="form-label" for="email">Email<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control rounded-0 maxLengthValidation" maxlength="255" name="email" id="email" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label" for="password">Password<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-container">
+                                    <input type="password" class="form-control rounded-0" maxlength="20" name="password" id="password" />
+                                    <i class="fas fa-eye" id="togglePassword"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label class="form-label" for="section">Section<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control rounded-0 chosn" id="section">
+                                    <option value="" disabled selected>-- Select Option --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label" for="department">Department<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control rounded-0 chosn" id="department">
+                                    <option value="" disabled selected>-- Select Option --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label class="form-label" for="approvalLevel" id="approvalLevelLbl">Approver Level</label>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control rounded-0 chosn" id="approvalLevel">
+                                    <option value="" disabled selected>-- Select Option --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label" for="userRole">User Role</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="checkbox" name="userRole" value="approver" id="approver" />
+                                <label for="approver">Approver</label>
+                                <input type="checkbox" name="userRole" value="reviewer" id="reviewer" />
+                                <label for="reviewer">Reviewer</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4">
+                            @if (string.IsNullOrWhiteSpace(mode) || mode == "Edit")
+                            {
+                                <button class="btn btn-primary" id="btnSave">Save</button>
+                            }
+                            @if (mode == "Edit")
+                            {
+                                @* <button class="btn btn-danger" id="btnDelete">Delete</button> *@
+                            }
+                            <button class="btn btn-warning" id="btnCancel">Cancel</button>
+                        </div>
+                        <div class="col-md-4">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-danger">Password Validation</span>
+                            <ul>
+                                <li>Password must be between 8 and 20 characters.</li>
+                                <li>Password must contain at least one uppercase letter.</li>
+                                <li>Password must contain at least one lowercase letter.</li>
+                                <li>Password must contain at least one special character.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var departments = [];
+    var sections = [];
+    var approvalLevels = [];
+
+    $(document).ready(async function () {
+
+        await BindDepartment();
+        await BindSection();
+        await BindApprovalLimit();
+
+        if ('@mode' == 'Edit' || '@mode' == 'View') {
+            await BindData('@ViewBag.paramID');
+
+            if ('@mode' == 'View')
+                $('.readonlyPortation').addClass('readonly_form');
+        }
+
+        $('#department').chosen({
+            width: '100%' // Ensure the chosen dropdown is 100% width
+        });
+        $('#section').chosen({
+            width: '100%' // Ensure the chosen dropdown is 100% width
+        });
+        $('#approvalLevel').chosen({
+            width: '100%' // Ensure the chosen dropdown is 100% width
+        });
+    });
+
+    async function BindDepartment() {
+
+        try {
+            let data = await $.ajax({
+                url: '@Url.Action("GetDepartment", "Masters")',
+                type: 'Get'
+            });
+
+            departments = data;
+
+            var dropdown = $('#department');
+            dropdown.empty();
+            dropdown.append($('<option>').text("-- Select Department --").attr('selected', true).attr('disabled', true).attr('value', 0));
+            for (var i = 0; i < data.length; i++) {
+                var selected = false;
+                if (data[i].isDefault) {
+                    selected = true;
+                }
+                dropdown.append($('<option>').text(data[i].name + ' - [' + data[i].code + ']').attr('value', data[i].id).attr('selected', selected));
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function BindSection() {
+
+        try {
+            let data = await $.ajax({
+                url: '@Url.Action("GetSection", "Masters")',
+                type: 'Get'
+            });
+
+            sections = data;
+
+            var dropdown = $('#section');
+            dropdown.empty();
+            dropdown.append($('<option>').text("-- Select Section --").attr('selected', true).attr('disabled', true).attr('value', 0));
+            for (var i = 0; i < data.length; i++) {
+                // var selected = false;
+                // if (data[i].isDefault) {
+                //     selected = true;
+                // }
+                dropdown.append($('<option>').text(data[i].name + ' - [' + data[i].code + ']').attr('value', data[i].id));
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function BindApprovalLimit() {
+
+        try {
+            let data = await $.ajax({
+                url: '@Url.Action("GetApprovalLimit", "Masters")',
+                type: 'Get'
+            });
+
+            approvalLevels = data;
+
+            var dropdown = $('#approvalLevel');
+            dropdown.empty();
+            dropdown.append($('<option>').text("-- Select Approval Level --").attr('selected', true).attr('disabled', true).attr('value', 0));
+            for (var i = 0; i < data.length; i++) {
+                dropdown.append($('<option>').text(data[i].type).attr('value', data[i].id));
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    $('#approver').on('click', async function () {
+        if ($(this).is(':checked')) {
+            $('#approvalLevelLbl').html('Approver Level<span class="text-danger">*</span>');
+        } else {
+            $('#approvalLevelLbl').html('Approver Level');
+        }
+    })
+
+    $('#btnSave').on('click', async function () {
+        event.preventDefault();
+
+        if (!isValidate()) {
+            alert("Please Fill All Required Fields");
+            return false;
+        }
+
+        let data = await $.ajax({
+            url: '@Url.Action("CheckUser", "Masters")',
+            type: 'Get',
+            data: { id: '@ViewBag.paramID', userId: $('#userId').val() }
+        });
+
+        if (!data) {
+            alert("UserId Already Exsist.");
+            return false;
+        }
+
+        if (!validatePassword($('#password').val())) {
+            alert("Please Enter Valid Password.");
+            return false;
+        }
+
+        var tmpSection = sections.filter(x => x.id == $('#section').val())[0];
+        var tmpDepartment = departments.filter(x => x.id == $('#department').val())[0];
+        var tmpApprovalLimit = approvalLevels.filter(x => x.id == $('#approvalLevel').val())[0];
+
+        var userRole = ' ';
+        if ($('#approver').is(':checked') && $('#reviewer').is(':checked')) {
+            userRole = 'Approver/Reviewer';
+        } else if ($('#approver').is(':checked')) {
+            userRole = 'Approver';
+        } else if ($('#reviewer').is(':checked')) {
+            userRole = 'Reviewer';
+        }
+
+        var obj = {
+            Id: '@ViewBag.paramID',
+            UserId: $('#userId').val(),
+            Password: $('#password').val(),
+            Name: $('#name').val(),
+            Email: $('#email').val(),
+            UserRole: userRole,
+            SectionId: $('#section').val(),
+            SectionName: tmpSection.name,
+            DepartmentId: $('#department').val(),
+            DepartmentName: tmpDepartment.name,
+            ApprovalLimitId: $('#approvalLevel').val(),
+            TransPrefix: $('#transPrefix').val(),
+            DashboardType: ' ',
+            IsActive: true,
+            ApprovalType: typeof tmpApprovalLimit == 'undefined' ? 0 : tmpApprovalLimit.type,
+            ApprovalRangeFrom: 0,
+            ApprovalRangeTo: 0
+        }
+        try {
+            let data = await $.ajax({
+                url: '@Url.Action("SaveUser", "Masters")',
+                type: 'post',
+                data: obj
+            });
+
+            if (data.statusCode == 201) {
+
+                loadPageWithParams('GRIDMASTERS', '', '', '@pageId');
+                // await resetForm();
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+    $('#btnCancel').on('click', async function () {
+        event.preventDefault();
+
+        loadPageWithParams('GRIDMASTERS', '', '', '@pageId');
+    });
+
+    async function BindData(id) {
+        try {
+            let data = await $.ajax({
+                url: '@Url.Action("GetUser", "Masters")',
+                type: 'Get',
+                data: { id: id }
+            });
+
+            $('#name').val(data.name);
+            $('#userId').val(data.userId);
+            $('#transPrefix').val(data.transPrefix);
+            $('#email').val(data.email);
+            $('#password').val(data.password);
+            $('#section').val(data.sectionId);
+            $('#department').val(data.departmentId);
+            $('#approvalLevel').val(data.approvalLimitId);
+            $('#approver').prop('checked', data.userRole.includes('Approver'));
+            $('#reviewer').prop('checked', data.userRole.includes('Reviewer'));
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    function isValidate() {
+
+        if (isNullOrEmpty($('#name').val())) {
+            return false;
+        } else if (isNullOrEmpty($('#userId').val())) {
+            return false;
+        } else if (isNullOrEmpty($('#transPrefix').val())) {
+            return false;
+        } else if (isNullOrEmpty($('#email').val())) {
+            return false;
+        } else if (isNullOrEmpty($('#password').val())) {
+            return false;
+        } else if (isNullOrEmpty($('#section').val())) {
+            return false;
+        } else if (isNullOrEmpty($('#department').val())) {
+            return false;
+        }
+
+        if ($('#approver').is(':checked')) {
+            if (isNullOrEmpty($('#approvalLevel').val())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function validatePassword(password) {
+        // Define the regular expressions for each rule
+        const lengthCheck = /^.{8,20}$/;
+        const uppercaseCheck = /[A-Z]/;
+        const lowercaseCheck = /[a-z]/;
+        const specialCharCheck = /[!@@#$%^&*(),.?":{}|<>]/;
+
+        // Validate each rule
+        if (!lengthCheck.test(password)) {
+            return false;
+        }
+        if (!uppercaseCheck.test(password)) {
+            return false;
+        }
+        if (!lowercaseCheck.test(password)) {
+            return false;
+        }
+        if (!specialCharCheck.test(password)) {
+            return false;
+        }
+
+        // If all checks pass
+        return true;
+    }
+
+    $('.maxLengthValidation').on('input paste', function () {
+        var maxLength = $(this).attr('maxlength');
+        var currentLength = $(this).val().length;
+        var remaining = (maxLength - 1) - currentLength;
+
+        if (remaining < 0) {
+            // Display validation message or take appropriate action
+            event.preventDefault();
+        } else {
+            // Clear validation message
+        }
+    });
+
+    $('#togglePassword').on('click', async function () {
+        let password = document.querySelector("#password");
+        password.setAttribute("type", password.getAttribute("type") === "password" ? "text" : "password");
+        this.classList.toggle("fa-eye");
+        this.classList.toggle("fa-eye-slash");
+    });
+
+</script>
