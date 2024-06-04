@@ -1,0 +1,211 @@
+﻿@inject IConfiguration Configuration
+
+@{
+
+    // Fetch configuration values from appsettings.json or other configuration sources
+    int decimalRoundOff = Configuration.GetValue<int>("NumberSettings:DecimalRoundOff");
+    int t1TBLength = Configuration.GetValue<int>("CharacterSettings:T1TypeTextbox");
+    int t2TBLength = Configuration.GetValue<int>("CharacterSettings:T2TypeTextbox");
+    int t3TBLength = Configuration.GetValue<int>("CharacterSettings:T3TypeTextbox");
+    string? dateFormat = Configuration.GetValue<string>("Date:dateFormat");
+    string mode = ViewBag.mode;
+    string url = ViewBag.url;
+    int pageId = ViewBag.pageId;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mx-auto col-lg-12">
+            <div class="card shadow-lg">
+                <div class="card-header text-white bg-warning d-flex">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-lg-start">
+                            @if (mode == "Edit")
+                            {
+                                @:Edit Charges
+                            }
+                            else if (mode == "View")
+                            {
+                                @:View Charges
+                            }
+                            else
+                            {
+                                @:Add Charges
+                            }
+                        </h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <span class="text-danger"> * Required fields</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="currencyForm">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <input type="text" name="Id" value="@(mode == "Edit" ? @ViewBag.paramID : 0)" id="Id" hidden />
+                                    <label class="form-label" for="name">NAME<span class="text-danger">*</span></label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input class="form-control rounded-0 toUpperCaseString" name="Name" id="name" type="text" placeholder="Enter currency name" required value="" maxlength="@t2TBLength" />
+
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="code">CODE<span class="text-danger">*</span></label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input class="form-control rounded-0 toUpperCaseString" name="TYPE" id="type" type="text" placeholder="Enter currency code" required value="" maxlength="@t1TBLength" />
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <label style="white-space: nowrap;" class="form-label" for="inwords">REMARKS</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input class="form-control rounded-0 toUpperCaseString" name="REMARKS" id="remarks" type="text" placeholder="Enter Sub Currency (Ex. Cents)" required value="" maxlength="@t2TBLength" />
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="row">
+                            <div class="col-sm-12">
+
+                                @if (mode == "Edit")
+                                {
+                                    @:<button id="submitBtn" class="btn btn-primary rounded-0 me-2 mt-4">Update</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    @:<button id="deleteBtn" class="btn btn-danger rounded-0 mt-4">Delete</button>
+                                }
+                                else
+                                {
+                                    @:<button id="submitBtn" class="btn btn-primary rounded-0 me-2 mt-4">Add</button>
+                                }
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <a class="btn btn-warning rounded-0 me-2 mt-4" href="#" onclick="loadPageWithParams('GridMasters','','',@ViewBag.pageId)">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(async function () {
+        debugger
+        if ('@mode' == 'Edit' || '@mode' == 'View') {
+            await BindData('@ViewBag.paramID');
+
+            if ('@mode' == 'View')
+                $('.readonlyPortation').addClass('readonly_form');
+        }
+    });
+
+    // Function to bind data for Edit/View mode
+    async function BindData(id) {
+        try {
+            let data = await $.ajax({
+                url: '@Url.Action("GetCHARGESById", "MasterCHARGES")',
+                type: 'Get',
+                data: { id: id }
+            });
+
+            $('#name').val(data.name);
+            $('#type').val(data.type);
+            $('#remarks').val(data.remarks)
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // Event handler for submit button click
+    $('#submitBtn').on('click', async function () {
+        event.preventDefault();
+
+        if (!isValidate()) {
+            alert("Please Fill All Required Fields");
+            return false;
+        }
+
+        // Check if the currency already exists
+        let data = await $.ajax({
+            url: '@Url.Action("CheckCHARGES", "MasterCHARGES")',
+            type: 'Get',
+            data: { id: '@ViewBag.paramID', Name: $('#name').val() }
+        });
+
+        if (!data) {
+            alert("Charges Already Exsist.");
+            return false;
+        }
+
+        var obj = {
+            Id: '@ViewBag.paramID',
+            Name: $('#name').val(),
+            TYPE: $('#type').val(),
+            IsActive: true,
+            IsDefault: false,
+            REMARKS: $('#remarks').val(),
+        }
+        try {// Save or update the currency details
+            let data1 = await $.ajax({
+                url: '@Url.Action("SaveCHARGES", "MasterCHARGES")',
+                type: 'post',
+                data: obj
+            });
+
+            if (data1.statusCode == 201) {
+                loadPageWithParams('GRIDMASTERS', '', '', '@pageId');
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+    function isValidate() {
+        // Function to validate required fields
+        if (isNullOrEmpty($('#name').val())) {
+            return false;
+        } else if (isNullOrEmpty($('#type').val())) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    $('#deleteBtn').click(async function (e) {
+        e.preventDefault();
+
+        const confirmed = confirm('Are you sure you want to delete?');
+
+        if (!confirmed) {
+            return;
+        }
+
+        let data2 = await $.ajax({
+            url: '@Url.Action("DeleteCHARGES", "MasterCHARGES")',
+            type: 'Get',
+            data: { id: '@ViewBag.paramID' }
+        });
+
+        loadPageWithParams('GRIDMASTERS', '', '', '@pageId');
+    });
+
+    // Function to disable form fields
+    function disableForm() {
+        const form = document.getElementById('currencyForm');
+        const formElements = form.elements;
+        for (let i = 0; i < formElements.length; i++) {
+            formElements[i].disabled = true;
+        }
+        document.getElementById('submitBtn').style.display = 'none';
+    }
+
+    $('.toUpperCaseString').on('input paste', function () {
+        $(this).val($(this).val().toLocaleUpperCase());
+    });
+</script>
