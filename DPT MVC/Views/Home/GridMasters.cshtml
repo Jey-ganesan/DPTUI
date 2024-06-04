@@ -315,7 +315,7 @@
 
         bindTable(data);
         document.getElementById('loader').style.display = 'none';
-
+        
     }
 
     $("#createPage").on('click', function () {
@@ -355,7 +355,7 @@
 
     function bindTable(data) {
         //i want to bind only the table data
-
+        
         $('#tableContainer').empty(); // Clear previous content
 
         var tableData = data[0].resultData;
@@ -400,7 +400,7 @@
         @:tabType == "Header" ? child = '<span class="details-control">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;' : '';
         @:return `${child}<span style="cursor: pointer;color:#007bff;" href = "#"title="${data}" onclick="loadPageWithParams('${page}', ${row.SLNO}, 'Edit', @pageId)">${displayData}</span>`;
     }
-                                                                   return data;
+                                                               return data;
                         }
                         return data;
                     } else {
@@ -460,7 +460,7 @@
         @:actions += '<a href="#" title="Edit" onclick="loadPageWithParams(\'' + page + '\', ' + row.SLNO + ', \'Edit\',@pageId)"><i class="fa fa-pencil"></i></a>';
     }
 
-                                                            return actions;
+                                                        return actions;
         }
 
         function formatColumnName(columnName) {
@@ -582,17 +582,17 @@
         dataTableLengthElement.style.position = 'sticky';
         dataTableLengthElement.style.left = '2px';
     }
-    //function formatNumericData(value) {
-    //    // Check if the value is a number
-    //    var roundOff = @decimalRoundOff;
-    //    if (!isNaN(parseFloat(value))) {
-    //        // Check if it's an integer
-    //        if (Number.isInteger(value)) {
-    //            return value.toLocaleString('en-US', { minimumFractionDigits: roundOff, maximumFractionDigits: roundOff }); // Format to two decimal places
-    //        } else {
-    //            return parseFloat(value).toLocaleString('en-US', { minimumFractionDigits: roundOff, maximumFractionDigits: roundOff }); // Format to two decimal places
-    //        }
-    //    }
-    //    return value; // Return as is if not a number
-    //}
+                                    //function formatNumericData(value) {
+                                    //    // Check if the value is a number
+                                    //    var roundOff = @decimalRoundOff;
+                                    //    if (!isNaN(parseFloat(value))) {
+                                    //        // Check if it's an integer
+                                    //        if (Number.isInteger(value)) {
+                                    //            return value.toLocaleString('en-US', { minimumFractionDigits: roundOff, maximumFractionDigits: roundOff }); // Format to two decimal places
+                                    //        } else {
+                                    //            return parseFloat(value).toLocaleString('en-US', { minimumFractionDigits: roundOff, maximumFractionDigits: roundOff }); // Format to two decimal places
+                                    //        }
+                                    //    }
+                                    //    return value; // Return as is if not a number
+                                    //}
 </script>
