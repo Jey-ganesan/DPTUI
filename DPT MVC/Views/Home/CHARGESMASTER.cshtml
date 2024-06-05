@@ -1,6 +1,8 @@
 ﻿@inject IConfiguration Configuration
 
 @{
+
+    // Fetch configuration values from appsettings.json or other configuration sources
     int decimalRoundOff = Configuration.GetValue<int>("NumberSettings:DecimalRoundOff");
     int t1TBLength = Configuration.GetValue<int>("CharacterSettings:T1TypeTextbox");
     int t2TBLength = Configuration.GetValue<int>("CharacterSettings:T2TypeTextbox");
@@ -91,14 +93,17 @@
 
     $(document).ready(async function () {
         debugger
-        if ('@mode' == 'Edit' || '@mode' == 'View') {
+        if ('@mode' == 'Edit') {
             await BindData('@ViewBag.paramID');
-
-            if ('@mode' == 'View')
-                $('.readonlyPortation').addClass('readonly_form');
         }
+        if ('@mode' == 'View') {
+            await BindData('@ViewBag.paramID');
+            disableForm();
+        }
+
     });
 
+    // Function to bind data for Edit/View mode
     async function BindData(id) {
         try {
             let data = await $.ajax({
@@ -117,7 +122,7 @@
         }
     }
 
-
+    // Event handler for submit button click
     $('#submitBtn').on('click', async function () {
         event.preventDefault();
 
@@ -126,6 +131,7 @@
             return false;
         }
 
+        // Check if the currency already exists
         let data = await $.ajax({
             url: '@Url.Action("CheckCHARGES", "MasterCHARGES")',
             type: 'Get',
@@ -133,7 +139,7 @@
         });
 
         if (!data) {
-            alert("Currency Already Exsist.");
+            alert("Charges Already Exsist.");
             return false;
         }
 
@@ -145,7 +151,7 @@
             IsDefault: false,
             REMARKS: $('#remarks').val(),
         }
-        try {
+        try {// Save or update the currency details
             let data1 = await $.ajax({
                 url: '@Url.Action("SaveCHARGES", "MasterCHARGES")',
                 type: 'post',
@@ -162,7 +168,7 @@
     });
 
     function isValidate() {
-
+        // Function to validate required fields
         if (isNullOrEmpty($('#name').val())) {
             return false;
         } else if (isNullOrEmpty($('#type').val())) {
@@ -191,6 +197,7 @@
         loadPageWithParams('GRIDMASTERS', '', '', '@pageId');
     });
 
+    // Function to disable form fields
     function disableForm() {
         const form = document.getElementById('currencyForm');
         const formElements = form.elements;

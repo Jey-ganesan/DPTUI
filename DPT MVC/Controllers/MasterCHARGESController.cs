@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Headers;
 using DPT.MVC.Models;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace DPT.MVC.Controllers
 {
@@ -42,18 +44,18 @@ namespace DPT.MVC.Controllers
                     if (model.Id != 0)
                     {
                         model.Created = DateTime.Now;
-                        //model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
                         model.LastUpdated = DateTime.Now;
-                        //model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
                         requestBody = new HttpRequestMessage(HttpMethod.Patch, "/api/masters/CHARGES");
 
                     }
                     else
                     {
                         model.Created = DateTime.Now;
-                        //model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
                         model.LastUpdated = DateTime.Now;
-                        //model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
                         requestBody = new HttpRequestMessage(HttpMethod.Post, "/api/masters/CHARGES");
                     }
                     var serializations = JsonConvert.SerializeObject(model);
@@ -108,6 +110,21 @@ namespace DPT.MVC.Controllers
             var data = System.Text.Json.JsonSerializer.Deserialize<bool>(content);
 
             return Json(data);
+        }
+        public async Task<JsonResult> GetCharges()
+        {
+            try
+            {
+                var client = _httpClientFactory.CreateClient("DPTClient");
+                var response = await client.GetAsync($"/api/masters/CHARGES"); 
+                var content = await response.Content.ReadAsStringAsync();
+                var res = System.Text.Json.JsonSerializer.Deserialize<object>(content);
+                return Json(res);
+            }
+            catch (System.Exception ex)
+            {
+                return Json(ex);
+            }
         }
     }
 }

@@ -98,11 +98,12 @@
 
     $(document).ready(async function () {
         debugger
-        if ('@mode' == 'Edit' || '@mode' == 'View') {
+        if ('@mode' == 'Edit') {
             await BindData('@ViewBag.paramID');
-
-            if ('@mode' == 'View')
-                $('.readonlyPortation').addClass('readonly_form');
+        }
+        if ('@mode' == 'View') {
+            await BindData('@ViewBag.paramID');
+            disableForm();
         }
     });
 
