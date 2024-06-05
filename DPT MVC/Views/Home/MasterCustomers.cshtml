@@ -39,6 +39,10 @@
         /*-moz-opacity: 1;*/
     }
 
+    .readonly_form {
+        pointer-events: none;
+        opacity: 0.5;
+    }
         .center-busy img {
             height: 128px;
             width: 128px;
@@ -71,7 +75,7 @@
                 </div>
                 <div class="card-body">
                     <form id="customerForm">
-                        <fieldset>
+                        <fieldset class="readonlyPortation">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="mb-3">
@@ -270,7 +274,8 @@
 
         if ('@mode' == 'View') {
             await BindCutomerData('@ViewBag.paramID');
-            disableForm();
+            document.getElementById('submitBtn').style.display = 'none';
+            $('.readonlyPortation').addClass('readonly_form');
         }
     });
 
