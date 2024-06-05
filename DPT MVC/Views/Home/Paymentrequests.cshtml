@@ -1,4 +1,5 @@
 ﻿@using System.Text.Json
+@using DPT.MVC.Helper
 @inject IConfiguration Configuration
 
 @{
@@ -10,6 +11,8 @@
     string mode = ViewBag.mode;
     string url = ViewBag.url;
     int pageId = ViewBag.pageId;
+    int userId = Convert.ToInt32(SessionHelper.GetStringValueFromSession(Context, "UserId"));
+    string userName = SessionHelper.GetStringValueFromSession(Context, "DisplayName");
 }
 
 <head>
@@ -19,24 +22,36 @@
             text-align: center !important;
         }
 
-        thead{
+        thead {
             background-color: #ffc107;
         }
 
-        .chosen-results{
+        .chosen-results {
             background-color: white;
             width: 300px;
         }
 
-        .chosen-search{
+        .chosen-search {
             background-color: white;
             width: 300px;
         }
 
-        .chosen-drop{
-            width: 300px;
+        #requestHdrGrid tbody tr:nth-child(odd) {
+            background-color: #d0d0d0;
         }
 
+        #requestHdrGrid tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .table-container {
+            overflow-x: auto; 
+            white-space: nowrap;
+        }
+
+        .table {
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -65,7 +80,7 @@
                             <div class="row">
                             </div>
                             <br />
-                            <div class="row">
+                            <div class="table-container">
                                 @* <table width="100%" id="requestHdrGrid" class='table dataTable dtr-inline'>
                                 </table> *@
                                 <table id="requestHdrGrid" class="table">
@@ -75,12 +90,12 @@
                                             <th>Job No</th>
                                             <th>HAWB</th>
                                             <th>Customer</th>
-                                            <th>Currency</th>
                                             <th>Charges 1</th>
                                             <th>Amount 1</th>
                                             <th>Charges 2</th>
                                             <th>Amount 2</th>
                                             <th>Total Amount</th>
+                                            <th>Remarks</th>
                                             <th>Bayan No</th>
                                             <th>Upload Bayan Copy</th>
                                         </tr>
@@ -125,7 +140,7 @@
         });
     }
 
-    async function Currencydata(){
+    async function Currencydata() {
         CurrencyData = await $.ajax({
             url: '@Url.Action("GetCurrencies", "MasterCurrencies")',
             type: 'get',
@@ -151,42 +166,38 @@
         const newRow = document.createElement('tr');
 
         newRow.innerHTML = `
-                    <td><input type="date" name="reviewerComment" class="form-control rounded-0     date-picker"></td>
-                <td><input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="50"></td>
-                <td><input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="50"></td>
-                <td>
-                    <select class="status-dropdown chosen-select" style="width: 100px;">
-                        <option value="">Select</option>
-                        ${CustomerData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
-                    </select>
-                </td>
-                <td>
-                    <select class="status-dropdown chosen-select" style="width: 100px;">
-                        <option value="">Select</option>
-                        ${CurrencyData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
-                    </select>
-                </td>
-                <td>
-                    <select class="status-dropdown chosen-select" style="width: 100px;">
-                        <option value="">Select</option>
-                        ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
-                    </select>
-                </td>
-                <td><input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="50"></td>
-                <td>
-                    <select class="status-dropdown chosen-select" style="width: 100px;">
-                        <option value="">Select</option>
-                        ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
-                    </select>
-                </td>
-                <td><input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="50"></td>
-                <td><input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="50"></td>
-                <td><input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="50"></td>
-                <td><input type="file" name="file" class="form-control"></td>
-            `;
+                        <td><input type="date" name="reviewerComment" class="chosen-border form-control rounded-0     date-picker"></td>
+                        <td><input type="text" name="JOBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                        <td><input type="text" name="HAWBNO " class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                    <td>
+                        <select name="CUSTOMERID" class="status-dropdown chosen-select" style="width: 100px;">
+                            <option value="">Select</option>
+                            ${CustomerData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                        </select>
+                    </td>
+                    <td>
+                            <select name="CHARGETYPEID" class="status-dropdown chosen-select" style="width: 100px;">
+                            <option value="">Select</option>
+                            ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                        </select>
+                    </td>
+                                <td><input name="AMOUNT" type="text" name="reviewerComment" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                    <td>
+                            <select name="CHARGETYPEID" class="status-dropdown chosen-select" style="width: 100px;">
+                            <option value="">Select</option>
+                            ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                        </select>
+                    </td>
+                            <td><input type="text" name="AMOUNT" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                            <td><input type="text" name="TOTALREQUESTAMOUNT" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                            <td><input type="textarea" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                            <td><input type="text" name="BAYANNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                        <td><input type="file" name="file" class="chosen-border form-control"></td>
+                `;
 
         table.appendChild(newRow);
         $('.chosen-select').chosen();
+        $('.chosen-drop').css('width', '310px');
         $('.date-picker').flatpickr({
             dateFormat: "d-M-Y",
             defaultDate: new Date()
@@ -316,8 +327,101 @@
     //     })
     // }
 
-
     async function SubmitrequestedRecord() {
+        debugger
+        // Get all rows in the header table
+        const rows = document.querySelectorAll('#requestHdrGrid tbody tr');
+
+        if (rows.length === 0) {
+            alert('No rows found in the header table.');
+            return;
+        }
+
+        const headers = [];
+        const details = [];
+
+        rows.forEach(row => {
+            // Gather header data for each row
+            const customerSelect = row.querySelector('select[name="CUSTOMERID"]');
+            const customerID = customerSelect?.value || '';
+            const customerName = customerSelect ? customerSelect.options[customerSelect.selectedIndex].text : '';
+
+            const headerdata = {
+                JOBNO: row.querySelector('input[name="JOBNO"]')?.value || '',
+                HAWBNO: row.querySelector('input[name="HAWBNO"]')?.value || '',
+                CUSTOMERID: customerID,
+                CUSTOMERNAME: customerName,
+                BAYANNO: row.querySelector('input[name="BAYANNO"]')?.value || '',
+                TOTALREQUESTAMOUNT: row.querySelector('input[name="TOTALREQUESTAMOUNT"]')?.value || '',
+                REQUESTEDBY: 'YourRequestedByValue' // Replace with your actual value or logic to get this value
+            };
+
+            headers.push(headerdata);
+
+            // Gather detail data for each row
+            const charge1 = row.querySelector('select[name="CHARGETYPEID"]')?.value;
+            const amount1 = row.querySelector('input[name="AMOUNT"]')?.value;
+            const remarks1 = row.querySelector('input[name="REMARKS1"]')?.value || '';
+
+            if (charge1 && amount1) {
+                details.push({
+                    HDRID: null, // Will be set after header is saved
+                    CHARGETYPEID: charge1,
+                    AMOUNT: amount1,
+                    REMARKS1: remarks1
+                });
+            }
+
+            const charge2 = row.querySelectorAll('select[name="CHARGETYPEID"]')[1]?.value;
+            const amount2 = row.querySelectorAll('input[name="AMOUNT"]')[1]?.value;
+
+            if (charge2 && amount2) {
+                details.push({
+                    HDRID: null, // Will be set after header is saved
+                    CHARGETYPEID: charge2,
+                    AMOUNT: amount2,
+                    REMARKS1: remarks1 // Assuming the same remarks for the second charge, or adjust if needed
+                });
+            }
+        });
+
+        try {
+            // Save header data
+            for (let headerdata of headers) {
+                const res1 = await $.ajax({
+                    url: '@Url.Action("SaveREQUESTHDR", "REQUESTHDR")',
+                    method: 'POST',
+                    data: headerdata
+                });
+
+                // Assuming HDRID is returned in the response for the saved header data
+                const HDRID = res1.HDRID;
+
+                // Update HDRID in detail data
+                details.forEach(detail => {
+                    if (detail.HDRID === null && detail.JOBNO === headerdata.JOBNO) {
+                        detail.HDRID = HDRID;
+                    }
+                });
+            }
+
+            // Save detail data
+            for (let detaildata of details) {
+                await $.ajax({
+                    url: '@Url.Action("SaveREQUESTDTL", "REQUESTDTL")',
+                    method: 'POST',
+                    data: detaildata
+                });
+            }
+
+            alert('Data saved successfully!');
+        } catch (error) {
+            console.error('Error saving data:', error);
+            alert('Failed to save data. Please try again.');
+        }
+    }
+
+    async function Save() {
         const rows = document.querySelectorAll('#requestHdrGrid tbody tr');
         const data = [];
 
@@ -334,17 +438,34 @@
         });
         debugger
 
-        $.ajax({
-            url: 'your-server-endpoint-url', // Replace with your server URL
+
+        // var headerdata = {
+        //     JOBNO: ,
+        //     HAWBNO: ,
+        //     CUSTOMERID: ,
+        //     CUSTOMERNAME: ,
+        //     BAYANNO: ,
+        //     TOTALREQUESTAMOUNT: ,
+        //     REQUESTEDBY: ,
+        // }
+
+        // var detaildata = {
+        //     HDRID: ,
+        //     CHARGETYPEID: ,
+        //     AMOUNT: ,
+        //     REMARKS1: ,
+        // }
+
+        var res2 = await $.ajax({
+            url: '@Url.Action("SaveREQUESTHDR", "REQUESTHDR")',
             method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function (response) {
-                console.log('Data successfully submitted', response);
-            },
-            error: function (error) {
-                console.error('Error submitting data', error);
-            }
+            data: headerdata
+        });
+
+        var res2 = await $.ajax({
+            url: '@Url.Action("SaveREQUESTDTL", "REQUESTDTL")',
+            method: 'POST',
+            data: detaildata
         });
     }
 
@@ -361,4 +482,22 @@
         }
     });
 
+    document.addEventListener('DOMContentLoaded', () => {
+        // Function to update total amount
+        function updateTotalAmount(row) {
+            const amount1 = parseFloat(row.querySelector('input[name="AMOUNT"]').value) || 0;
+            const amount2 = parseFloat(row.querySelectorAll('input[name="AMOUNT"]')[1]?.value) || 0;
+            const totalAmount = amount1 + amount2;
+            row.querySelector('input[name="TOTALREQUESTAMOUNT"]').value = totalAmount.toFixed(2);
+        }
+
+        // Event delegation for input changes
+        document.querySelector('#requestHdrGrid tbody').addEventListener('input', (event) => {
+            const target = event.target;
+            if (target.matches('input[name="AMOUNT"]')) {
+                const row = target.closest('tr');
+                updateTotalAmount(row);
+            }
+        });
+    });
 </script>

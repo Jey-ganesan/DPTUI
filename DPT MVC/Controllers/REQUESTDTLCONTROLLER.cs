@@ -1,39 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
-using System.Net;
+﻿using DPT.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net;
 using System.Net.Http.Headers;
-using DPT.MVC.Models;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Wordprocessing;
+using System.Net;
 
 namespace DPT.MVC.Controllers
 {
-    public class MasterCHARGESController : Controller
+    public class REQUESTDTLCONTROLLER : Controller
     {
-        private readonly ILogger<MasterCHARGESController> _logger;
+        private readonly ILogger<REQUESTDTLCONTROLLER> _logger;
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public MasterCHARGESController(ILogger<MasterCHARGESController> logger, IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public REQUESTDTLCONTROLLER(ILogger<REQUESTDTLCONTROLLER> logger, IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
         }
-        public async Task<JsonResult> GetCHARGESById(int id)
-        {
-            var client = _httpClientFactory.CreateClient("DPTClient");
-            var response = await client.GetAsync("api/masters/CHARGES/" + id);
-            var content = await response.Content.ReadAsStringAsync();
-            var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
-            return Json(data);
-        }
-
         [HttpPost]
-        public async Task<ActionResult> SaveCHARGES(CHARGES model)
+        public async Task<ActionResult> SaveREQUESTDTL(REQUESTDTL model)
         {
             var client = _httpClientFactory.CreateClient("DPTClient");
             try
@@ -41,22 +27,22 @@ namespace DPT.MVC.Controllers
                 if (model != null)
                 {
                     var requestBody = new HttpRequestMessage();
-                    if (model.Id != 0)
+                    if (model.ID != 0)
                     {
-                        model.Created = DateTime.Now;
-                        model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-                        model.LastUpdated = DateTime.Now;
-                        model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-                        requestBody = new HttpRequestMessage(HttpMethod.Patch, "/api/masters/CHARGES");
+                        model.CREATED = DateTime.Now;
+                        model.CREATEDBY = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        model.LASTUPDATED = DateTime.Now;
+                        model.LASTUPDATEDBY = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        requestBody = new HttpRequestMessage(HttpMethod.Patch, "/api/REQUESTDTL");
 
                     }
                     else
                     {
-                        model.Created = DateTime.Now;
-                        model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-                        model.LastUpdated = DateTime.Now;
-                        model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-                        requestBody = new HttpRequestMessage(HttpMethod.Post, "/api/masters/CHARGES");
+                        model.CREATED = DateTime.Now;
+                        model.CREATEDBY = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        model.LASTUPDATED = DateTime.Now;
+                        model.LASTUPDATEDBY = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        requestBody = new HttpRequestMessage(HttpMethod.Post, "/api/REQUESTDTL");
                     }
                     var serializations = JsonConvert.SerializeObject(model);
                     requestBody.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("applications/json"));
@@ -92,31 +78,12 @@ namespace DPT.MVC.Controllers
             }
             return Json(model);
         }
-
-        public async Task<JsonResult> DeleteCHARGES(int id)
-        {
-            var client = _httpClientFactory.CreateClient("DPTClient");
-            var response = await client.DeleteAsync("/api/masters/CHARGES/" + id);
-            var content = await response.Content.ReadAsStringAsync();
-            var currenciesDetails = System.Text.Json.JsonSerializer.Deserialize<object>(content);
-            return Json(currenciesDetails);
-        }
-
-        public async Task<JsonResult> CheckCHARGES(int id, string name)
-        {
-            var client = _httpClientFactory.CreateClient("DPTClient");
-            var response = await client.GetAsync($"/api/masters/CHARGES/CheckCHARGES?id={id}&name={name}");
-            var content = await response.Content.ReadAsStringAsync();
-            var data = System.Text.Json.JsonSerializer.Deserialize<bool>(content);
-
-            return Json(data);
-        }
-        public async Task<JsonResult> GetCharges()
+        public async Task<JsonResult> GetAllREQUESTDTL()
         {
             try
             {
                 var client = _httpClientFactory.CreateClient("DPTClient");
-                var response = await client.GetAsync($"/api/masters/CHARGES"); 
+                var response = await client.GetAsync($"/api/REQUESTDTL");
                 var content = await response.Content.ReadAsStringAsync();
                 var res = System.Text.Json.JsonSerializer.Deserialize<object>(content);
                 return Json(res);
