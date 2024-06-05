@@ -30,50 +30,21 @@ namespace DPT.MVC.Controllers
 
         public async Task<JsonResult> GetCustomers()
         {
-            try
-            {
-                var response = await HttpClient.GetAsync("/api/customers");
+                var client = _httpClientFactory.CreateClient("DPTClient");
+                var response = await client.GetAsync("/api/customers");
                 var content = await response.Content.ReadAsStringAsync();
                 var currenciesDetails = System.Text.Json.JsonSerializer.Deserialize<object>(content);
                 return Json(currenciesDetails);
-            }
-            catch (Exception e)
-            {
-                // Get the controller and action names
-                var controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                var actionName = ControllerContext.ActionDescriptor.ActionName;
 
-                // Get the DisplayName from the session
-                var displayName = HttpContext.Session.GetString("DisplayName");
-
-                // Log the error along with the controller, action, and DisplayName
-                _logger.LogError(e, "An error occurred in {ControllerName}/{ActionName} for {DisplayName}.", controllerName, actionName, displayName);
-                return Json(new Models.Customer());
-            }
         }
 
         public async Task<JsonResult> GetCustomersById(int id)
         {
-            try
-            {
-                var response = await HttpClient.GetAsync("/api/customers/" + id);
+                var client = _httpClientFactory.CreateClient("DPTClient");
+                var response = await client.GetAsync("/api/customers/" + id);
                 var content = await response.Content.ReadAsStringAsync();
                 var currenciesDetails = System.Text.Json.JsonSerializer.Deserialize<object>(content);
                 return Json(currenciesDetails);
-            }
-            catch (Exception e)
-            {
-                // Get the controller and action names
-                var controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                var actionName = ControllerContext.ActionDescriptor.ActionName;
-
-                // Get the DisplayName from the session
-                var displayName = HttpContext.Session.GetString("DisplayName");
-
-                // Log the error along with the controller, action, and DisplayName
-                _logger.LogError(e, "An error occurred in {ControllerName}/{ActionName} for {DisplayName}.", controllerName, actionName, displayName);
-                return Json(new Models.Customer());
-            }
         }
 
         [HttpPost]
@@ -81,14 +52,13 @@ namespace DPT.MVC.Controllers
         {
             try
             {
+                var client = _httpClientFactory.CreateClient("DPTClient");
+
                 if (model != null)
                 {
 
                     var requestBody = new HttpRequestMessage();
-                    if (model.Id == 0)
-                    {
-                        model.Id = null;
-                    }
+                
                     if (model.Id != 0 && model.Id != null)
                     {
 
@@ -108,7 +78,7 @@ namespace DPT.MVC.Controllers
                     requestBody.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     requestBody.Content = new StringContent(serializations);
                     requestBody.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    var response = await HttpClient.SendAsync(requestBody);
+                    var response = await client.SendAsync(requestBody);
 
 
                     if (response.IsSuccessStatusCode)
@@ -144,27 +114,21 @@ namespace DPT.MVC.Controllers
         [HttpDelete]
         public async Task<JsonResult> DeleteCustomer(int id)
         {
-            try
-            {
-                var response = await HttpClient.DeleteAsync("/api/customers/" + id);
+                var client = _httpClientFactory.CreateClient("DPTClient");
+                var response = await client.DeleteAsync("/api/customers/" + id);
                 var content = await response.Content.ReadAsStringAsync();
                 var customersDetails = System.Text.Json.JsonSerializer.Deserialize<object>(content);
-                return Json(customersDetails);
-            }
-            catch (Exception e)
-            {
-                // Get the controller and action names
-                var controllerName = ControllerContext.ActionDescriptor.ControllerName;
-                var actionName = ControllerContext.ActionDescriptor.ActionName;
-
-                // Get the DisplayName from the session
-                var displayName = HttpContext.Session.GetString("DisplayName");
-
-                // Log the error along with the controller, action, and DisplayName
-                _logger.LogError(e, "An error occurred in {ControllerName}/{ActionName} for {DisplayName}.", controllerName, actionName, displayName);
-                return Json(new Models.Customer());
-            }
+                return Json(customersDetails);         
         }
 
+        public async Task<JsonResult> CheckCustomer(int id, string Code)
+        {
+            var client = _httpClientFactory.CreateClient("DPTClient");
+            var response = await client.GetAsync($"/api/customers/CheckCustomer?id={id}&Code={Code}");
+            var content = await response.Content.ReadAsStringAsync();
+            var data = System.Text.Json.JsonSerializer.Deserialize<bool>(content);
+
+            return Json(data);
+        }
     }
 }
