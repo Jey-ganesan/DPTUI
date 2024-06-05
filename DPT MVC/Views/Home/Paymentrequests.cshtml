@@ -181,14 +181,14 @@
                             ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
                         </select>
                     </td>
-                                <td><input name="AMOUNT" type="text" name="reviewerComment" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                                    <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="updateTotalAmount(this)" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
                     <td>
                             <select name="CHARGETYPEID" class="status-dropdown chosen-select" style="width: 100px;">
                             <option value="">Select</option>
                             ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
                         </select>
                     </td>
-                            <td><input type="text" name="AMOUNT" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
+                                <td><input type="text" name="AMOUNT" oninput="updateTotalAmount(this)" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
                             <td><input type="text" name="TOTALREQUESTAMOUNT" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
                             <td><input type="textarea" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
                             <td><input type="text" name="BAYANNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
@@ -202,6 +202,17 @@
             dateFormat: "d-M-Y",
             defaultDate: new Date()
         });
+        newRow.querySelectorAll('.amount-field').forEach(field => {
+            field.addEventListener('input', updateTotalAmount);
+        });
+    }
+
+    function updateTotalAmount(inputField) {
+        const row = inputField.closest('tr');
+        const amount1 = parseFloat(row.querySelector('input[name="AMOUNT1"]').value) || 0;
+        const amount2 = parseFloat(row.querySelector('input[name="AMOUNT2"]').value) || 0;
+        const totalAmount = amount1 + amount2;
+        row.querySelector('input[name="TOTALREQUESTAMOUNT"]').value = totalAmount.toFixed(2);
     }
 
     $('#addRowBtn').on('click', addRow);
