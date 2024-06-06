@@ -1,0 +1,335 @@
+﻿@using DPT.MVC.Models
+@inject IConfiguration Configuration
+
+@{
+    int decimalRoundOff = Configuration.GetValue<int>("NumberSettings:DecimalRoundOff");
+    int t1TBLength = Configuration.GetValue<int>("CharacterSettings:T1TypeTextbox");
+    int t2TBLength = Configuration.GetValue<int>("CharacterSettings:T2TypeTextbox");
+    int t3TBLength = Configuration.GetValue<int>("CharacterSettings:T3TypeTextbox");
+    string? dateFormat = Configuration.GetValue<string>("Date:dateFormat");
+    string mode = ViewBag.mode;
+    string url = ViewBag.url;
+    int pageId = ViewBag.pageId;
+    Access access = ViewBag.access;
+
+    // Access access = ViewBag.access;
+}
+
+<head>
+    <style>
+        .input-container {
+            position: relative;
+            /* width: max-content; */
+        }
+
+            .input-container input {
+                padding-right: 30px; /* Adjust padding to make room for the icon */
+            }
+
+            .input-container .fa-eye,
+            .input-container .fa-eye-slash {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+                cursor: pointer;
+            }
+
+        .readonly_form {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+    </style>
+</head>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mx-auto col-lg-12">
+            <div class="card shadow-lg">
+                <div class="card-header text-white bg-warning d-flex">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-lg-start">
+                            @if (mode == "Edit")
+                            {
+                                @:Edit User
+                            }
+                            else if (mode == "View")
+                            {
+                                @:View User
+                            }
+                            else
+                            {
+                                @:Add User
+                            }
+                        </h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <span class="text-danger"> * Required fields</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @* Page Content *@
+                    <div class="readonlyPortation">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <label class="form-label" for="name">User Name<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" name="displayName" id="displayName" />
+                            </div>
+                            <div class="col-md-1">
+                                <label class="form-label" for="userId">User Role<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" name="userRole" id="userRole" />
+                            </div>
+                            <div class="col-md-1">
+                                <label class="form-label" for="transPrefix">User Prefix<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control rounded-0 maxLengthValidation" maxlength="5" name="transPrefix" id="transPrefix" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label class="form-label" for="email">Email<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control rounded-0 maxLengthValidation" maxlength="255" name="email" id="email" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label" for="password">Password<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-container">
+                                    <input type="password" class="form-control rounded-0" maxlength="20" name="password" id="password" />
+                                    <i class="fas fa-eye" id="togglePassword"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4">
+                            @if (mode == "Edit")
+                            {
+                                @:  <button class="btn btn-primary" id="btnSave">Update</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                @if (access.delete)
+                                {
+                                    @: <button class="btn btn-danger" id="btnDelete">Delete</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                }
+                            }
+                            else
+                            {
+                               @:<button class="btn btn-primary" id="btnSave">Add</button>
+                            }
+                            <button class="btn btn-warning" id="btnCancel">Cancel</button>
+                        </div>
+                        <div class="col-md-4">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-danger">Password Validation</span>
+                            <ul>
+                                <li>Password must be between 8 and 20 characters.</li>
+                                <li>Password must contain at least one uppercase letter.</li>
+                                <li>Password must contain at least one lowercase letter.</li>
+                                <li>Password must contain at least one special character.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var departments = [];
+    var sections = [];
+    var approvalLevels = [];
+
+    $(document).ready(async function () {
+
+
+        if ('@mode' == 'Edit') {
+            await BindData('@ViewBag.paramID');
+        }
+
+        if ('@mode' == 'View') { 
+                await BindData('@ViewBag.paramID');
+            document.getElementById('btnSave').style.display = 'none';
+                $('.readonlyPortation').addClass('readonly_form');
+        }
+    });   
+
+    $('#btnSave').on('click', async function () {
+        debugger
+        event.preventDefault();
+
+        if (!isValidate()) {
+            alert("Please Fill All Required Fields");
+            return false;
+        }
+
+        let data = await $.ajax({
+            url: '@Url.Action("CheckUser", "Users")',
+            type: 'Get',
+            data: { id: '@ViewBag.paramID', Email: $('#email').val() }
+        });
+
+        if (!data) {
+            alert("UserId Already Exsist.");
+            return false;
+        }
+
+        if (!validatePassword($('#password').val())) {
+            alert("Please Enter Valid Password.");
+            return false;
+        }
+
+
+        var obj = {
+            Id: '@ViewBag.paramID',
+            Password: $('#password').val(),
+            DisplayName: $('#displayName').val(),
+            Email: $('#email').val(),
+            UserRole: $('#userRole').val(),
+            TransPrefix: $('#transPrefix').val(),
+            DashboardType: ' ',
+            IsActive: true,
+        }
+        try {
+            let data = await $.ajax({
+                url: '@Url.Action("SaveUser", "Users")',
+                type: 'post',
+                data: obj
+            });
+
+            if (data.statusCode == 201) {
+
+                loadPageWithParams('GRIDMASTERS', '', '', '@pageId');
+                // await resetForm();
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+    $('#btnDelete').on('click', async function () {
+        debugger
+        event.preventDefault();
+
+        try {
+            let data = await $.ajax({
+                url: '@Url.Action("DeleteUser", "Users")',
+                type: 'Delete',
+                data: { id: '@ViewBag.paramID' }
+            });
+
+            if (data.statusCode == 201) {
+
+                loadPageWithParams('GRIDMASTERS', '', '', '@pageId');
+                // await resetForm();
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+    $('#btnCancel').on('click', async function () {
+        event.preventDefault();
+
+        loadPageWithParams('GRIDMASTERS', '', '', '@pageId');
+    });
+
+    async function BindData(id) {
+        try {
+            let data = await $.ajax({
+                url: '@Url.Action("GetUserById", "Users")',
+                type: 'Get',
+                data: { id: id }
+            });
+
+            $('#displayName').val(data.displayName);
+            $('#userRole').val(data.userRole);
+            $('#transPrefix').val(data.transPrefix);
+            $('#email').val(data.email);
+            $('#password').val(data.password);         
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    function isValidate() {
+
+        if (isNullOrEmpty($('#displayName').val())) {
+            return false;
+        } else if (isNullOrEmpty($('#userRole').val())) {
+            return false;
+        } else if (isNullOrEmpty($('#transPrefix').val())) {
+            return false;
+        } else if (isNullOrEmpty($('#email').val())) {
+            return false;
+        } else if (isNullOrEmpty($('#password').val())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function validatePassword(password) {
+        // Define the regular expressions for each rule
+        const lengthCheck = /^.{8,20}$/;
+        const uppercaseCheck = /[A-Z]/;
+        const lowercaseCheck = /[a-z]/;
+        const specialCharCheck = /[!@@#$%^&*(),.?":{}|<>]/;
+
+        // Validate each rule
+        if (!lengthCheck.test(password)) {
+            return false;
+        }
+        if (!uppercaseCheck.test(password)) {
+            return false;
+        }
+        if (!lowercaseCheck.test(password)) {
+            return false;
+        }
+        if (!specialCharCheck.test(password)) {
+            return false;
+        }
+
+        // If all checks pass
+        return true;
+    }
+
+    $('.maxLengthValidation').on('input paste', function () {
+        var maxLength = $(this).attr('maxlength');
+        var currentLength = $(this).val().length;
+        var remaining = (maxLength - 1) - currentLength;
+        $(this).val($(this).val().toLocaleUpperCase());
+
+        if (remaining < 0) {
+            event.preventDefault();
+        } else {
+        }
+    });
+
+    $('#togglePassword').on('click', async function () {
+        let password = document.querySelector("#password");
+        password.setAttribute("type", password.getAttribute("type") === "password" ? "text" : "password");
+        this.classList.toggle("fa-eye");
+        this.classList.toggle("fa-eye-slash");
+    });
+
+</script>

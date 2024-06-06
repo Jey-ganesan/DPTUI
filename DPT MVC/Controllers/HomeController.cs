@@ -36,6 +36,8 @@ namespace DPT.MVC.Controllers
         {
             try
             {
+                var client = _httpClientFactory.CreateClient("DPTClient");
+
                 if (model != null)
                 {
                     var serializations = JsonConvert.SerializeObject(model);
@@ -44,12 +46,12 @@ namespace DPT.MVC.Controllers
                     requestBody.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("applications/json"));
                     requestBody.Content = new StringContent(serializations);
                     requestBody.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    var reponse = await HttpClient.SendAsync(requestBody);
+                    var reponse = await client.SendAsync(requestBody);
                     if (reponse.IsSuccessStatusCode)
                     {
                         var token = await reponse.Content.ReadAsStringAsync();
 
-                        var response = await HttpClient.GetAsync("/api/users/getbyemail/" + model.email);
+                        var response = await client.GetAsync("/api/users/getbyemail/" + model.email);
                         var content = await response.Content.ReadAsStringAsync();
                         var userDetails = System.Text.Json.JsonSerializer.Deserialize<Users>(content);
                         //DashboardType = userDetails.dashboardType;
@@ -87,13 +89,15 @@ namespace DPT.MVC.Controllers
         {
             try
             {
+                var client = _httpClientFactory.CreateClient("DPTClient");
+
                 var token = HttpContext.Session.GetString("Token");
                 if (string.IsNullOrEmpty(token))
                 {
                     return View("Login");
                 }
                 //var menuIds = permission.Select(x => x.menuId).ToList();
-                var response = await HttpClient.GetAsync("/api/menus");
+                var response = await client.GetAsync("/api/menus");
                 var content = await response.Content.ReadAsStringAsync();
 
                 // Deserialize the response content into the list of MenuInfo objects
@@ -139,6 +143,7 @@ namespace DPT.MVC.Controllers
             try
 
             {
+                var client = _httpClientFactory.CreateClient("DPTClient");
 
                 //var token = HttpContext.Session.GetString("Token");
 

@@ -1,39 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
-using System.Net;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net;
 using System.Net.Http.Headers;
+using System.Net;
 using DPT.MVC.Models;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace DPT.MVC.Controllers
 {
-    public class MasterCurrenciesController : Controller
+    public class UsersController : Controller
     {
-        private readonly ILogger<MasterCurrenciesController> _logger;
+        private readonly ILogger<UsersController> _logger;
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public MasterCurrenciesController(ILogger<MasterCurrenciesController> logger, IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public UsersController(ILogger<UsersController> logger, IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
         }
-        public async Task<JsonResult> GetCurrencyById(int id)
+        public async Task<JsonResult> GetUserById(int id)
         {
             var client = _httpClientFactory.CreateClient("DPTClient");
-            var response = await client.GetAsync("api/masters/currency/" + id);
+            var response = await client.GetAsync("/api/users/" + id);
             var content = await response.Content.ReadAsStringAsync();
             var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
             return Json(data);
         }
 
         [HttpPost]
-        public async Task<ActionResult> SaveCurrency(Currencies model)
+        public async Task<JsonResult> SaveUser(Users model)
         {
             var client = _httpClientFactory.CreateClient("DPTClient");
             try
@@ -41,22 +36,20 @@ namespace DPT.MVC.Controllers
                 if (model != null)
                 {
                     var requestBody = new HttpRequestMessage();
-                    if (model.Id != 0)
+                    if (model.id != 0)
                     {
-                        model.Created = DateTime.Now;
-                        model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-                        model.LastUpdated = DateTime.Now;
-                        model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-                        requestBody = new HttpRequestMessage(HttpMethod.Patch, "/api/masters/currency");
 
+                        //model.LastUpdated = DateTime.Now;
+                        //model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        requestBody = new HttpRequestMessage(HttpMethod.Patch, "/api/users");
                     }
                     else
                     {
-                        model.Created = DateTime.Now;
-                        model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-                        model.LastUpdated = DateTime.Now;
-                        model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-                        requestBody = new HttpRequestMessage(HttpMethod.Post, "/api/masters/currency");
+                        //model.Created = DateTime.Now;
+                        //model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        //model.LastUpdated = DateTime.Now;
+                        //model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        requestBody = new HttpRequestMessage(HttpMethod.Post, "/api/users");
                     }
                     var serializations = JsonConvert.SerializeObject(model);
                     requestBody.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("applications/json"));
@@ -92,39 +85,25 @@ namespace DPT.MVC.Controllers
             }
             return Json(model);
         }
-
-        public async Task<JsonResult> DeleteCurrency(int id)
+        public async Task<JsonResult> CheckUser(int id, string Email)
         {
             var client = _httpClientFactory.CreateClient("DPTClient");
-            var response = await client.DeleteAsync("/api/masters/currency/" + id);
-            var content = await response.Content.ReadAsStringAsync();
-            var currenciesDetails = System.Text.Json.JsonSerializer.Deserialize<object>(content);
-            return Json(currenciesDetails);
-        }
-
-        public async Task<JsonResult> CheckCurrency(int id, string name)
-        {
-            var client = _httpClientFactory.CreateClient("DPTClient");
-            var response = await client.GetAsync($"/api/masters/currency/CheckCurrency?id={id}&name={name}");
+            var response = await client.GetAsync($"/api/users/CheckUser?id={id}&Email={Email}");
             var content = await response.Content.ReadAsStringAsync();
             var data = System.Text.Json.JsonSerializer.Deserialize<bool>(content);
 
             return Json(data);
         }
-        public async Task<JsonResult> GetCurrencies()
+
+        [HttpDelete]
+        public async Task<JsonResult> DeleteUser(int id)
         {
-            try
-            {
-                var client = _httpClientFactory.CreateClient("DPTClient");
-                var response = await client.GetAsync($"/api/masters/currency");
-                var content = await response.Content.ReadAsStringAsync();
-                var res = System.Text.Json.JsonSerializer.Deserialize<object>(content);
-                return Json(res);
-            }
-            catch (System.Exception ex)
-            {
-                return Json(ex);
-            }
+            var client = _httpClientFactory.CreateClient("DPTClient");
+            var response = await client.GetAsync("/api/users/" + id);
+            var content = await response.Content.ReadAsStringAsync();
+            var data = System.Text.Json.JsonSerializer.Deserialize<bool>(content);
+
+            return Json(data);
         }
     }
 }
