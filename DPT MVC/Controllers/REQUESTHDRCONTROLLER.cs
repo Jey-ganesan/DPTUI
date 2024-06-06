@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace DPT.MVC.Controllers
 {
@@ -18,7 +19,7 @@ namespace DPT.MVC.Controllers
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
         }
-        
+
         [HttpPost]
         public async Task<ActionResult> SaveREQUESTHDR(REQUESTHDR model)
         {
@@ -53,8 +54,9 @@ namespace DPT.MVC.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
-                        var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
-                        var successResponse = new { Message = data, StatusCode = 201 };
+                        var data = JsonConvert.DeserializeObject<JObject>(content);
+                        int requesthdrId = data["requesthdr"]["id"].Value<int>();
+                        var successResponse = new { Message = data, StatusCode = 201, Hdrid = requesthdrId };
                         return Json(successResponse);
                     }
                     else if (response.StatusCode == HttpStatusCode.Conflict)
@@ -92,6 +94,37 @@ namespace DPT.MVC.Controllers
             catch (System.Exception ex)
             {
                 return Json(ex);
+            }
+        }
+
+        public async Task<JsonResult> PostRequestforpayment(List<PaymentRequestDetails> data)
+        {
+            try
+            {
+                var client = _httpClientFactory.CreateClient("DPTClient");
+                var requestBody = new HttpRequestMessage();
+                var jsonRequest = JsonConvert.SerializeObject(data);
+                requestBody = new HttpRequestMessage(HttpMethod.Post, "/api/REQUESTHDR/PostRequestforpayment");
+                requestBody.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("applications/json"));
+                requestBody.Content = new StringContent(jsonRequest);
+                requestBody.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var response = await client.SendAsync(requestBody);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var listOfHdrids = JsonConvert.DeserializeObject<List<int>>(responseContent);
+                    return Json("Created");
+                }
+                else
+                {
+                    return Json("Error occurred while saving");
+
+                }
+            }
+            catch (System.Exception ex)
+            {
+                return Json(ex.Message);
             }
         }
     }

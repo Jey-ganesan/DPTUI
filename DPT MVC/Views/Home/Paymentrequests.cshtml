@@ -7,6 +7,8 @@
     int t1TBLength = Configuration.GetValue<int>("CharacterSettings:T1TypeTextbox");
     int t2TBLength = Configuration.GetValue<int>("CharacterSettings:T2TypeTextbox");
     int t3TBLength = Configuration.GetValue<int>("CharacterSettings:T3TypeTextbox");
+    int t4TBLength = Configuration.GetValue<int>("CharacterSettings:T4TypeTextbox");
+    int t5TBLength = Configuration.GetValue<int>("CharacterSettings:T5TypeTextbox");
     string? dateFormat = Configuration.GetValue<string>("Date:dateFormat");
     string mode = ViewBag.mode;
     string url = ViewBag.url;
@@ -42,11 +44,6 @@
 
         #requestHdrGrid tbody tr:nth-child(even) {
             background-color: #f2f2f2;
-        }
-
-        .table-container {
-            overflow-x: auto; 
-            white-space: nowrap;
         }
 
         .table {
@@ -86,18 +83,18 @@
                                 <table id="requestHdrGrid" class="table">
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
-                                            <th>Job No</th>
-                                            <th>HAWB</th>
-                                            <th>Customer</th>
-                                            <th>Charges 1</th>
-                                            <th>Amount 1</th>
-                                            <th>Charges 2</th>
-                                            <th>Amount 2</th>
-                                            <th>Total Amount</th>
-                                            <th>Remarks</th>
-                                            <th>Bayan No</th>
-                                            <th>Upload Bayan Copy</th>
+                                            <th>DATE<span class="text-danger">*</span></th>
+                                            <th>JOB NO<span class="text-danger">*</span></th>
+                                            <th>HAWB<span class="text-danger">*</span></th>
+                                            <th>CUSTOMER<span class="text-danger">*</span></th>
+                                            <th>CHARGES 1<span class="text-danger">*</span></th>
+                                            <th>AMOUNT 1<span class="text-danger">*</span></th>
+                                            <th>CHARGES 2</th>
+                                            <th>AMOUNT 2</th>
+                                            <th>TOTAL AMOUNT<span class="text-danger">*</span></th>
+                                            <th>REMARKS</th>
+                                            <th>BAYAN NO<span class="text-danger">*</span></th>
+                                            <th>UPLOAD BAYAN COPY</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -154,46 +151,39 @@
         });
     }
 
-    // function addRow() {
-    //     var newRow = {};
-    //     var table = $('#requestHdrGrid').DataTable();
-    //     table.row.add(newRow).draw();
-    //     $('.chosen-select').chosen();
-    // }
-
     function addRow() {
         const table = document.querySelector('#requestHdrGrid tbody');
         const newRow = document.createElement('tr');
 
         newRow.innerHTML = `
-                        <td><input type="date" name="reviewerComment" class="chosen-border form-control rounded-0     date-picker"></td>
-                        <td><input type="text" name="JOBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
-                        <td><input type="text" name="HAWBNO " class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
-                    <td>
-                        <select name="CUSTOMERID" class="status-dropdown chosen-select" style="width: 100px;">
-                            <option value="">Select</option>
-                            ${CustomerData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
-                        </select>
-                    </td>
-                    <td>
-                            <select name="CHARGETYPEID" class="status-dropdown chosen-select" style="width: 100px;">
-                            <option value="">Select</option>
-                            ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
-                        </select>
-                    </td>
-                                    <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="updateTotalAmount(this)" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
-                    <td>
-                            <select name="CHARGETYPEID" class="status-dropdown chosen-select" style="width: 100px;">
-                            <option value="">Select</option>
-                            ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
-                        </select>
-                    </td>
-                                <td><input type="text" name="AMOUNT" oninput="updateTotalAmount(this)" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
-                            <td><input type="text" name="TOTALREQUESTAMOUNT" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
-                            <td><input type="textarea" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
-                            <td><input type="text" name="BAYANNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="50"></td>
-                        <td><input type="file" name="file" class="chosen-border form-control"></td>
-                `;
+                    <td><input type="date" name="REQUESTDATE" class="chosen-border form-control rounded-0     date-picker"></td>
+                <td><input type="text" name="JOBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
+                    <td><input type="text" name="HAWBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
+            <td>
+                <select name="CUSTOMERID" class="status-dropdown chosen-select" style="width: 100px;">
+                    <option value="">Select</option>
+                    ${CustomerData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                </select>
+            </td>
+            <td>
+                    <select name="CHARGETYPEID1" class="status-dropdown chosen-select" style="width: 100px;">
+                    <option value="">Select</option>
+                    ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                </select>
+            </td>
+                                <td><input name="AMOUNT1" type="text" name="reviewerComment" oninput="updateTotalAmount1(this); validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+            <td>
+                <select name="CHARGETYPEID2" class="status-dropdown chosen-select" style="width: 100px;">
+                    <option value="">Select</option>
+                    ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                </select>
+            </td>
+                                <td><input type="text" name="AMOUNT2" oninput="updateTotalAmount2(this); validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+                    <td><input type="text" name="TOTALREQUESTAMOUNT" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"disabled></td>
+                    <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t4TBLength"></td>
+                    <td><input type="text" name="BAYANNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
+                <td><input style="width:50px" type="file" name="file" class="chosen-border form-control"></td>
+        `;
 
         table.appendChild(newRow);
         $('.chosen-select').chosen();
@@ -207,15 +197,327 @@
         });
     }
 
-    function updateTotalAmount(inputField) {
+    function updateTotalAmount1(inputField) {
+        debugger
         const row = inputField.closest('tr');
-        const amount1 = parseFloat(row.querySelector('input[name="AMOUNT1"]').value) || 0;
-        const amount2 = parseFloat(row.querySelector('input[name="AMOUNT2"]').value) || 0;
-        const totalAmount = amount1 + amount2;
-        row.querySelector('input[name="TOTALREQUESTAMOUNT"]').value = totalAmount.toFixed(2);
+        const amount1Input = row.querySelector('input[name="AMOUNT1"]');
+        const totalAmountInput = row.querySelector('input[name="TOTALREQUESTAMOUNT"]');
+
+        if (amount1Input && totalAmountInput) {
+            const amount1 = parseFloat(amount1Input.value) || 0;
+            const totalAmount = amount1;
+            totalAmountInput.value = totalAmount.toFixed(2);
+        } else {
+            console.error("One or more input fields not found.");
+        }
+    }
+
+    function validateNumericInput(input) {
+        input.value = input.value.replace(/[^\d]/g, '');
+    }
+
+    function updateTotalAmount2(inputField) {
+        debugger
+        const row = inputField.closest('tr');
+        const amount1Input = row.querySelector('input[name="AMOUNT1"]');
+        const amount2Input = row.querySelector('input[name="AMOUNT2"]');
+        const totalAmountInput = row.querySelector('input[name="TOTALREQUESTAMOUNT"]');
+
+        if (amount1Input && amount2Input && totalAmountInput) {
+            const amount1 = parseFloat(amount1Input.value) || 0;
+            const amount2 = parseFloat(amount2Input.value) || 0;
+            const totalAmount = amount1 + amount2;
+            totalAmountInput.value = totalAmount.toFixed(2);
+        } else {
+            console.error("One or more input fields not found.");
+        }
     }
 
     $('#addRowBtn').on('click', addRow);
+
+
+    function validateForm() {
+        let isValid = true;
+        const rows = document.querySelectorAll('#requestHdrGrid tbody tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const customerID = row.querySelector('select[name="CUSTOMERID"]').value;
+            const jobNo = row.querySelector('input[name="JOBNO"]').value;
+            const bayanNo = row.querySelector('input[name="BAYANNO"]').value;
+            const totalAmount = row.querySelector('input[name="TOTALREQUESTAMOUNT"]').value;
+            const chargeType1 = row.querySelector('select[name="CHARGETYPEID1"]').value;
+            const amount1 = row.querySelector('input[name="AMOUNT1"]').value;
+
+            const charge2 = row.querySelector('select[name="CHARGETYPEID2"]')?.value;
+            const amount2 = row.querySelector('input[name="AMOUNT1"]')?.value;
+
+            if (customerID == '' && jobNo == '' && bayanNo == '' && totalAmount == '' && chargeType1 == '' && amount1 == '') {
+                row.remove();
+            } else {
+                if (customerID == '' || jobNo == '' || bayanNo == '' || totalAmount == '' || chargeType1 == '' || amount1 == '') {
+                    isValid = false;
+                    return isValid;
+                } else if (charge2 !== '' && amount2 == '') {
+                    isValid = false;
+                    return isValid;
+
+                }
+            }
+        }
+        return isValid;
+    }
+
+
+    async function SubmitrequestedRecord() {
+        if (!validateForm()) {
+            alert('Please fill all the required fields.')
+            return;
+        }
+
+        // Get all rows in the header table
+        const rows = document.querySelectorAll('#requestHdrGrid tbody tr');
+
+        const headers = [];
+        const details = [];
+
+        const Validationdata = [];
+
+
+
+        rows.forEach(async (row) => {
+            const inputs = row.querySelectorAll('input, select');
+            let hasValues = false;
+            const customerSelect1 = row.querySelector('select[name="CUSTOMERID"]');
+            const customerID1 = customerSelect1?.value || '';
+            const requestdate = row.querySelector('input[name="REQUESTDATE"]')?.value || '';
+            const jobno = row.querySelector('input[name="JOBNO"]')?.value || '';
+            const bayanno = row.querySelector('input[name="BAYANNO"]')?.value || '';
+            const totalamount = row.querySelector('input[name="TOTALREQUESTAMOUNT"]')?.value || '';
+            const charge11 = row.querySelector('select[name="CHARGETYPEID1"]')?.value;
+            const amount11 = row.querySelector('input[name="AMOUNT1"]')?.value;
+
+            if (customerID1 !== '' && requestdate !== '' && jobno !== '' && bayanno !== '' && totalamount !== '' && charge11 !== '' && amount11 !== '') {
+                hasValues = true;
+            } else {
+                row.remove();
+            }
+
+            if (hasValues) {
+
+                // Gather header data for each row
+                const customerSelect = row.querySelector('select[name="CUSTOMERID"]');
+                const customerID = customerSelect?.value || '';
+                const customerName = customerSelect ? customerSelect.options[customerSelect.selectedIndex].text : '';
+
+                const headerdata = {
+                    REQUESTDATE: row.querySelector('input[name="REQUESTDATE"]')?.value || '',
+                    JOBNO: row.querySelector('input[name="JOBNO"]')?.value || '',
+                    HAWBNO: row.querySelector('input[name="HAWBNO"]')?.value || '',
+                    CUSTOMERID: customerID,
+                    CUSTOMERNAME: customerName,
+                    BAYANNO: row.querySelector('input[name="BAYANNO"]')?.value || '',
+                    TOTALREQUESTAMOUNT: row.querySelector('input[name="TOTALREQUESTAMOUNT"]')?.value || '',
+                    REMARKS1: row.querySelector('input[name="REMARKS1"]')?.value || '',
+                    REQUESTEDBY: '@userName' // Replace with your actual value or logic to get this value
+                };
+
+                headers.push(headerdata);
+                debugger
+                const res1 = await $.ajax({
+                    url: '@Url.Action("SaveREQUESTHDR", "REQUESTHDR")',
+                    method: 'POST',
+                    data: headerdata
+                });
+
+                const HDRID = res1.hdrid;
+
+                // Gather detail data for each row
+                const charge1 = row.querySelector('select[name="CHARGETYPEID1"]')?.value;
+                const amount1 = row.querySelector('input[name="AMOUNT1"]')?.value;
+
+                if (charge1 && amount1) {
+                    debugger
+                    var detail1Obj = {
+                        HDRID: HDRID, // Will be set after header is saved
+                        CHARGETYPEID: charge1,
+                        AMOUNT: amount1,
+                    };
+                    await $.ajax({
+                        url: '@Url.Action("SaveREQUESTDTL", "REQUESTDTL")',
+                        method: 'POST',
+                        data: detail1Obj
+                    });
+                }
+                debugger
+                const charge2 = row.querySelector('select[name="CHARGETYPEID2"]')?.value;
+                const amount2 = row.querySelector('input[name="AMOUNT2"]')?.value;
+
+                if (charge2 && amount2) {
+                    debugger
+                    var detail2Obj = {
+                        HDRID: HDRID, // Will be set after header is saved
+                        CHARGETYPEID: charge2,
+                        AMOUNT: amount2,
+                    };
+                    await $.ajax({
+                        url: '@Url.Action("SaveREQUESTDTL", "REQUESTDTL")',
+                        method: 'POST',
+                        data: detail2Obj
+                    });
+                }
+            }
+        });
+    }
+
+    // async function SubmitrequestedRecord() {
+    //     debugger
+    //     if (!validateForm()) {
+    //         alert('Please fill all the required fields.')
+    //         return;
+    //     }
+
+    //     // Get all rows in the header table
+    //     const rows = document.querySelectorAll('#requestHdrGrid tbody tr');
+
+    //     const headers = [];
+
+    //     rows.forEach(row => {
+    //         const inputs = row.querySelectorAll('input, select');
+    //         let hasValues = false;
+    //         const customerSelect1 = row.querySelector('select[name="CUSTOMERID"]');
+    //         const customerID1 = customerSelect1?.value || '';
+    //         const requestdate = row.querySelector('input[name="REQUESTDATE"]')?.value || '';
+    //         const jobno = row.querySelector('input[name="JOBNO"]')?.value || '';
+    //         const bayanno = row.querySelector('input[name="BAYANNO"]')?.value || '';
+    //         const totalamount = row.querySelector('input[name="TOTALREQUESTAMOUNT"]')?.value || '';
+    //         const charge11 = row.querySelector('select[name="CHARGETYPEID1"]')?.value;
+    //         const amount11 = row.querySelector('input[name="AMOUNT1"]')?.value;
+
+    //         if (customerID1 !== '' && requestdate !== '' && jobno !== '' && bayanno !== '' && totalamount !== '' && charge11 !== '' && amount11 !== '') {
+    //             hasValues = true;
+    //         } else {
+    //             row.remove();
+    //         }
+    //         debugger
+    //         if (hasValues) {
+    //             // Gather header data for each row
+    //             const customerSelect = row.querySelector('select[name="CUSTOMERID"]');
+    //             const customerID = customerSelect?.value || '';
+    //             const customerName = customerSelect ? customerSelect.options[customerSelect.selectedIndex].text : '';
+    //             const charge1 = row.querySelector('select[name="CHARGETYPEID1"]')?.value;
+    //             const amount1 = row.querySelector('input[name="AMOUNT1"]')?.value;
+    //             const charge2 = row.querySelector('select[name="CHARGETYPEID2"]')?.value;
+    //             const amount2 = row.querySelector('input[name="AMOUNT2"]')?.value;
+
+    //             const headerdata = {
+    //                 REQUESTDATE: row.querySelector('input[name="REQUESTDATE"]')?.value || '',
+    //                 JOBNO: row.querySelector('input[name="JOBNO"]')?.value || '',
+    //                 HAWBNO: row.querySelector('input[name="HAWBNO"]')?.value || '',
+    //                 CUSTOMERID: customerID,
+    //                 CUSTOMERNAME: customerName,
+    //                 BAYANNO: row.querySelector('input[name="BAYANNO"]')?.value || '',
+    //                 TOTALREQUESTAMOUNT: row.querySelector('input[name="TOTALREQUESTAMOUNT"]')?.value || '',
+    //                 REMARKS1: row.querySelector('input[name="REMARKS1"]')?.value || '',
+    //                 REQUESTEDBY: '@userName',
+    //                 CHARGETYPEID1: charge1,
+    //                 AMOUNT1: amount1,
+    //                 CHARGETYPEID2: charge2,
+    //                 AMOUNT2: amount2,
+    //                 CREATEDBY: @userId,
+    //                 LASTUPDATEDBY: @userId,
+    //             };
+
+    //             headers.push(headerdata);
+
+    //         }
+    //     });
+
+    //     await $.ajax({
+    //         url: '@Url.Action("PostRequestforpayment", "REQUESTHDR")',
+    //         method: 'POST',
+    //         data: { data: headers }
+    //     });
+    // }
+
+    $('.maxLengthValidation').on('input paste', function () {
+        var maxLength = $(this).attr('maxlength');
+        var currentLength = $(this).val().length;
+        var remaining = (maxLength - 1) - currentLength;
+
+        if (remaining < 0) {
+            // Display validation message or take appropriate action
+            event.preventDefault();
+        } else {
+            // Clear validation message
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Function to update total amount
+        function updateTotalAmount(row) {
+            const amount1 = parseFloat(row.querySelector('input[name="AMOUNT"]').value) || 0;
+            const amount2 = parseFloat(row.querySelectorAll('input[name="AMOUNT"]')[1]?.value) || 0;
+            const totalAmount = amount1 + amount2;
+            row.querySelector('input[name="TOTALREQUESTAMOUNT"]').value = totalAmount.toFixed(2);
+        }
+
+        // Event delegation for input changes
+        document.querySelector('#requestHdrGrid tbody').addEventListener('input', (event) => {
+            const target = event.target;
+            if (target.matches('input[name="AMOUNT"]')) {
+                const row = target.closest('tr');
+                updateTotalAmount(row);
+            }
+        });
+    });
+    // rows.forEach(row => {
+    //     let hasValues1 = false;
+    //     const customerSelect1validation = row.querySelector('select[name="CUSTOMERID"]');
+    //     const customerID1validation = customerSelect1?.value || '';
+    //     const requestdatevalidation = row.querySelector('input[name="REQUESTDATE"]')?.value || '';
+    //     const jobnovalidation = row.querySelector('input[name="JOBNO"]')?.value || '';
+    //     const bayannovalidation = row.querySelector('input[name="BAYANNO"]')?.value || '';
+    //     const totalamountvalidation = row.querySelector('input[name="TOTALREQUESTAMOUNT"]')?.value || '';
+    //     const charge11validation = row.querySelector('select[name="CHARGETYPEID"]')?.value;
+    //     const amount11validation = row.querySelector('input[name="AMOUNT1"]')?.value;
+
+    //     if (
+    //         customerID1validation !== '' &&
+    //         requestdatevalidation !== '' &&
+    //         jobnovalidation !== '' &&
+    //         bayannovalidation !== '' &&
+    //         totalamountvalidation !== '' &&
+    //         charge11validation !== '' &&
+    //         amount11validation !== ''
+    //     ) {
+    //         hasValues1 = true;
+    //     }
+
+    //     debugger
+    //     if (hasValues1) {
+    //         const customerSelect = row.querySelector('select[name="CUSTOMERID"]');
+    //         const customerID = customerSelect?.value || '';
+    //         const customerName = customerSelect ? customerSelect.options[customerSelect.selectedIndex].text : '';
+    //         const charge1 = row.querySelector('select[name="CHARGETYPEID"]')?.value;
+    //         const amount1 = row.querySelector('input[name="AMOUNT1"]')?.value;
+    //         const remarks1 = row.querySelector('input[name="REMARKS1"]')?.value || '';
+
+    //         const headerdata = {
+    //             REQUESTDATE: row.querySelector('input[name="REQUESTDATE"]')?.value || '',
+    //             JOBNO: row.querySelector('input[name="JOBNO"]')?.value || '',
+    //             CUSTOMERID: customerID,
+    //             CUSTOMERNAME: customerName,
+    //             BAYANNO: row.querySelector('input[name="BAYANNO"]')?.value || '',
+    //             TOTALREQUESTAMOUNT: row.querySelector('input[name="TOTALREQUESTAMOUNT"]')?.value || '',
+    //             CHARGETYPEID1: charge1,
+    //             AMOUNT1: amount1,
+    //             CHARGETYPEID2: charge2,
+    //             AMOUNT2: amount2,
+    //         };
+    //         headers.push(headerdata);
+    //     }
+    // });
 
     // async function BindRequest(initialData) {
 
@@ -337,178 +639,10 @@
     //         destroy: true
     //     })
     // }
-
-    async function SubmitrequestedRecord() {
-        debugger
-        // Get all rows in the header table
-        const rows = document.querySelectorAll('#requestHdrGrid tbody tr');
-
-        if (rows.length === 0) {
-            alert('No rows found in the header table.');
-            return;
-        }
-
-        const headers = [];
-        const details = [];
-
-        rows.forEach(row => {
-            // Gather header data for each row
-            const customerSelect = row.querySelector('select[name="CUSTOMERID"]');
-            const customerID = customerSelect?.value || '';
-            const customerName = customerSelect ? customerSelect.options[customerSelect.selectedIndex].text : '';
-
-            const headerdata = {
-                JOBNO: row.querySelector('input[name="JOBNO"]')?.value || '',
-                HAWBNO: row.querySelector('input[name="HAWBNO"]')?.value || '',
-                CUSTOMERID: customerID,
-                CUSTOMERNAME: customerName,
-                BAYANNO: row.querySelector('input[name="BAYANNO"]')?.value || '',
-                TOTALREQUESTAMOUNT: row.querySelector('input[name="TOTALREQUESTAMOUNT"]')?.value || '',
-                REQUESTEDBY: 'YourRequestedByValue' // Replace with your actual value or logic to get this value
-            };
-
-            headers.push(headerdata);
-
-            // Gather detail data for each row
-            const charge1 = row.querySelector('select[name="CHARGETYPEID"]')?.value;
-            const amount1 = row.querySelector('input[name="AMOUNT"]')?.value;
-            const remarks1 = row.querySelector('input[name="REMARKS1"]')?.value || '';
-
-            if (charge1 && amount1) {
-                details.push({
-                    HDRID: null, // Will be set after header is saved
-                    CHARGETYPEID: charge1,
-                    AMOUNT: amount1,
-                    REMARKS1: remarks1
-                });
-            }
-
-            const charge2 = row.querySelectorAll('select[name="CHARGETYPEID"]')[1]?.value;
-            const amount2 = row.querySelectorAll('input[name="AMOUNT"]')[1]?.value;
-
-            if (charge2 && amount2) {
-                details.push({
-                    HDRID: null, // Will be set after header is saved
-                    CHARGETYPEID: charge2,
-                    AMOUNT: amount2,
-                    REMARKS1: remarks1 // Assuming the same remarks for the second charge, or adjust if needed
-                });
-            }
-        });
-
-        try {
-            // Save header data
-            for (let headerdata of headers) {
-                const res1 = await $.ajax({
-                    url: '@Url.Action("SaveREQUESTHDR", "REQUESTHDR")',
-                    method: 'POST',
-                    data: headerdata
-                });
-
-                // Assuming HDRID is returned in the response for the saved header data
-                const HDRID = res1.HDRID;
-
-                // Update HDRID in detail data
-                details.forEach(detail => {
-                    if (detail.HDRID === null && detail.JOBNO === headerdata.JOBNO) {
-                        detail.HDRID = HDRID;
-                    }
-                });
-            }
-
-            // Save detail data
-            for (let detaildata of details) {
-                await $.ajax({
-                    url: '@Url.Action("SaveREQUESTDTL", "REQUESTDTL")',
-                    method: 'POST',
-                    data: detaildata
-                });
-            }
-
-            alert('Data saved successfully!');
-        } catch (error) {
-            console.error('Error saving data:', error);
-            alert('Failed to save data. Please try again.');
-        }
-    }
-
-    async function Save() {
-        const rows = document.querySelectorAll('#requestHdrGrid tbody tr');
-        const data = [];
-
-        rows.forEach(row => {
-            const rowData = {};
-            row.querySelectorAll('input, select').forEach(input => {
-                if (input.type === 'file') {
-                    rowData[input.name] = input.files[0] ? input.files[0].name : '';
-                } else {
-                    rowData[input.name] = input.value;
-                }
-            });
-            data.push(rowData);
-        });
-        debugger
-
-
-        // var headerdata = {
-        //     JOBNO: ,
-        //     HAWBNO: ,
-        //     CUSTOMERID: ,
-        //     CUSTOMERNAME: ,
-        //     BAYANNO: ,
-        //     TOTALREQUESTAMOUNT: ,
-        //     REQUESTEDBY: ,
-        // }
-
-        // var detaildata = {
-        //     HDRID: ,
-        //     CHARGETYPEID: ,
-        //     AMOUNT: ,
-        //     REMARKS1: ,
-        // }
-
-        var res2 = await $.ajax({
-            url: '@Url.Action("SaveREQUESTHDR", "REQUESTHDR")',
-            method: 'POST',
-            data: headerdata
-        });
-
-        var res2 = await $.ajax({
-            url: '@Url.Action("SaveREQUESTDTL", "REQUESTDTL")',
-            method: 'POST',
-            data: detaildata
-        });
-    }
-
-    $('.maxLengthValidation').on('input paste', function () {
-        var maxLength = $(this).attr('maxlength');
-        var currentLength = $(this).val().length;
-        var remaining = (maxLength - 1) - currentLength;
-
-        if (remaining < 0) {
-            // Display validation message or take appropriate action
-            event.preventDefault();
-        } else {
-            // Clear validation message
-        }
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-        // Function to update total amount
-        function updateTotalAmount(row) {
-            const amount1 = parseFloat(row.querySelector('input[name="AMOUNT"]').value) || 0;
-            const amount2 = parseFloat(row.querySelectorAll('input[name="AMOUNT"]')[1]?.value) || 0;
-            const totalAmount = amount1 + amount2;
-            row.querySelector('input[name="TOTALREQUESTAMOUNT"]').value = totalAmount.toFixed(2);
-        }
-
-        // Event delegation for input changes
-        document.querySelector('#requestHdrGrid tbody').addEventListener('input', (event) => {
-            const target = event.target;
-            if (target.matches('input[name="AMOUNT"]')) {
-                const row = target.closest('tr');
-                updateTotalAmount(row);
-            }
-        });
-    });
+    // function addRow() {
+    //     var newRow = {};
+    //     var table = $('#requestHdrGrid').DataTable();
+    //     table.row.add(newRow).draw();
+    //     $('.chosen-select').chosen();
+    // }
 </script>
