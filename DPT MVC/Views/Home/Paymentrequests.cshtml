@@ -45,10 +45,6 @@
         #requestHdrGrid tbody tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-
-        .table {
-            width: 100%;
-        }
     </style>
 </head>
 
@@ -70,6 +66,11 @@
                             Add Row
                         </a>
                     </div>
+                    <div class='col-md-4 col-sm-6 col-lg-1'>
+                        <a href='#' id="viewrequest" class='btn btn-outline-primary btn-sm float-sm-center'>
+                            View Requests
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <form id="countryForm">
@@ -78,8 +79,6 @@
                             </div>
                             <br />
                             <div class="table-container">
-                                @* <table width="100%" id="requestHdrGrid" class='table dataTable dtr-inline'>
-                                </table> *@
                                 <table id="requestHdrGrid" class="table">
                                     <thead>
                                         <tr>
@@ -156,9 +155,9 @@
         const newRow = document.createElement('tr');
 
         newRow.innerHTML = `
-                    <td><input type="date" name="REQUESTDATE" class="chosen-border form-control rounded-0     date-picker"></td>
-                <td><input type="text" name="JOBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
-                    <td><input type="text" name="HAWBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
+            <td><input type="date" name="REQUESTDATE" class="chosen-border form-control rounded-0     date-picker"></td>
+            <td><input type="text" name="JOBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
+            <td><input type="text" name="HAWBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
             <td>
                 <select name="CUSTOMERID" class="status-dropdown chosen-select" style="width: 100px;">
                     <option value="">Select</option>
@@ -166,23 +165,23 @@
                 </select>
             </td>
             <td>
-                    <select name="CHARGETYPEID1" class="status-dropdown chosen-select" style="width: 100px;">
+                <select name="CHARGETYPEID1" class="status-dropdown chosen-select" style="width: 100px;">
                     <option value="">Select</option>
                     ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
                 </select>
             </td>
-                                <td><input name="AMOUNT1" type="text" name="reviewerComment" oninput="updateTotalAmount1(this); validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+            <td><input name="AMOUNT1" type="text" name="reviewerComment" oninput="updateTotalAmount1(this); validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
             <td>
                 <select name="CHARGETYPEID2" class="status-dropdown chosen-select" style="width: 100px;">
                     <option value="">Select</option>
                     ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
                 </select>
             </td>
-                                <td><input type="text" name="AMOUNT2" oninput="updateTotalAmount2(this); validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
-                    <td><input type="text" name="TOTALREQUESTAMOUNT" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"disabled></td>
-                    <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t4TBLength"></td>
-                    <td><input type="text" name="BAYANNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
-                <td><input style="width:50px" type="file" name="file" class="chosen-border form-control"></td>
+            <td><input type="text" name="AMOUNT2" oninput="updateTotalAmount2(this); validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+            <td><input type="text" name="TOTALREQUESTAMOUNT" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"disabled></td>
+            <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t4TBLength"></td>
+            <td><input type="text" name="BAYANNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
+            <td><input type="file" name="file" class="chosen-border form-control"></td>
         `;
 
         table.appendChild(newRow);
@@ -234,6 +233,12 @@
     }
 
     $('#addRowBtn').on('click', addRow);
+    
+    $('#viewrequest').on('click', viewRequest);
+
+    function viewRequest() {
+        loadPageWithParams('')
+    }
 
 
     function validateForm() {
