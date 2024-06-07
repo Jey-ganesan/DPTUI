@@ -1,12 +1,18 @@
 ﻿@using DPT.MVC.Models
+@using System.Text.Json
 @using DPT.MVC.Helper
 @inject IConfiguration Configuration
 
 @{
     int decimalRoundOff = Configuration.GetValue<int>("NumberSettings:DecimalRoundOff");
+    var userInfo = Context.Session.GetString("UserInfo");
     List<MenuInfo> ParentMenu = ViewBag.ParentMenu;
     List<MenuInfo> ChildMenu = ViewBag.ChildMenu;
     List<MenuInfo> menus = ViewBag.menus;
+    var UserModel = System.Text.Json.JsonSerializer.Deserialize<Users>(userInfo, new System.Text.Json.JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
 }
 
 <!DOCTYPE html>
@@ -149,11 +155,11 @@
                                         @child.menuName
                                     </a>
                                 }
-@*                                 if (count % 3 == 0)
-                                {
-                                    <div class='dropdown-divider'></div>
-                                }
-                                count++; *@
+                                @*                                 if (count % 3 == 0)
+                        {
+                        <div class='dropdown-divider'></div>
+                        }
+                        count++; *@
                             }
                         </div>
                     </li>
@@ -167,7 +173,7 @@
                 <li class="nav-item dropdown" style="display:flex;align-items:center">
                     <div id="currentTime"></div>
                     <a class="nav-link " style="display:flex;column-gap:10px" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        @SessionHelper.GetStringValueFromSession(Context, "DisplayName")
+                        <b>@UserModel.displayName [@UserModel.userRole]</b>
                     </a>
                     <a class="nav-link" onclick="return confirm(' Are you sure you want to log out ? ');" href="/Home/Logout">
                         <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
