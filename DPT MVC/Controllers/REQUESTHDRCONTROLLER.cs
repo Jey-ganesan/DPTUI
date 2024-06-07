@@ -1,39 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
-using System.Net;
+﻿using DPT.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net;
 using System.Net.Http.Headers;
-using DPT.MVC.Models;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Wordprocessing;
+using System.Net;
 
 namespace DPT.MVC.Controllers
 {
-    public class MasterCurrenciesController : Controller
+    public class REQUESTHDRCONTROLLER : Controller
     {
-        private readonly ILogger<MasterCurrenciesController> _logger;
+        private readonly ILogger<REQUESTHDRCONTROLLER> _logger;
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public MasterCurrenciesController(ILogger<MasterCurrenciesController> logger, IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public REQUESTHDRCONTROLLER(ILogger<REQUESTHDRCONTROLLER> logger, IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
         }
-        public async Task<JsonResult> GetCurrencyById(int id)
-        {
-            var client = _httpClientFactory.CreateClient("DPTClient");
-            var response = await client.GetAsync("api/masters/currency/" + id);
-            var content = await response.Content.ReadAsStringAsync();
-            var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
-            return Json(data);
-        }
-
+        
         [HttpPost]
-        public async Task<ActionResult> SaveCurrency(Currencies model)
+        public async Task<ActionResult> SaveREQUESTHDR(REQUESTHDR model)
         {
             var client = _httpClientFactory.CreateClient("DPTClient");
             try
@@ -41,22 +28,22 @@ namespace DPT.MVC.Controllers
                 if (model != null)
                 {
                     var requestBody = new HttpRequestMessage();
-                    if (model.Id != 0)
+                    if (model.ID != 0)
                     {
-                        model.Created = DateTime.Now;
-                        model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-                        model.LastUpdated = DateTime.Now;
-                        model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-                        requestBody = new HttpRequestMessage(HttpMethod.Patch, "/api/masters/currency");
+                        model.CREATED = DateTime.Now;
+                        model.CREATEDBY = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        model.LASTUPDATED = DateTime.Now;
+                        model.LASTUPDATEDBY = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        requestBody = new HttpRequestMessage(HttpMethod.Patch, "/api/REQUESTHDR");
 
                     }
                     else
                     {
-                        model.Created = DateTime.Now;
-                        model.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-                        model.LastUpdated = DateTime.Now;
-                        model.LastUpdatedBy = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-                        requestBody = new HttpRequestMessage(HttpMethod.Post, "/api/masters/currency");
+                        model.CREATED = DateTime.Now;
+                        model.CREATEDBY = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        model.LASTUPDATED = DateTime.Now;
+                        model.LASTUPDATEDBY = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                        requestBody = new HttpRequestMessage(HttpMethod.Post, "/api/REQUESTHDR");
                     }
                     var serializations = JsonConvert.SerializeObject(model);
                     requestBody.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("applications/json"));
@@ -92,31 +79,12 @@ namespace DPT.MVC.Controllers
             }
             return Json(model);
         }
-
-        public async Task<JsonResult> DeleteCurrency(int id)
-        {
-            var client = _httpClientFactory.CreateClient("DPTClient");
-            var response = await client.DeleteAsync("/api/masters/currency/" + id);
-            var content = await response.Content.ReadAsStringAsync();
-            var currenciesDetails = System.Text.Json.JsonSerializer.Deserialize<object>(content);
-            return Json(currenciesDetails);
-        }
-
-        public async Task<JsonResult> CheckCurrency(int id, string name)
-        {
-            var client = _httpClientFactory.CreateClient("DPTClient");
-            var response = await client.GetAsync($"/api/masters/currency/CheckCurrency?id={id}&name={name}");
-            var content = await response.Content.ReadAsStringAsync();
-            var data = System.Text.Json.JsonSerializer.Deserialize<bool>(content);
-
-            return Json(data);
-        }
-        public async Task<JsonResult> GetCurrencies()
+        public async Task<JsonResult> GetAllREQUESTHDR()
         {
             try
             {
                 var client = _httpClientFactory.CreateClient("DPTClient");
-                var response = await client.GetAsync($"/api/masters/currency");
+                var response = await client.GetAsync($"/api/REQUESTHDR");
                 var content = await response.Content.ReadAsStringAsync();
                 var res = System.Text.Json.JsonSerializer.Deserialize<object>(content);
                 return Json(res);
@@ -125,6 +93,17 @@ namespace DPT.MVC.Controllers
             {
                 return Json(ex);
             }
+        }
+        [HttpGet]
+        public async Task<JsonResult> GetRequestPendingForApproval()
+        {
+            var userId = HttpContext.Session.GetString("UserId");
+            var client = _httpClientFactory.CreateClient("DPTClient");
+            var response = await client.GetAsync("/api/REQUESTHDR/GetPendingForApproval?userId=" + userId);
+            var content = await response.Content.ReadAsStringAsync();
+            var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
+
+            return Json(data);
         }
     }
 }

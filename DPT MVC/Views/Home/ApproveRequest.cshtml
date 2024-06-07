@@ -1,0 +1,185 @@
+﻿@using System.Text.Json
+@using DPT.MVC.Models
+@inject IConfiguration Configuration
+
+@{
+    int decimalRoundOff = Configuration.GetValue<int>("NumberSettings:DecimalRoundOff");
+    int t1TBLength = Configuration.GetValue<int>("CharacterSettings:T1TypeTextbox");
+    int t2TBLength = Configuration.GetValue<int>("CharacterSettings:T2TypeTextbox");
+    int t3TBLength = Configuration.GetValue<int>("CharacterSettings:T3TypeTextbox");
+    string? dateFormat = Configuration.GetValue<string>("Date:dateFormat");
+    string mode = ViewBag.mode;
+    string url = ViewBag.url;
+    int pageId = ViewBag.pageId;
+    var userInfo = Context.Session.GetString("UserInfo");
+    var UserModel = System.Text.Json.JsonSerializer.Deserialize<Users>(userInfo, new System.Text.Json.JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+    // Access access = ViewBag.access;
+}
+
+<head>
+    <style>
+        /* Center table headings */
+        th {
+            text-align: center !important;
+        }
+
+        table td:nth-child(6) {
+            text-align: right;
+        }
+
+        table td:nth-child(8) {
+            text-align: center;
+        }
+
+        table td:nth-child(9) {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mx-auto col-lg-12">
+            <div class="card shadow-lg">
+                <div class="card-header text-white bg-warning d-flex">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-lg-start">
+                            Approve Request
+                        </h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <span class="text-danger"> * Required fields</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <fieldset>
+                            <div class="row">
+                            </div>
+                            <br />
+                            <div class="row">
+                                <table width="100%" id="poHdrGrid" class='table table-bordered table-striped dataTable dtr-inline'>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button class="btn btn-primary" onclick="SubmitApprovalRecord()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+                @* <div class="card-footer"></div> *@
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(async function () {
+
+        await BindPOHdrGrid();
+
+    });
+    var poRecords = [];
+
+    async function BindPOHdrGrid() {
+        debugger
+        try {
+            let data = await $.ajax({
+                url: '@Url.Action("GetRequestPendingForApproval", "REQUESTHDR")',
+                type: 'Get'
+            });
+
+            poRecords = data;
+
+            var table = new DataTable('#poHdrGrid', {
+                data: data,
+                columns: [
+                    {
+                        title: 'REQUEST NO',
+                        data: 'requestno',
+                        render: (data, type, row) => {
+                            return '<input type="text" id="rowId" value="' + row.id + '" hidden /><a href="#" onclick="loadPageWithParams(\'CreatePurchaseOrder\', ' + row.id + ', \'Edit\',61)">' + data + '</a>';
+                        }
+                    },
+                    { title: 'REQUEST DATE', data: 'requestdate' },
+                    { title: 'CUTOMER NAME', data: 'customername' },
+                    { title: 'JOB NO', data: 'jobno' },
+                    { title: 'HAWB NO', data: 'hawbno' },
+                    { title: 'CHARGE 1', data: 'chargE1' },
+                    { title: 'AMOUNT 1', data: 'amounT1' },
+                    { title: 'CHARGE 1', data: 'chargE2' },
+                    { title: 'AMOUNT 2', data: 'amounT2' },
+                    { title: 'BAYAN NO', data: 'bayanno' },
+                    { title: 'TOTAL AMOUNT', data: 'totalrequestamount' },
+                    {
+                        title: 'APPROVE/DENY',
+                        orderable: false,
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<select><option value = "">--Select--</option><option value = "Approved">APPROVED</option> <option value = "Deny">DENY</option></select>';
+                        }
+                    },
+                    {
+                        title: 'Deny',
+                        orderable: false,
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<input type="radio" value="deny" name="radio' + row.id + '" data-id="' + row.id + '">';
+                        }
+                    },
+                    {
+                        title: 'COMMENT',
+                        orderable: false,
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<input type="text" name="approverComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
+                        }
+                    },                 
+                ],
+                columnDefs: [
+                    {
+                        targets: 1,
+                        type: 'moment',
+                        width: '75px',
+                        render: function (data, type, row, meta) {
+                            return moment(data).format('DD-MMM-yyyy')
+                        }
+                    },
+                    {
+                        targets: 7,
+                        render: function (data, type, row, meta) {
+                            return formatNumericData(data);
+                        }
+                    }
+                ],
+                lengthChange: true,
+                autoWidth: false,
+                paging: true,
+                scrollY: 300,
+                pagingType: 'full_numbers',
+                search: true,
+                destroy: true
+            });
+
+            $('#poHdrGrid tbody').on('change', 'input[type="radio"]', function () {
+                var row = $(this).closest('tr');
+                if ($(this).val() == 'approve') {
+                    row.find('input[type="checkbox"]').prop('disabled', false);
+                } else if ($(this).val() == 'deny') {
+                    row.find('input[type="checkbox"]').prop('disabled', true);
+                    row.find('input[type="checkbox"]').prop('checked', false);
+                }
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+</script>

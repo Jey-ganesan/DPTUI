@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -37,7 +37,27 @@ namespace DPT.MVC.Controllers
                 return Json(currenciesDetails);
 
         }
-
+public async Task<JsonResult> GetCustomersForRequest()
+{
+    try
+    {
+        var response = await HttpClient.GetAsync("/api/customersForRequest");
+        var content = await response.Content.ReadAsStringAsync();
+        var currenciesDetails = System.Text.Json.JsonSerializer.Deserialize<object>(content);
+        return Json(currenciesDetails);
+    }
+    catch (Exception e)
+    {
+        // Get the controller and action names
+        var controllerName = ControllerContext.ActionDescriptor.ControllerName;
+        var actionName = ControllerContext.ActionDescriptor.ActionName;
+        // Get the DisplayName from the session
+        var displayName = HttpContext.Session.GetString("DisplayName");
+        // Log the error along with the controller, action, and DisplayName
+        _logger.LogError(e, "An error occurred in {ControllerName}/{ActionName} for {DisplayName}.", controllerName, actionName, displayName);
+        return Json(new Models.Customer());
+    }
+}
         public async Task<JsonResult> GetCustomersById(int id)
         {
                 var client = _httpClientFactory.CreateClient("DPTClient");
