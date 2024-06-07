@@ -1,4 +1,6 @@
-﻿namespace DPT.MVC.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DPT.MVC.Models
 {
     public class REQUESTHDR
     {
@@ -15,6 +17,8 @@
         public string? REQUESTEDBY { get; set; }
         public string? REMARKS1 { get; set; }
         public string? REMARKS2 { get; set; }
+        [NotMapped]
+        public string? CHARGESNAME { get; set; }
         public double? PAYMENTAMOUNT { get; set; }
         public bool? EXCEPTION { get; set; }
         public string? EXCEPTIONCOMMENTS { get; set; }
