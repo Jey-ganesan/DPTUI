@@ -105,5 +105,16 @@ namespace DPT.MVC.Controllers
 
             return Json(data);
         }
+        [HttpGet]
+        public async Task<JsonResult> ApproveSelectedRequest()
+        {
+            var userId = HttpContext.Session.GetString("UserId");
+            var client = _httpClientFactory.CreateClient("DPTClient");
+            var response = await client.GetAsync("/api/po/pohdr/GetPendingForApproval?userId=" + userId);
+            var content = await response.Content.ReadAsStringAsync();
+            var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
+
+            return Json(data);
+        }
     }
 }
