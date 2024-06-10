@@ -106,6 +106,7 @@ namespace DPT.MVC.Controllers
             var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
 
             return Json(data);
+        }
         public async Task<JsonResult> PostRequestforpayment(List<PaymentRequestDetails> data)
         {
             try
