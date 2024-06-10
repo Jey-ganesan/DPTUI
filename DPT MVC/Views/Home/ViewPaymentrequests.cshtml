@@ -43,6 +43,11 @@
                             </div>
                         </fieldset>
                     </form>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button class="btn btn-primary" onclick="Back()">Back</button>
+                        </div>
+                    </div>
                 </div>
                 @* <div class="card-footer"></div> *@
             </div>
@@ -63,7 +68,7 @@
 
         try {
             let data = await $.ajax({
-                url: '@Url.Action("GetPOPendingForReview", "PO")',
+                url: '@Url.Action("GetAllRequestToview", "REQUESTHDR")',
                 type: 'Get'
             });
 
@@ -73,42 +78,19 @@
                 data: data,
                 columns: [
                     {
-                        title: 'PO No',
-                        data: 'poNumber',
-                        render: (data, type, row) => {
-                            return '<input type="text" id="rowId" value="' + row.id + '" hidden /><a href="#" onclick="loadPageWithParams(\'CreatePurchaseOrder\', ' + row.id + ', \'Edit\',61)">' + data + '</a>';
-                        }
+                        title: 'REQUEST NO',
+                        data: 'requestno',
                     },
-                    { title: 'PO Date', data: 'poDate' },
-                    { title: 'Supplier Name', data: 'supplierName' },
-                    { title: 'Quote Ref', data: 'quoteRef' },
-                    { title: 'Currency', data: 'currencyName' },
-                    { title: 'PO Total', data: 'total' },
-                    { title: 'Department', data: 'departmentName' },
-                    {
-                        title: 'Approve',
-                        orderable: false,
-                        data: null,
-                        render: function (data, type, row) {
-                            return '<input type="radio" value="approve" name="radio' + row.id + '" data-id="' + row.id + '">';
-                        }
-                    },
-                    {
-                        title: 'Deny',
-                        orderable: false,
-                        data: null,
-                        render: function (data, type, row) {
-                            return '<input type="radio" value="deny" name="radio' + row.id + '" data-id="' + row.id + '">';
-                        }
-                    },
-                    {
-                        title: 'Comment',
-                        orderable: false,
-                        data: null,
-                        render: function (data, type, row) {
-                            return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
-                        }
-                    }
+                    { title: 'REQUEST DATE', data: 'requestdate' },
+                    { title: 'CUTOMER NAME', data: 'customername' },
+                    { title: 'JOB NO', data: 'jobno' },
+                    { title: 'HAWB NO', data: 'hawbno' },
+                    { title: 'CHARGE 1', data: 'chargE1' },
+                    { title: 'AMOUNT 1', data: 'amounT1' },
+                    { title: 'CHARGE 1', data: 'chargE2' },
+                    { title: 'AMOUNT 2', data: 'amounT2' },
+                    { title: 'BAYAN NO', data: 'bayanno' },
+                    { title: 'TOTAL AMOUNT', data: 'totalrequestamount' },
                 ],
                 lengthChange: true,
                 autoWidth: false,
@@ -123,5 +105,8 @@
         } catch (error) {
             console.log(error);
         }
+    }
+    function Back() {
+        loadPageWithParams('Paymentrequests')
     }
 </script>
