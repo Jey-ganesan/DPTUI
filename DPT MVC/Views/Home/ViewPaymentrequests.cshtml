@@ -1,0 +1,127 @@
+﻿@using System.Text.Json
+@inject IConfiguration Configuration
+
+@{
+    int decimalRoundOff = Configuration.GetValue<int>("NumberSettings:DecimalRoundOff");
+    int t1TBLength = Configuration.GetValue<int>("CharacterSettings:T1TypeTextbox");
+    int t2TBLength = Configuration.GetValue<int>("CharacterSettings:T2TypeTextbox");
+    int t3TBLength = Configuration.GetValue<int>("CharacterSettings:T3TypeTextbox");
+    string? dateFormat = Configuration.GetValue<string>("Date:dateFormat");
+    string mode = ViewBag.mode;
+    string url = ViewBag.url;
+    int pageId = ViewBag.pageId;
+    var userInfo = Context.Session.GetString("UserInfo");
+    // Access access = ViewBag.access;
+}
+
+<head>
+    <style>
+
+    </style>
+</head>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mx-auto col-lg-12">
+            <div class="card shadow-lg">
+                <div class="card-header text-white bg-warning d-flex">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-lg-start">
+                            Payment Requests
+                        </h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <span class="text-danger"> * Required fields</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="countryForm">
+                        <fieldset>
+                            <div class="row">
+                                <table width="100%" id="poHdrGrid" class='table table-bordered table-striped dataTable dtr-inline'>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                @* <div class="card-footer"></div> *@
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var RequestRecords = [];
+
+    $(document).ready(async function () {
+
+        await BindPOHdrGrid();
+
+    });
+
+    async function BindPOHdrGrid() {
+
+        try {
+            let data = await $.ajax({
+                url: '@Url.Action("GetPOPendingForReview", "PO")',
+                type: 'Get'
+            });
+
+            RequestRecords = data;
+
+            var table = new DataTable('#poHdrGrid', {
+                data: data,
+                columns: [
+                    {
+                        title: 'PO No',
+                        data: 'poNumber',
+                        render: (data, type, row) => {
+                            return '<input type="text" id="rowId" value="' + row.id + '" hidden /><a href="#" onclick="loadPageWithParams(\'CreatePurchaseOrder\', ' + row.id + ', \'Edit\',61)">' + data + '</a>';
+                        }
+                    },
+                    { title: 'PO Date', data: 'poDate' },
+                    { title: 'Supplier Name', data: 'supplierName' },
+                    { title: 'Quote Ref', data: 'quoteRef' },
+                    { title: 'Currency', data: 'currencyName' },
+                    { title: 'PO Total', data: 'total' },
+                    { title: 'Department', data: 'departmentName' },
+                    {
+                        title: 'Approve',
+                        orderable: false,
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<input type="radio" value="approve" name="radio' + row.id + '" data-id="' + row.id + '">';
+                        }
+                    },
+                    {
+                        title: 'Deny',
+                        orderable: false,
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<input type="radio" value="deny" name="radio' + row.id + '" data-id="' + row.id + '">';
+                        }
+                    },
+                    {
+                        title: 'Comment',
+                        orderable: false,
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
+                        }
+                    }
+                ],
+                lengthChange: true,
+                autoWidth: false,
+                paging: true,
+                scrollY: 300,
+                pagingType: 'full_numbers',
+                search: true,
+                destroy: true
+            })
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+</script>
