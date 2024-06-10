@@ -2,10 +2,11 @@
 {
     public class PaymentRequestDetails
     {
-        public int CHARGETYPEID { get; set; }
-        public double? AMOUNT { get; set; }
-        public string? REFERENCENO { get; set; }
-        public DateTime? REFERENCEDATE { get; set; }
+        public int CHARGETYPEID1 { get; set; }
+        public double? AMOUNT1 { get; set; }
+        public int CHARGETYPEID2 { get; set; }
+        public double? AMOUNT2 { get; set; }
+        public DateTime? REQUESTDATE { get; set; }
         public string? REMARKS1 { get; set; }
         public string? REMARKS2 { get; set; }
         public DateTime? CREATED { get; set; }
@@ -18,13 +19,7 @@
         public string? CUSTOMERNAME { get; set; }
         public string? BAYANNO { get; set; }
         public double? TOTALREQUESTAMOUNT { get; set; }
-        public int? PAYMENTTYPEID { get; set; }
         public string? REQUESTEDBY { get; set; }
         public double? PAYMENTAMOUNT { get; set; }
-        public bool? EXCEPTION { get; set; }
-        public string? EXCEPTIONCOMMENTS { get; set; }
-        public string? EXCEPTIONAPPROVEDBY { get; set; }
-        public DateTime? EXCEPTIONAPPROVEDON { get; set; }
-        public string? STATUS { get; set; }
     }
 }
