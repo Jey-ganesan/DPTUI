@@ -25,26 +25,41 @@
         }
 
         /* thead {
-            background-color: #ffc107;
-        } */
+                    background-color: #ffc107;
+                } */
 
         .chosen-results {
             background-color: white;
             width: 300px;
         }
 
+        #requestHdrGrid td{
+            padding: 0 !important;
+            vertical-align: middle;
+            horizontal-align: middle;
+            text-align: center;
+        }
+
+        #requestHdrGrid th {
+            white-space:nowrap;
+        }
+         
         .chosen-search {
             background-color: white;
             width: 300px;
         }
 
-        #requestHdrGrid tbody tr:nth-child(odd) {
+        .chosen-results{
+            text-align: left;
+        }
+
+        /* #requestHdrGrid tbody tr:nth-child(odd) {
             background-color: #d0d0d0;
         }
 
         #requestHdrGrid tbody tr:nth-child(even) {
             background-color: #f2f2f2;
-        }
+        } */
     </style>
 </head>
 
@@ -155,34 +170,34 @@
         const newRow = document.createElement('tr');
 
         newRow.innerHTML = `
-            <td><input type="date" name="REQUESTDATE" class="chosen-border form-control rounded-0     date-picker"></td>
-            <td><input type="text" name="JOBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
-            <td><input type="text" name="HAWBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
-            <td>
-                <select name="CUSTOMERID" class="status-dropdown chosen-select" style="width: 100px;">
-                    <option value="">Select</option>
-                    ${CustomerData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
-                </select>
-            </td>
-            <td>
-                <select name="CHARGETYPEID1" class="status-dropdown chosen-select" style="width: 100px;">
-                    <option value="">Select</option>
-                    ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
-                </select>
-            </td>
-            <td><input name="AMOUNT1" type="text" name="reviewerComment" oninput="updateTotalAmount1(this); validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
-            <td>
-                <select name="CHARGETYPEID2" class="status-dropdown chosen-select" style="width: 100px;">
-                    <option value="">Select</option>
-                    ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
-                </select>
-            </td>
-            <td><input type="text" name="AMOUNT2" oninput="updateTotalAmount2(this); validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
-            <td><input type="text" name="TOTALREQUESTAMOUNT" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"disabled></td>
-            <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t4TBLength"></td>
-            <td><input type="text" name="BAYANNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
-            <td><input type="file" name="file" class="chosen-border form-control"></td>
-        `;
+                <td><input type="date" name="REQUESTDATE" class="chosen-border form-control rounded-0     date-picker"></td>
+                <td><input type="text" name="JOBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
+                <td><input type="text" name="HAWBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
+                <td>
+                    <select name="CUSTOMERID" class="status-dropdown chosen-select" style="width: 100px;">
+                        <option value="">Select</option>
+                        ${CustomerData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                    </select>
+                </td>
+                <td>
+                    <select name="CHARGETYPEID1" class="status-dropdown chosen-select" style="width: 100px;">
+                        <option value="">Select</option>
+                        ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                    </select>
+                </td>
+                <td><input name="AMOUNT1" type="text" name="reviewerComment" oninput="updateTotalAmount1(this); validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+                <td>
+                    <select name="CHARGETYPEID2" class="status-dropdown chosen-select" style="width: 100px;">
+                        <option value="">Select</option>
+                        ${CHARGESData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                    </select>
+                </td>
+                <td><input type="text" name="AMOUNT2" oninput="updateTotalAmount2(this); validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+                <td><input type="text" name="TOTALREQUESTAMOUNT" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"disabled></td>
+                <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t4TBLength"></td>
+                <td><input type="text" name="BAYANNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
+                <td><input type="file" name="file" class="chosen-border form-control"></td>
+            `;
 
         table.appendChild(newRow);
         $('.chosen-select').chosen();
@@ -197,7 +212,7 @@
     }
 
     function updateTotalAmount1(inputField) {
-        debugger
+        
         const row = inputField.closest('tr');
         const amount1Input = row.querySelector('input[name="AMOUNT1"]');
         const totalAmountInput = row.querySelector('input[name="TOTALREQUESTAMOUNT"]');
@@ -216,7 +231,7 @@
     }
 
     function updateTotalAmount2(inputField) {
-        debugger
+        
         const row = inputField.closest('tr');
         const amount1Input = row.querySelector('input[name="AMOUNT1"]');
         const amount2Input = row.querySelector('input[name="AMOUNT2"]');
@@ -233,7 +248,7 @@
     }
 
     $('#addRowBtn').on('click', addRow);
-    
+
     $('#viewrequest').on('click', viewRequest);
 
     function viewRequest() {
@@ -255,7 +270,7 @@
             const amount1 = row.querySelector('input[name="AMOUNT1"]').value;
 
             const charge2 = row.querySelector('select[name="CHARGETYPEID2"]')?.value;
-            const amount2 = row.querySelector('input[name="AMOUNT1"]')?.value;
+            const amount2 = row.querySelector('input[name="AMOUNT2"]')?.value;
 
             if (customerID == '' && jobNo == '' && bayanNo == '' && totalAmount == '' && chargeType1 == '' && amount1 == '') {
                 row.remove();
@@ -328,7 +343,7 @@
                 };
 
                 headers.push(headerdata);
-                debugger
+                
                 const res1 = await $.ajax({
                     url: '@Url.Action("SaveREQUESTHDR", "REQUESTHDR")',
                     method: 'POST',
@@ -337,12 +352,14 @@
 
                 const HDRID = res1.hdrid;
 
+                await uploadFile(HDRID, row);
+
                 // Gather detail data for each row
                 const charge1 = row.querySelector('select[name="CHARGETYPEID1"]')?.value;
                 const amount1 = row.querySelector('input[name="AMOUNT1"]')?.value;
 
                 if (charge1 && amount1) {
-                    debugger
+                    
                     var detail1Obj = {
                         HDRID: HDRID, // Will be set after header is saved
                         CHARGETYPEID: charge1,
@@ -354,12 +371,12 @@
                         data: detail1Obj
                     });
                 }
-                debugger
+                
                 const charge2 = row.querySelector('select[name="CHARGETYPEID2"]')?.value;
                 const amount2 = row.querySelector('input[name="AMOUNT2"]')?.value;
 
                 if (charge2 && amount2) {
-                    debugger
+                    
                     var detail2Obj = {
                         HDRID: HDRID, // Will be set after header is saved
                         CHARGETYPEID: charge2,
@@ -375,8 +392,41 @@
         });
     }
 
+    async function uploadFile(headerId, row) {
+
+        var fileInput = row.querySelector('input[type="file"]');
+        var files = fileInput.files;
+
+        if (files.length === 0) {
+            console.log("No files selected for upload.");
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            debugger;
+            var formData = new FormData();
+            formData.append('file', files[i]);
+            formData.append('typeId', '1');
+            formData.append('transName', 'PaymentRequest');
+
+            try {
+                await $.ajax({
+                    url: "@Url.Action("SaveFile", "Home")",
+                    type: "POST",
+                    headers: { 'ProdId': headerId },
+                    data: formData,
+                    contentType: false,
+                    processData: false
+                });
+                console.log("File uploaded successfully:", files[i].name);
+            } catch (error) {
+                console.error("Error uploading file:", error);
+            }
+        }
+    }
+
     // async function SubmitrequestedRecord() {
-    //     debugger
+    //     
     //     if (!validateForm()) {
     //         alert('Please fill all the required fields.')
     //         return;
@@ -404,7 +454,7 @@
     //         } else {
     //             row.remove();
     //         }
-    //         debugger
+    //         
     //         if (hasValues) {
     //             // Gather header data for each row
     //             const customerSelect = row.querySelector('select[name="CUSTOMERID"]');
@@ -499,7 +549,7 @@
     //         hasValues1 = true;
     //     }
 
-    //     debugger
+    //     
     //     if (hasValues1) {
     //         const customerSelect = row.querySelector('select[name="CUSTOMERID"]');
     //         const customerID = customerSelect?.value || '';
