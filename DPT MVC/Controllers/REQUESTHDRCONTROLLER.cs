@@ -138,14 +138,14 @@ namespace DPT.MVC.Controllers
             }
         }
         [HttpGet]
-        public async Task<JsonResult> ApproveSelectedRequest()
+        public async Task<JsonResult> ApproveSelectedRequest(int id , string approved, string comments)
         {
-            var userId = HttpContext.Session.GetString("UserId");
             var client = _httpClientFactory.CreateClient("DPTClient");
-            var response = await client.GetAsync("/api/po/pohdr/GetPendingForApproval?userId=" + userId);
+            var UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            var response = await client.GetAsync("/api/REQUESTHDR/UpdateWhenApproved?Id="+ id +"&approved=" + approved +"&comments=" + comments +"&UpdatedBy=" + UserId);
             var content = await response.Content.ReadAsStringAsync();
             var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
-
+             
             return Json(data);
         }
     }

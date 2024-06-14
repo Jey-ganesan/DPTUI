@@ -194,12 +194,11 @@
             await UpdateRecords();
 
             // await BindPOHdrGrid();
-            loadPageWithParams('ApprovePurchaseOrder', '', '', '@pageId');
+            loadPageWithParams('ApproveRequest', '', '', '@pageId');
         } else {
             alert('Please Give Comments For Denied Orders');
         }
     }
-
     async function ValidateApprovedRecords() {
 
         let isValid = true;
@@ -227,12 +226,17 @@
             var rowId = $(this).find("input[id='rowId']").val();
 
             var isApproved = $(this).find("input[name='radio" + rowId + "']:checked").val();
-
+            var comment = $(this).find("input[name='approverComment']").val();
+            var obj = {
+                Id: rowId
+            }
             if (isApproved) {
+                console.log(obj)
                 try {
                     let data = await $.ajax({
                         url: '@Url.Action("ApproveSelectedRequest", "REQUESTHDR")',
-                        type: 'Get' 
+                        type: 'Get',
+                        data: { id: rowId, approved: isApproved, comments: comment }
                     });
 
                 } catch (error) {
