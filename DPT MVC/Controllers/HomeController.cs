@@ -17,7 +17,6 @@ namespace DPT.MVC.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         public HttpClient HttpClient = new HttpClient();
         public static string DashboardType = string.Empty;
-        string connection = string.Empty;
         public static List<MenuInfo> menus = new List<MenuInfo>();
 
 
@@ -28,7 +27,6 @@ namespace DPT.MVC.Controllers
             _logger = logger;
             _configuration = configuration;
             HttpClient.BaseAddress = new Uri(_configuration["MySetting:ApiURL"]);
-            connection = _configuration.GetConnectionString("DPT.ConnectionString");
         }
 
         [HttpPost]
