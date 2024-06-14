@@ -119,6 +119,7 @@ namespace DPT.MVC.Controllers
 
             return Json(data);
         }
+
         public async Task<JsonResult> PostRequestforpayment(List<PaymentRequestDetails> data)
         {
             try
@@ -148,6 +149,17 @@ namespace DPT.MVC.Controllers
             {
                 return Json(ex.Message);
             }
+        }
+        [HttpGet]
+        public async Task<JsonResult> ApproveSelectedRequest(int id , string approved, string comments)
+        {
+            var client = _httpClientFactory.CreateClient("DPTClient");
+            var UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            var response = await client.GetAsync("/api/REQUESTHDR/UpdateWhenApproved?Id="+ id +"&approved=" + approved +"&comments=" + comments +"&UpdatedBy=" + UserId);
+            var content = await response.Content.ReadAsStringAsync();
+            var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
+             
+            return Json(data);
         }
     }
 }

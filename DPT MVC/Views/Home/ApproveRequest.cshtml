@@ -80,8 +80,11 @@
 </div>
 <script type="text/javascript">
 
+    //It will call this method when page is load.
     $(document).ready(async function () {
 
+        // bind the data into grid which is pending for Approve/Deny ---- Nuthan
+        
         await BindPOHdrGrid();
 
     });
@@ -90,6 +93,7 @@
     async function BindPOHdrGrid() {
         debugger
         try {
+            //Get Method to Bind the data into grid datatable
             let data = await $.ajax({
                 url: '@Url.Action("GetRequestPendingForApproval", "REQUESTHDR")',
                 type: 'Get'
@@ -113,20 +117,20 @@
                     { title: 'HAWB NO', data: 'hawbno' },
                     { title: 'CHARGE 1', data: 'chargE1' },
                     { title: 'AMOUNT 1', data: 'amounT1' },
-                    { title: 'CHARGE 1', data: 'chargE2' },
+                    { title: 'CHARGE 2', data: 'chargE2' },
                     { title: 'AMOUNT 2', data: 'amounT2' },
                     { title: 'BAYAN NO', data: 'bayanno' },
                     { title: 'TOTAL AMOUNT', data: 'totalrequestamount' },
                     {
-                        title: 'APPROVE/DENY',
+                        title: 'APPROVE',
                         orderable: false,
                         data: null,
                         render: function (data, type, row) {
-                            return '<select><option value = "">--Select--</option><option value = "Approved">APPROVED</option> <option value = "Deny">DENY</option></select>';
+                            return '<input type="radio" value="approve" id="approveRadio" name="radio' + row.id + '" data-id="' + row.id + '">';
                         }
                     },
                     {
-                        title: 'Deny',
+                        title: 'DENY',
                         orderable: false,
                         data: null,
                         render: function (data, type, row) {
@@ -140,7 +144,7 @@
                         render: function (data, type, row) {
                             return '<input type="text" name="approverComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
                         }
-                    },                 
+                    },
                 ],
                 columnDefs: [
                     {
@@ -181,5 +185,79 @@
             console.log(error);
         }
     }
+
+    async function SubmitApprovalRecord() {
+        debugger
+        let isValid = await ValidateApprovedRecords();
+
+        if (isValid) {
+            await UpdateRecords();
+
+            // await BindPOHdrGrid();
+            loadPageWithParams('ApproveRequest', '', '', '@pageId');
+        } else {
+            alert('Please Give Comments For Denied Orders');
+        }
+    }
+    async function ValidateApprovedRecords() {
+
+        let isValid = true;
+
+        $('#poHdrGrid tbody tr').each(async function () {
+
+            var rowId = $(this).find("input[id='rowId']").val();
+
+            var isApproved = $(this).find("input[name='radio" + rowId + "']:checked").val();
+
+            var comment = $(this).find("input[name='approverComment']").val();
+
+            if (isApproved) {
+                if (isApproved == 'deny' && comment == '')
+                    isValid = false;
+            }
+        });
+        return isValid;
+    }
+
+    async function UpdateRecords() {
+
+        $('#poHdrGrid tbody tr').each(async function () {
+
+            var rowId = $(this).find("input[id='rowId']").val();
+
+            var isApproved = $(this).find("input[name='radio" + rowId + "']:checked").val();
+            var comment = $(this).find("input[name='approverComment']").val();
+            var obj = {
+                Id: rowId
+            }
+            if (isApproved) {
+                console.log(obj)
+                try {
+                    let data = await $.ajax({
+                        url: '@Url.Action("ApproveSelectedRequest", "REQUESTHDR")',
+                        type: 'Get',
+                        data: { id: rowId, approved: isApproved, comments: comment }
+                    });
+
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        });
+
+    }
+    $('.maxLengthValidation').on('input paste', function () {
+        var maxLength = $(this).attr('maxlength');
+        var currentLength = $(this).val().length;
+        var remaining = (maxLength - 1) - currentLength;
+        $(this).val($(this).val().toLocaleUpperCase());
+
+        if (remaining < 0) {
+            // Display validation message or take appropriate action
+            event.preventDefault();
+        } else {
+            // Clear validation message
+        }
+    });
 
 </script>

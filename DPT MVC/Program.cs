@@ -36,7 +36,7 @@ try
         option.IdleTimeout = TimeSpan.FromHours(8);
         option.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         option.Cookie.IsEssential = true;
-    });
+    }); 
 
     var app = builder.Build();
 
