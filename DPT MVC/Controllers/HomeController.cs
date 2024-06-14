@@ -1,11 +1,8 @@
 using DPT.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
-using System;
-using System.Diagnostics;
 using System.Net.Http.Headers;
-using System.Reflection;
-using System.Security;
 
 namespace DPT.MVC.Controllers
 {
@@ -280,6 +277,79 @@ namespace DPT.MVC.Controllers
             }
             return RedirectToAction("Index");
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SaveFile([FromForm] IFormFile file, string typeId, string transName)
+        {
+            try
+            {
+                if (Request.Headers.TryGetValue("ProdId", out Microsoft.Extensions.Primitives.StringValues header))
+                {
+                    if (StringValues.IsNullOrEmpty(header))
+                    {
+                        return BadRequest("File doesn't have Id.");
+                    }
+                    string Id = header[0];
+
+                    if (file == null || file.Length == 0)
+                    {
+                        return BadRequest("No file was uploaded.");
+                    }
+
+                    var fileName = Path.GetFileName(file.FileName);
+                    // Get the current date and time as a formatted string
+                    string dateTimeString = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+                    // Append the formatted date and time to the original filename
+
+                    //Below Commented because of we need original file name for this column without any timestemp prefix
+                    //fileName = $"{dateTimeString}_{fileName}";
+
+                    var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "PDF_Files");
+                    var filePath = Path.Combine(folderPath, fileName);
+
+
+                    using (var formData = new MultipartFormDataContent())
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await file.CopyToAsync(memoryStream);
+                            var fileContent = new ByteArrayContent(memoryStream.ToArray());
+                            formData.Add(fileContent, "file", file.FileName);
+                            formData.Add(new StringContent(transName), "TransName");
+                            formData.Add(new StringContent(Id), "TransId");
+                            formData.Add(new StringContent(fileName), "FileName");
+                            formData.Add(new StringContent(filePath), "FolderName");
+                            formData.Add(new StringContent(typeId), "AttachmentTypeSlNo");
+                            formData.Add(new StringContent((file.Length / 1024).ToString()), "SizeInKB");
+                            var response = await HttpClient.PostAsync("api/fileattachment/upload", formData);
+                            var content = await response.Content.ReadAsStringAsync();
+                            return Ok(System.Text.Json.JsonSerializer.Deserialize<int>(content));
+                        }
+                    }
+
+                }
+
+                return BadRequest("ProdId header missing.");
+            }
+            catch (Exception e)
+            {
+                // Handle exceptions here
+                // Get the controller and action names
+                // Get the controller and action names
+                var controllerName = ControllerContext.ActionDescriptor.ControllerName;
+                var actionName = ControllerContext.ActionDescriptor.ActionName;
+
+                // Get the DisplayName from the session
+                var displayName = HttpContext.Session.GetString("DisplayName");
+
+                // Log the error along with the controller, action, and DisplayName
+                //  _logger.LogError(e, "An error occurred in {ControllerName}/{ActionName} for {DisplayName}.", controllerName, actionName, displayName);
+                throw;
+            }
+        }
+
 
     }
 }
