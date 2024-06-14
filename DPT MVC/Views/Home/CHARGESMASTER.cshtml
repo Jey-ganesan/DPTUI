@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form id="currencyForm">
+                    <form id="chargesForm">
                         <fieldset>
                             <div class="row">
                                 <div class="col-sm-1">
@@ -47,14 +47,14 @@
                                     <label class="form-label" for="name">NAME<span class="text-danger">*</span></label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input class="form-control rounded-0 toUpperCaseString" name="Name" id="name" type="text" placeholder="Enter currency name" required value="" maxlength="@t2TBLength" />
+                                    <input class="form-control rounded-0 toUpperCaseString" name="Name" id="name" type="text" placeholder="Enter charges name" required value="" maxlength="@t2TBLength" />
 
                                 </div>
                                 <div class="col-sm-1">
                                     <label class="form-label" for="code">CODE<span class="text-danger">*</span></label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input class="form-control rounded-0 toUpperCaseString" name="TYPE" id="type" type="text" placeholder="Enter currency code" required value="" maxlength="@t1TBLength" />
+                                    <input class="form-control rounded-0 toUpperCaseString" name="TYPE" id="type" type="text" placeholder="Enter charges code" required value="" maxlength="@t1TBLength" />
                                 </div>
                             </div>
                             <br />
@@ -63,7 +63,7 @@
                                     <label style="white-space: nowrap;" class="form-label" for="inwords">REMARKS</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input class="form-control rounded-0 toUpperCaseString" name="REMARKS" id="remarks" type="text" placeholder="Enter Sub Currency (Ex. Cents)" required value="" maxlength="@t2TBLength" />
+                                    <input class="form-control rounded-0 toUpperCaseString" name="REMARKS" id="remarks" type="text" placeholder="Enter remarks" required value="" maxlength="@t2TBLength" />
                                 </div>
                             </div>
                         </fieldset>
@@ -199,7 +199,7 @@
 
     // Function to disable form fields
     function disableForm() {
-        const form = document.getElementById('currencyForm');
+        const form = document.getElementById('chargesForm');
         const formElements = form.elements;
         for (let i = 0; i < formElements.length; i++) {
             formElements[i].disabled = true;
