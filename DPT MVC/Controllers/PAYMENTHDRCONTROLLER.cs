@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace DPT.MVC.Controllers
 {
@@ -28,7 +29,7 @@ namespace DPT.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> SaveCountry(PAYMENTHDR model)
+        public async Task<JsonResult> SavePAYMENTHDR(PAYMENTHDR model)
         {
             try
             {
@@ -58,7 +59,9 @@ namespace DPT.MVC.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
-                        var successResponse = new { Message = content, StatusCode = 201 };
+                        var data = JsonConvert.DeserializeObject<JObject>(content);
+                        int requesthdrId = data["paymenthdr"]["id"].Value<int>();
+                        var successResponse = new { Message = data, StatusCode = 201, Hdrid = requesthdrId };
                         return Json(successResponse);
                     }
                     else if (response.StatusCode == HttpStatusCode.Conflict)

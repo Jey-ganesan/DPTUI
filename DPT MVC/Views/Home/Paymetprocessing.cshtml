@@ -1,6 +1,6 @@
-﻿@using System.Text.Json
-@using DPT.MVC.Helper
-@inject IConfiguration Configuration
+﻿    @using System.Text.Json
+    @using DPT.MVC.Helper
+    @inject IConfiguration Configuration
 
 @{
     int decimalRoundOff = Configuration.GetValue<int>("NumberSettings:DecimalRoundOff");
@@ -49,7 +49,7 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <input type="text" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" name="TRANNO" id="tranNo" />
-                                </div> 
+                                </div>
                                 <div class="col-sm-1">
                                     <label class="form-label" for="tranDate">DATE<span class="text-danger">*</span></label>
                                 </div>
@@ -70,35 +70,35 @@
                                 </div>
                                 @* <div class="col-sm-2">
                                 <div class="col-sm-1">
-                                    <label class="form-label" for="poType">MODE<span class="text-danger">*</span></label>
+                                <label class="form-label" for="poType">MODE<span class="text-danger">*</span></label>
                                 </div>
-                                    <Select class="form-control rounded-0 chosn" id="poType">
-                                        <option value="" >-- Select Option --</option>
-                                        <option value="demo">MODE1</option>
-                                        <option value="demo1">MODE2</option>
-                                    </Select>
+                                <Select class="form-control rounded-0 chosn" id="poType">
+                                <option value="" >-- Select Option --</option>
+                                <option value="demo">MODE1</option>
+                                <option value="demo1">MODE2</option>
+                                </Select>
                                 </div>
                                 <div class="col-sm-1">
-                                    <label class="form-label" for="AMOUNT">AMOUNT<span class="text-danger">*</span></label>
+                                <label class="form-label" for="AMOUNT">AMOUNT<span class="text-danger">*</span></label>
                                 </div>
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control rounded-0 maxLengthValidation" name="AMOUNT" id="AMOUNT" />
+                                <input type="text" class="form-control rounded-0 maxLengthValidation" name="AMOUNT" id="AMOUNT" />
                                 </div> *@
                             </div>
                             <br />
                             @* <div class="row">
-                                <div class="col-sm-1">
-                                    <label class="form-label" for="remarks1">REMARKS1</label>
-                                </div>
-                                <div class="col-sm-5">
-                                    <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t3TBLength" name="remarks1" id="remarks1" />
-                                </div>
-                                <div class="col-sm-1">
-                                    <label class="form-label" for="remarks2">REMARKS2</label>
-                                </div>
-                                <div class="col-sm-5">
-                                    <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t3TBLength" name="remarks2" id="remarks2" />
-                                </div>
+                            <div class="col-sm-1">
+                            <label class="form-label" for="remarks1">REMARKS1</label>
+                            </div>
+                            <div class="col-sm-5">
+                            <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t3TBLength" name="remarks1" id="remarks1" />
+                            </div>
+                            <div class="col-sm-1">
+                            <label class="form-label" for="remarks2">REMARKS2</label>
+                            </div>
+                            <div class="col-sm-5">
+                            <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t3TBLength" name="remarks2" id="remarks2" />
+                            </div>
                             </div>
                             <br /> *@
                             <div class="row">
@@ -131,38 +131,38 @@
                             </div>
                             <br />
                             @* <div style="border: 2px solid black;padding: 10px">
-                                <div class="row">
-                                    <div class="col-sm-1">
-                                        <label class="form-label" for="charge1">CHARGE 1</label>
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <input type="text" class="form-control rounded-0" name="CHARGE1" id="charge1" readonly />
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <label class="form-label" for="description">AMOUNT 1</label>
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <input type="text" class="form-control rounded-0" name="AMOUNT1" id="amount1" readonly />
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <label class="form-label" for="charge2">CHARGE 2</label>
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <input type="text" class="form-control rounded-0" name="CHARGE2" id="charge2" readonly />
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <label class="form-label" for="description">AMOUNT 2</label>
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <input type="text" class="form-control rounded-0" name="AMOUNT2" id="amount2" readonly />
-                                    </div>
-                                    <div class="col-sm-1" style="white-space:nowrap">
-                                        <input type="checkbox" id="Adddetailsofcharges" value="true">
-                                        <label class="form-label" style="white-space:nowrap" for="dofr">Do you like to continue with the current charges?</label>
-                                    </div>
-                                </div>
-                                <br />
-                                
+                            <div class="row">
+                            <div class="col-sm-1">
+                            <label class="form-label" for="charge1">CHARGE 1</label>
+                            </div>
+                            <div class="col-sm-1">
+                            <input type="text" class="form-control rounded-0" name="CHARGE1" id="charge1" readonly />
+                            </div>
+                            <div class="col-sm-1">
+                            <label class="form-label" for="description">AMOUNT 1</label>
+                            </div>
+                            <div class="col-sm-1">
+                            <input type="text" class="form-control rounded-0" name="AMOUNT1" id="amount1" readonly />
+                            </div>
+                            <div class="col-sm-1">
+                            <label class="form-label" for="charge2">CHARGE 2</label>
+                            </div>
+                            <div class="col-sm-1">
+                            <input type="text" class="form-control rounded-0" name="CHARGE2" id="charge2" readonly />
+                            </div>
+                            <div class="col-sm-1">
+                            <label class="form-label" for="description">AMOUNT 2</label>
+                            </div>
+                            <div class="col-sm-1">
+                            <input type="text" class="form-control rounded-0" name="AMOUNT2" id="amount2" readonly />
+                            </div>
+                            <div class="col-sm-1" style="white-space:nowrap">
+                            <input type="checkbox" id="Adddetailsofcharges" value="true">
+                            <label class="form-label" style="white-space:nowrap" for="dofr">Do you like to continue with the current charges?</label>
+                            </div>
+                            </div>
+                            <br />
+
                             </div>
                             <br /> *@
                             <div style="border: 2px solid black;padding: 10px">
@@ -171,25 +171,30 @@
                                         <label class="form-label" for="receiptNo">RECEIPT NO</label>
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control rounded-0" name="RECEIPTNO" id="receiptNo"  />
+                                        <input type="text" class="form-control rounded-0" name="RECEIPTNO" id="receiptNo" />
                                     </div>
                                     <div class="col-sm-1">
                                         <label class="form-label" for="receiptDate">DATE</label>
                                     </div>
                                     <div class="col-sm-1">
-                                        <input type="date" class="form-control rounded-0" name="RECEIPTDATE" id="receiptDate"  />
+                                        <input type="date" class="form-control rounded-0" name="RECEIPTDATE" id="receiptDate" />
                                     </div>
                                     <div class="col-sm-1">
                                         <label class="form-label" for="amount">AMOUNT</label>
                                     </div>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control rounded-0" name="AMOUNT" id="amount"  />
+                                    <div class="col-sm-1">
+                                        <input type="text" class="form-control rounded-0" name="AMOUNT" id="amount" />
                                     </div>
                                     <div class="col-sm-1">
-                                        <label class="form-label" for="remarks1">REMARKS</label>
+                                        <label class="form-label" for="remarks1rec">REMARKS</label>
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control rounded-0" name="REMARKS1" id="remarks1"  />
+                                        <input type="text" class="form-control rounded-0" name="REMARKS1" id="remarks1rec" />
+                                    </div>
+                                    <div class="col-sm-1" style="padding-left: 60px;">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                        </button>
                                     </div>
                                     <div class="col-sm-1">
                                         <button class="btn btn-outline-primary" onclick="Addrows()">Add Row</button>
@@ -199,7 +204,6 @@
                                 <table width="100%" id="itemGrid" class='table table-bordered'>
                                     <thead>
                                         <tr>
-                                            <th style="text-align:center;">SLNO</th>
                                             <th style="text-align:center;">CHARGE</th>
                                             <th style="text-align:center;">AMOUNT</th>
                                             <th style="text-align:center;">REMARKS</th>
@@ -210,18 +214,23 @@
                                 </table>
                             </div>
                             @* <table width="100%" id="itemGrid" class='table table-bordered'>
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: center;">NO</th>
-                                        <th style="text-align: center;">CHARGE</th>
-                                        <th style="text-align: center;">AMOUNT</th>
-                                        <th style="text-align: center;">REMARKS</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="itemTableBody">
-                                </tbody>
+                            <thead>
+                            <tr>
+                            <th style="text-align: center;">NO</th>
+                            <th style="text-align: center;">CHARGE</th>
+                            <th style="text-align: center;">AMOUNT</th>
+                            <th style="text-align: center;">REMARKS</th>
+                            </tr>
+                            </thead>
+                            <tbody id="itemTableBody">
+                            </tbody>
                             </table>
                             <br /> *@
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button class="btn btn-primary" id="btnAdd" onclick="Submitrequest()">Submit</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -235,7 +244,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Attach Quotations</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Attach Files</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -243,18 +252,15 @@
             <div class="modal-body">
                 @* Start Model Body *@
                 <div class="row">
-                    <div class="col-md-7"><input class="form-control fileUpload" type="file" id="fileUpload1" /></div>
-                    <div class="col-md-5"><input class="form-control maxLengthValidation" maxlength="@t2TBLength" type="text" id="supplier1" placeholder="Supplier Name" /></div>
+                    <div class="col-md-12"><input class="form-control fileUpload" type="file" id="fileUpload1" /></div>
                 </div>
                 <br />
                 <div class="row">
-                    <div class="col-md-7"><input class="form-control fileUpload" type="file" id="fileUpload2" /></div>
-                    <div class="col-md-5"><input class="form-control maxLengthValidation" maxlength="@t2TBLength" type="text" id="supplier2" placeholder="Supplier Name" /></div>
+                    <div class="col-md-12"><input class="form-control fileUpload" type="file" id="fileUpload2" /></div>
                 </div>
                 <br />
                 <div class="row">
-                    <div class="col-md-7"><input class="form-control fileUpload" type="file" id="fileUpload3" /></div>
-                    <div class="col-md-5"><input class="form-control maxLengthValidation" maxlength="@t2TBLength" type="text" id="supplier3" placeholder="Supplier Name" /></div>
+                    <div class="col-md-12"><input class="form-control fileUpload" type="file" id="fileUpload3" /></div>
                 </div>
                 @* End Model Body *@
             </div>
@@ -270,36 +276,19 @@
 
     var Requestnos = [];
     var detailsofrequestno = [];
-    var itemDetails = [];
-    var tmpItem;
-    var itemGridData = [];
-    var previousSupplier = '';
-    var isApproverUpdate = false;
+    var CHARGESData;
+    var requestid;
 
     $(document).ready(async function () {
 
         await BindRequestnos();
         await Requestnodropdown(Requestnos);
+        await Chargesdata();
+        await Addrows();
         // await BindTerms();
-        // await BindCurrency();
         // await BindItem();
 
         $('#requestNo').chosen({
-            width: '100%' // Ensure the chosen dropdown is 100% width
-        });
-        $('#supplierName').chosen({
-            width: '100%' // Ensure the chosen dropdown is 100% width
-        });
-        $('#terms').chosen({
-            width: '100%' // Ensure the chosen dropdown is 100% width
-        });
-        $('#currency').chosen({
-            width: '100%' // Ensure the chosen dropdown is 100% width
-        });
-        $('#poType').chosen({
-            width: '100%' // Ensure the chosen dropdown is 100% width
-        });
-        $('#modeOfPymt').chosen({
             width: '100%' // Ensure the chosen dropdown is 100% width
         });
 
@@ -307,6 +296,14 @@
         //ref date flatpicker initialization
 
         flatpickr("#tranDate", {
+            dateFormat: "@dateFormat",
+            altInput: true,
+            allowInput: true,
+            altFormat: "@dateFormat",
+            maxDate: new Date(),
+            defaultDate: new Date() // You can set the default date here
+        });
+        flatpickr("#receiptDate", {
             dateFormat: "@dateFormat",
             altInput: true,
             allowInput: true,
@@ -326,42 +323,42 @@
         });
     }
 
-    $('#Adddetailsofcharges').change(async function () {
-        debugger
-        if (this.checked) {
-            // Get values from CHARGE 1 and AMOUNT 1
-            var charge1 = $('#charge1').val();
-            var amount1 = $('#amount1').val();
+    // $('#Adddetailsofcharges').change(async function () {
+    //     debugger
+    //     if (this.checked) {
+    //         // Get values from CHARGE 1 and AMOUNT 1
+    //         var charge1 = $('#charge1').val();
+    //         var amount1 = $('#amount1').val();
 
-            // Append a new row to the table body
-            $('#itemTableBody').append(
-                '<tr>' +
-                '<td>1</td>' + // Assuming you want a sequential number
-                '<td>' + charge1 + '</td>' +
-                '<td>' + amount1 + '</td>' +
-                '<td>Remarks</td>' + // You can add remarks or leave it blank
-                '</tr>'
-            );
-            var charge2 = $('#charge2').val();
-            var amount2 = $('#amount2').val();
-            if (charge2 != '') {
-                $('#itemTableBody').append(
-                    '<tr>' +
-                    '<td>1</td>' + // Assuming you want a sequential number
-                    '<td>' + charge2 + '</td>' +
-                    '<td>' + amount2 + '</td>' +
-                    '<td>Remarks</td>' + // You can add remarks or leave it blank
-                    '</tr>'
-                );
-            } else {
-                $('#itemTableBody').html('')
-            }
-        }
-    });
+    //         // Append a new row to the table body
+    //         $('#itemTableBody').append(
+    //             '<tr>' +
+    //             '<td>1</td>' + // Assuming you want a sequential number
+    //             '<td>' + charge1 + '</td>' +
+    //             '<td>' + amount1 + '</td>' +
+    //             '<td>Remarks</td>' + // You can add remarks or leave it blank
+    //             '</tr>'
+    //         );
+    //         var charge2 = $('#charge2').val();
+    //         var amount2 = $('#amount2').val();
+    //         if (charge2 != '') {
+    //             $('#itemTableBody').append(
+    //                 '<tr>' +
+    //                 '<td>1</td>' + // Assuming you want a sequential number
+    //                 '<td>' + charge2 + '</td>' +
+    //                 '<td>' + amount2 + '</td>' +
+    //                 '<td>Remarks</td>' + // You can add remarks or leave it blank
+    //                 '</tr>'
+    //             );
+    //         } else {
+    //             $('#itemTableBody').html('')
+    //         }
+    //     }
+    // });
 
     $('#requestNo').change(async function () {
-        debugger
         var selectedId = this.value;
+        requestid = this.value;
         try {
             let data = await $.ajax({
                 url: '@Url.Action("GetdetailsByRequestid", "PAYMENTHDR")',
@@ -374,16 +371,8 @@
             Flatpicker(Formateddate);
             $('#totalRequestamount').val(data[0].totalrequestamount);
             $('#jobNo').val(data[0].jobno);
-            $('#charge1').val(data[0].chargetype)
-            $('#amount1').val(data[0].amount)
-            if (data.length > 1) {
-                $('#charge2').val(data[1].chargetype)
-                $('#amount2').val(data[1].amount)
-            } else {
-                $('#charge2').val('')
-                $('#amount2').val('')
-            }
             
+
         } catch (error) {
             console.log(error);
         }
@@ -394,10 +383,10 @@
         dropdown.innerHTML = "<option value=''>--Select Request No--</option>";
 
         Requestnodata.forEach(item => {
-                const option = document.createElement("option");
-                option.value = item.id;
-                option.text = `${item.requestno}`;
-                dropdown.appendChild(option);
+            const option = document.createElement("option");
+            option.value = item.id;
+            option.text = `${item.requestno}`;
+            dropdown.appendChild(option);
         });
         $('#requestNo').trigger("chosen:updated")
     }
@@ -416,898 +405,102 @@
         }
     }
 
-    async function BindSupplier() {
-
-        try {
-            let data = await $.ajax({
-                url: '@Url.Action("GetSupplier", "Masters")',
-                type: 'Get'
-            });
-
-            supplierDetails = data;
-
-            var dropdown = $('#supplierName');
-            dropdown.empty();
-            dropdown.append($('<option>').text("-- Select Supplier --").attr('selected', true).attr('disabled', true).attr('value', 0));
-            for (var i = 0; i < data.length; i++) {
-                dropdown.append($('<option>').text(data[i].name + ' - [' + data[i].accountCode + ']').attr('value', data[i].id));
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
+    async function Chargesdata() {
+        CHARGESData = await $.ajax({
+            url: '@Url.Action("GetCharges", "MasterCHARGES")',
+            type: 'get',
+        });
     }
 
-    async function BindTerms() {
+    function addRow() {
+        const table = document.querySelector('#itemGrid tbody');
+        const newRow = document.createElement('tr');
 
-        try {
-            let data = await $.ajax({
-                url: '@Url.Action("GetTerms", "Masters")',
-                type: 'Get'
-            });
+        newRow.innerHTML = `
+                <td>
+                    <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
+                        <option value="">Select</option>
+                        ${CHARGESData.map(item => `<option value="${item.id}">${item.type}</option>`).join('')}
+                    </select>
+                </td>
+                <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+                <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t4TBLength"></td>
+            `;
 
-            var dropdown = $('#terms');
-            dropdown.empty();
-            dropdown.append($('<option>').text("-- Select Terms --").attr('selected', true).attr('disabled', true).attr('value', 0));
-            for (var i = 0; i < data.length; i++) {
-                var selected = false;
-                if (data[i].isDefault) {
-                    selected = true;
-                }
-                dropdown.append($('<option>').text(data[i].name).attr('value', data[i].id).attr('selected', selected));
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
+        table.appendChild(newRow);
+        $('.chosen-select').chosen();
+        $('.chosen-container').css('width', '100%'); // Ensures the chosen container takes full width
+        $('.date-picker').flatpickr({
+            dateFormat: "@dateFormat",
+            defaultDate: new Date()
+        });
     }
 
-    async function BindCurrency() {
-
-        try {
-            // let data = await $.ajax({
-            //     url: '@Url.Action("GetCurrency", "Masters")',
-            //     type: 'Get'
-            // });
-
-            let data = currencyInfo;
-
-            var dropdown = $('#currency');
-            dropdown.empty();
-            dropdown.append($('<option>').text("-- Select Currency --").attr('selected', true).attr('disabled', true).attr('value', 0));
-            for (var i = 0; i < data.length; i++) {
-                var selected = false;
-                if (data[i].isDefault) {
-                    selected = true;
-                }
-                dropdown.append($('<option>').text(data[i].name + ' - [' + data[i].code + ']').attr('value', data[i].id).attr('selected', selected));
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
+    function validateNumericInput(input) {
+        input.value = input.value.replace(/[^\d]/g, '');
     }
 
-    async function BindItem(supplierId) {
-
-        try {
-            let data = await $.ajax({
-                url: '@Url.Action("GetItemBySupplier", "Masters")' + '?supplierId=' + supplierId,
-                type: 'Get'
-            });
-
-            itemDetails = data;
-
-            var dropdown = $('#itemCode');
-            dropdown.empty();
-            dropdown.append($('<option>').text("-- Select Item --").attr('selected', true).attr('disabled', true).attr('value', 0));
-            for (var i = 0; i < data.length; i++) {
-                dropdown.append($('<option>').text('[' + data[i].code + '] - ' + data[i].description).attr('value', data[i].id));
-            }
-
-            $('#itemCode').chosen({
-                width: '100%' // Ensure the chosen dropdown is 100% width
-            });
-            $('#itemCode').trigger('chosen:updated');
-
-        } catch (error) {
-            console.log(error);
+    async function Addrows() {
+        for (let i = 0; i < 5; i++) {
+            await addRow();
         }
     }
-
-    $('#supplierName').on('chosen:showing_dropdown', function () {
-        previousSupplier = $(this).val();
-    });
-
-    $('#supplierName').change(async function () {
-
-        var table = document.getElementById('itemGrid').getElementsByTagName('tbody')[0];
-        const rows = table.getElementsByTagName('tr');
-
-        if (rows.length > 0) {
-            if (confirm('Added Items Will Be Removed.\nDo You Want To Proceed ?')) {
-                $('#itemTableBody').empty();
-                previousSupplier = $(this).val();
-            } else {
-                $(this).val(previousSupplier).trigger('chosen:updated');
-                event.preventDefault();
-            }
-        }
-
-        // Bind Acct Code and Address
-        var tmp = supplierDetails.filter(x => x.id == this.value)[0];
-
-        if (!isNullOrEmpty(tmp.address))
-            $('#address').val(tmp.address);
-
-        if (!isNullOrEmpty(tmp.accountCode))
-            $('#acctCode').val(tmp.accountCode);
-
-        if (!isNullOrEmpty(tmp.contactPerson))
-            $('#attnTo').val(tmp.contactPerson);
-
-        if (!isNullOrEmpty(tmp.cargoWiseCode))
-            $('#cargoWiseCode').val(tmp.cargoWiseCode);
-
-
-        await BindItem(this.value);
-    });
-
-    $('#itemCode').change(async function () {
-        // Upon selection of Item, need to show Item code, Category, UOM and Cost.
-        var tmp = itemDetails.filter(x => x.id == this.value)[0];
-        tmpItem = tmp;
-        $('#description').val(tmp.description);
-        $('#category').val(tmp.categoryName);
-        $('#uom').val(tmp.uomName);
-        $('#cost').val(tmp.rate);
-    });
-
-    $('#currency').change(async function () {
-        $('#amountInWords').html(inWords($('#total').val(), $(this).val()));
-    });
-
-    $('#qty').on('input', async function () {
-        enforceMaxLength(this);
-        let value = $(this).val();
-
-        // If value is negative or contains a decimal point, set it to zero
-        if (value < 0 || value.indexOf('.') !== -1) {
-            $(this).val(Math.floor(Math.abs(value)));
-        }
-
-        // If the value is not a number or less than zero, set it to zero
-        if (isNaN(value) || value < 0) {
-            $(this).val(0);
-        }
-    });
 
     $('#btnAdd').on('click', async function () {
-
         event.preventDefault();
-        var table = document.getElementById('itemGrid').getElementsByTagName('tbody')[0];
-
-        const rows = table.getElementsByTagName('tr');
-
-        for (let i = 0; i < rows.length; i++) {
-            const cell = rows[i].getElementsByTagName('td')[1];
-            const cellText = cell.textContent.trim().replace(cell.querySelector('input').outerHTML, '').trim();
-            if (cell && cellText === tmpItem.code) {
-                alert('Item code ' + tmpItem.code + ' already exists!');
-                return;
-            }
+        debugger
+        var headerdata1 = {
+            TRANNO: $('#tranNo').val(),
+            TRANDATE: $('#tranDate').val(),
+            REQUESTID: requestid,
+            REMARKS1: $('#remarks1').val(),
+            REMARKS2: $('#remarks2').val(),
+            PAIDBY: "@userName"
         }
-
-        var body = '<tr>';
-        body += '<td><input type="text" id="poDtlId" value="0" hidden/>' + (table.rows.length + 1) + '</td>';
-        body += '<td><input type="text" id="itemId" value="' + tmpItem.id + '" hidden/>' + tmpItem.code + '</td>';
-        body += '<td>' + $('#description').val() + '</td>';
-        body += '<td>' + $('#category').val() + '</td>';
-        body += '<td>' + $('#uom').val() + '</td>';
-        body += '<td>' + $('#qty').val() + '</td>';
-        body += '<td>' + $('#cost').val() + '</td>';
-        body += '<td>' + ($('#qty').val() * $('#cost').val()).toFixed(2) + '</td>';
-        body += '<td><a href="#" title="Delete" onclick="deleteRow(this)"><i class="fa fa-trash"></i></a></td>';
-        $('#itemTableBody').append(body);
-
-        await CountTotalCost();
-
-        await ClearItemForm();
-    });
-
-    async function ClearItemForm() {
-        $('#itemCode').val('').trigger('chosen:updated');
-        $('#description').val('');
-        $('#category').val('');
-        $('#uom').val('');
-        $('#qty').val(1);
-        $('#cost').val(0);
-    }
-
-    async function deleteRow(button) {
-        // Find the row to be deleted
-        var row = button.parentNode.parentNode;
-        // Delete the row
-        row.parentNode.removeChild(row);
-        updateSequenceNumbers();
-        await CountTotalCost();
-    }
-
-    function updateSequenceNumbers() {
-        const table = document.getElementById('itemGrid').getElementsByTagName('tbody')[0];
-        for (let i = 0; i < table.rows.length; i++) {
-            table.rows[i].cells[0].innerText = i + 1;
-        }
-    }
-
-    $('#btnCancel').on('click', async function () {
-
-        event.preventDefault();
-        var prevPage = JSON.parse(localStorage.getItem("prevPage"));
-        if (prevPage[0] == '') {
-            loadPageWithParams('GridMasters', '', '', @ViewBag.pageId);
-        } else {
-            loadPageWithParams(prevPage[0], prevPage[1], prevPage[2], prevPage[3]);
-        }
-        // loadPageWithParams('GRIDMASTERS', '', '', '@pageId');
-
-    });
-
-    $('#discount').on('keyup', async function () {
-        if ($(this).val() == '.') {
-            $(this).val(0);
-        }
-        await CountTotalCost();
-
-    });
-
-    async function CountTotalCost() {
-        var totalCost = 0;
-        $('#itemTableBody tr').each(async function () {
-            // 'this' refers to the current <tr> element in the loop
-            var currentRow = $(this);
-
-            // Do something with the current row, for example:
-            var rowData = currentRow.find('td:eq(7)').text();
-            totalCost = totalCost + parseFloat(rowData);
+        const res1 = await $.ajax({
+            url: '@Url.Action("SavePAYMENTHDR", "PAYMENTHDR")',
+            method: 'POST',
+            data: headerdata1
         });
-        $('#totalAmount').val(totalCost.toFixed(2));
-        if ($('#discount').val() != '') {
-            if ($('#discount').val() > totalCost) {
-                $('#discount').val(0);
-            }
-            totalCost = totalCost - parseFloat($('#discount').val());
+        debugger
+        const PAYMENTHDRID = res1.hdrid;
+        var headerdata2 = {
+            HDRID: PAYMENTHDRID,
+            REQUESTID: requestid,
+            RECEIPTNO: $('#receiptNo').val(),
+            RECEIPTDATE: $('#receiptDate').val(),
+            RECEIPTAMOUNT: $('#amount').val(),
+            REMARKS1: $('#remarks1rec').val()
         }
-        $('#total').val(totalCost.toFixed(2));
-        $('#amountInWords').html(inWords(totalCost.toFixed(2), $('#currency').val()));
-    }
+        const res2 = await $.ajax({
+            url: '@Url.Action("SavePAYMENTRECEIPTS", "PAYMENTRECEIPTS")',
+            method: 'POST',
+            data: headerdata2
+        });
+        debugger
+        const PAYMENTRECEIPTID = res2.hdrid;
+        const rows = document.querySelectorAll('#itemGrid tbody tr');
+        for (const row of rows) {
+            const charge = row.querySelector('select[name="CHARGE"]').value;
+            const amount = row.querySelector('input[name="AMOUNT"]').value;
+            const remarks1 = row.querySelector('input[name="REMARKS1"]').value;
 
-    $('#btnSave').on('click', async function () {
-        event.preventDefault();
+            var headerdata3 = {
+                CHARGETYPEID: charge,
+                AMOUNT: amount,
+                REMARKS1: remarks1,
+                PAYMENTHDRID: PAYMENTHDRID,
+                PAYMENTRECEIPTID: PAYMENTRECEIPTID,
+                REQUESTID: requestid,
 
-        if (!isValidate()) {
-            alert("Please Fill All Required Fields");
-            return false;
-        }
-        const table = document.getElementById('itemGrid').getElementsByTagName('tbody')[0];
+            };
 
-        if (table.rows.length == 0) {
-            alert("Please Add At Least One Line Item.");
-            return false;
-        }
-
-        var tmpSupplier = supplierDetails.filter(x => x.id == $('#supplierName').val())[0];
-        var tmpDepartments = departments.filter(x => x.id == $('#department').val())[0];
-        var tmpCurrency = currencyInfo.filter(x => x.id == $('#currency').val())[0];
-
-        var obj = {
-            Id: $('#Id').val(),
-            DepartmentId: $('#department').val(),
-            DepartmentName: tmpDepartments.name,
-            DOFRFlag: $('#dofr').is(':checked'),
-            PONumber: $('#poNo').val(),
-            PODate: $('#date').val(),
-            Type: $('#poType').val(),
-            SupplierId: $('#supplierName').val(),
-            SupplierName: tmpSupplier.name,
-            SupplierAccountCode: $('#acctCode').val(),
-            SupplierCargoWiseCode: $('#cargoWiseCode').val(),
-            SupplierAddress: $('#address').val(),
-            QuoteRef: $('#quoteRef').val(),
-            AttentionTo: $('#attnTo').val(),
-            Terms: $('#terms').val(),
-            CurrencyId: $('#currency').val(),
-            CurrencyName: tmpCurrency.name,
-            ModeOfPayment: $('#modeOfPymt').val(),
-            Origin: $('#origin').val(),
-            Customer: $('#customer').val(),
-            DGFReference: $('#dgfRef').val(),
-            TotalAmount: $('#totalAmount').val(),
-            Discount: $('#discount').val(),
-            Total: $('#total').val(),
-            AmountInWords: $('#amountInWords').text(),
-            ReviewerComment: $('#reviewerComment').val(),
-            ReviewedBy: "0",
-            ReviewedOn: null,
-            ApproverComment: $('#approverComment').val(),
-            ApprovedBy: "0",
-            ApprovedOn: null,
-            Remarks1: $('#remarks1').val(),
-            Remarks2: $('#remarks2').val(),
-            Status: "Pending",
-            PrintFlag: false,
-            SentToCountryManager: false
-        }
-
-        try {
-            let data = await $.ajax({
-                url: '@Url.Action("SavePOHdr", "PO")',
-                type: 'post',
-                data: obj
+            await $.ajax({
+                url: '@Url.Action("SavePAYMENTRECEIPTCHARGES", "PAYMENTRECEIPTCHARGES")',
+                method: 'POST',
+                data: headerdata3
             });
-
-            if (data.statusCode == 201) {
-                //clear form
-
-                await saveQuoteRefFiles(data.message.pohdr.id);
-
-                await SavePODtl(data.message.pohdr.id);
-                var msg = 'Updated';
-                if ($('#Id').val() == 0)
-                    msg = 'Created';
-
-                alert('PO Request ' + msg + ' Successfully...');
-                loadPageWithParams('GRIDMASTERS', '', '', '@pageId');
-                // await resetForm();
-            }
-
-        } catch (error) {
-            console.log(error);
         }
-
-    });
-
-    function isValidate() {
-
-        if (isNullOrEmpty($('#date').val())) {
-            return false;
-        } else if (isNullOrEmpty($('#poType').val())) {
-            return false;
-        } else if (isNullOrEmpty($('#supplierName').val())) {
-            return false;
-        } else if (isNullOrEmpty($('#modeOfPymt').val())) {
-            return false;
-        }
-
-        return true;
-    }
-
-    async function SavePODtl(hdrId) {
-
-        $('#itemTableBody tr').each(async function () {
-
-            // Do something with the current row, for example:
-            var itemId = $(this).find('input[id="itemId"]').val();
-            var tmp = itemDetails.filter(x => x.id == itemId)[0];
-
-            var category;
-            var qty;
-            var containerNo;
-            var size;
-
-            if ($('#dofr').is(':checked')) {
-                containerNo = $(this).find("td:eq(3)").html();
-                size = $(this).find("td:eq(5)").html();
-                category = '';
-                qty = 0;
-            } else {
-                category = $(this).find("td:eq(3)").html();
-                qty = $(this).find("td:eq(5)").html();
-                containerNo = '';
-                size = '';
-            }
-
-            var obj = {
-                Id: $(this).find('input[id="poDtlId"]').val(),
-                HdrId: hdrId,
-                ItemId: tmp.id,
-                ItemCode: tmp.code,
-                Description: tmp.description,
-                Category: category,
-                UOM: $(this).find("td:eq(4)").html(),
-                QTY: qty,
-                Cost: $(this).find("td:eq(6)").html(),
-                TotalCost: $(this).find("td:eq(7)").html(),
-                ContainerNo: containerNo,
-                Size: size,
-                Remarks1: '',
-                Remarks2: ''
-            }
-            try {
-                let data = await $.ajax({
-                    url: '@Url.Action("SavePODtl", "PO")',
-                    type: 'post',
-                    data: obj
-                });
-
-            } catch (error) {
-                console.log(error);
-            }
-        });
-
-
-
-    }
-
-    async function resetForm() {
-
-        $('#CPOForm')[0].reset();
-
-        flatpickr("#date", {
-            dateFormat: "@dateFormat",
-            altInput: true,
-            allowInput: true,
-            altFormat: "@dateFormat",
-            maxDate: new Date(),
-            defaultDate: new Date() // You can set the default date here
-        });
-        $('#amountInWords').text('');
-        $('#itemTableBody').empty();
-    }
-
-    async function BindData(id) {
-        try {
-            let data = await $.ajax({
-                url: '@Url.Action("GetPOById", "PO")',
-                type: 'Get',
-                data: { id: id }
-            });
-
-            $('#Id').val(data.id);
-            $('#department').val(data.departmentId);
-            $('#department').trigger('chosen:updated');
-            $('#dofr').prop('checked', data.dofrFlag).trigger('change');
-            $('#poNo').val(data.poNumber);
-            $('#date').val(data.poDate);
-            $('#poType').val(data.type);
-            $('#supplierName').val(data.supplierId);
-            $('#acctCode').val(data.supplierAccountCode);
-            $('#cargoWiseCode').val(data.supplierCargoWiseCode);
-            $('#address').val(data.supplierAddress);
-            $('#attnTo').val(data.attentionTo);
-            $('#quoteRef').val(data.quoteRef);
-            $('#terms').val(data.terms);
-            $('#terms').trigger('chosen:updated');
-            $('#currency').val(data.currencyId);
-            $('#modeOfPymt').val(data.modeOfPayment);
-            $('#origin').val(data.origin);
-            $('#customer').val(data.customer);
-            $('#dgfRef').val(data.dgfReference);
-            $('#totalAmount').val(data.totalAmount);
-            $('#discount').val(data.discount);
-            $('#total').val(data.total);
-            $('#amountInWords').text(data.amountInWords);
-            $('#reviewerComment').val(data.reviewerComment);
-            $('#approverComment').val(data.approverComment);
-            $('#remarks1').val(data.remarks1);
-            $('#remarks2').val(data.remarks2);
-
-            itemGridData = data.poDtls;
-
-            //Binding Items Dropdown
-            await BindItem(data.supplierId);
-
-            await BindItemGrid(data);
-
-            await GetTheFilePath(id);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async function BindItemGrid(data) {
-        var detailsData = data.poDtls;
-        var allowDelete = false;
-
-        if ('@mode' == 'Edit') {
-            allowDelete = true;
-        }
-
-        $('#itemTableBody').empty();
-        detailsData.forEach(item => {
-            var body = '<tr>';
-            body += '<td><input type="text" id="poDtlId" value="' + item.id + '" hidden/>1</td>';
-            body += '<td><input type="text" id="itemId" value="' + item.itemId + '" hidden/>' + item.itemCode + '</td>';
-            body += '<td>' + item.description + '</td>';
-            body += '<td>' + (data.dofrFlag ? item.containerNo : item.category) + '</td>';
-            body += '<td>' + item.uom + '</td>';
-            body += '<td>' + (data.dofrFlag ? item.size : item.qty) + '</td>';
-            body += '<td>' + item.cost + '</td>';
-            body += '<td>' + item.totalCost + '</td>';
-            if (allowDelete) {
-                body += '<td><a href="#" title="Edit" onclick="deleteItem(' + item.id + ')"><i class="fa fa-trash"></i></a></td>';
-            } else {
-                body += '<td><a href="#" title="Edit" style="pointer-events: none;cursor: default;color: gray;" ><i class="fa fa-trash"></i></a></td>';
-            }
-
-            $('#itemTableBody').append(body);
-        });
-        updateSequenceNumbers();
-    }
-
-    async function deleteItem(id) {
-
-        alert('This Feature Is Under Development.');
-
-        // try {
-        //     if (!confirm(' Are you sure you want to delete ? '))
-        //         return false;
-        //     let data = await $.ajax({
-        //         url: '@Url.Action("DeletePODtl", "PO")',
-        //         type: 'Get',
-        //         data: { id: id }
-        //     });
-
-        //     itemGridData = itemGridData.filter(x => x.id != id);
-
-        //     await BindItemGrid(itemGridData);
-
-        // } catch {
-
-        // }
-    }
-
-    $('#btnDelete').on('click', async function () {
-
-        event.preventDefault();
-
-        try {
-            if (!confirm(' Are you sure you want to delete ? '))
-                return false;
-            let data = await $.ajax({
-                url: '@Url.Action("DeletePOHdr", "PO")',
-                type: 'Get',
-                data: { id: $('#Id').val() }
-            });
-
-            loadPageWithParams('GRIDMASTERS', '', '', '@pageId');
-
-        } catch {
-
-        }
-    });
-
-    async function saveQuoteRefFiles(hdrId) {
-
-        var file1 = document.getElementById("fileUpload1").files;
-        var file2 = document.getElementById("fileUpload2").files;
-        var file3 = document.getElementById("fileUpload3").files;
-
-        var supplier1 = document.getElementById("supplier1").value;
-        var supplier2 = document.getElementById("supplier2").value;
-        var supplier3 = document.getElementById("supplier3").value;
-
-        if (file1.length > 0) {
-
-            var obj1 = {
-                HdrId: hdrId,
-                SupplierName: supplier1,
-                Remarks: ''
-            }
-
-            let data1 = await $.ajax({
-                url: '@Url.Action("SavePOQuote", "PO")',
-                type: 'post',
-                data: obj1
-            });
-
-            if (data1.statusCode == 201) {
-
-                var formData1 = new FormData();
-                formData1.append('file', file1[0]);
-                formData1.append('typeId', '1');
-                formData1.append('transName', 'PO Request');
-
-                await $.ajax({
-                    url: "@Url.Action("SaveFile", "Files")",
-                    type: "POST",
-                    headers: { 'ProdId': data1.message.poQuote.id },
-                    data: formData1,
-                    contentType: false,
-                    processData: false
-                });
-            }
-
-        }
-        if (file2.length > 0) {
-
-            var obj2 = {
-                HdrId: hdrId,
-                SupplierName: supplier2,
-                Remarks: ''
-            }
-
-            let data2 = await $.ajax({
-                url: '@Url.Action("SavePOQuote", "PO")',
-                type: 'post',
-                data: obj2
-            });
-
-            if (data2.statusCode == 201) {
-
-                var formData2 = new FormData();
-                formData2.append('file', file2[0]);
-                formData2.append('typeId', '1');
-                formData2.append('transName', 'PO Request');
-
-                await $.ajax({
-                    url: "@Url.Action("SaveFile", "Files")",
-                    type: "POST",
-                    headers: { 'ProdId': data2.message.poQuote.id },
-                    data: formData2,
-                    contentType: false,
-                    processData: false
-                });
-            }
-        }
-        if (file3.length > 0) {
-
-            var obj3 = {
-                HdrId: hdrId,
-                SupplierName: supplier3,
-                Remarks: ''
-            }
-
-            let data3 = await $.ajax({
-                url: '@Url.Action("SavePOQuote", "PO")',
-                type: 'post',
-                data: obj3
-            });
-
-            if (data3.statusCode == 201) {
-
-                var formData3 = new FormData();
-                formData3.append('file', file3[0]);
-                formData3.append('typeId', '1');
-                formData3.append('transName', 'PO Request');
-
-                await $.ajax({
-                    url: "@Url.Action("SaveFile", "Files")",
-                    type: "POST",
-                    headers: { 'ProdId': data3.message.poQuote.id },
-                    data: formData3,
-                    contentType: false,
-                    processData: false
-                });
-            }
-        }
-
-    }
-
-    async function GetTheFilePath(id) {
-
-        var data = await $.ajax({
-            url: '@Url.Action("GetFilesForPOQuote", "Files")',
-            type: 'GET',
-            data: { Id: id, transname: 'PO Request' }
-        });
-        //we have the fileType id we need to map the filetype id with filetype name
-
-        //Second Func
-        var attachmentData = await $.ajax({
-            url: '@Url.Action("GetAttachmentTypes", "Files")',
-            method: 'GET'
-        });
-
-        var innerHtml = '<div class="uploaded-files"><label class="section-title">Uploaded Files Details</label><ul class="file-list">';
-        for (var i = 0; i < data.length; i++) {
-            var fileNames2 = data[i].fileName.replace(/\s+/g, '_');
-            // Find out the attachment type name from the attachmenttype Id
-            var targetFileType = attachmentData.find(item => item.id === data[i].attachmentTypeSlNo);
-            data[i].supplierName = data[i].supplierName ?? "";
-            if (data[i].fileName.split('.')[1] === 'pdf') {
-                innerHtml += '<li><a href="#" onClick="DownLoadFileProcessedPDF(' + data[i].id + ', \'' + data[i].fileName + '\')">' + data[i].fileName + '</a><h5>' + data[i].supplierName + '<h5></h5> ' + targetFileType.description + '</h5>&nbsp;&nbsp;<span class="ion ion-close" onclick="DeleteAttachment(' + data[i].id + ')"></span></li>';
-            } else {
-                innerHtml += '<li><a href="#" onClick="DownLoadFileProcessed(' + data[i].id + ', \'' + data[i].fileName + '\')">' + data[i].fileName + '</a><h5>' + data[i].supplierName + '<h5></h5> ' + targetFileType.description + '</h5>&nbsp;&nbsp;<span class="ion ion-close" onclick="DeleteAttachment(' + data[i].id + ')"></span></li>';
-            }
-            if (targetFileType.description == 'Request Form') {
-                requestFormId = data[i].id;
-            }
-        }
-        innerHtml += '</ul></div>';
-        document.getElementById('msg').innerHTML = innerHtml;
-    }
-
-    function DownLoadFileProcessedPDF(id, fileName) {
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', `/Files/DownloadFile?id=${id}`, true);
-        xhr.responseType = 'blob';
-
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var blob = xhr.response;
-
-                // Convert the blob to a blob URL
-                var blobUrl = URL.createObjectURL(blob);
-
-                // Open the PDF in a new tab
-                var newTab = window.open(blobUrl, '_blank');
-                if (!newTab) {
-                    console.error('Failed to open a new tab.');
-                }
-            } else {
-                console.error('Error downloading file:', xhr.statusText);
-            }
-        };
-
-        xhr.onerror = function () {
-            console.error('Network error occurred while downloading the file.');
-        };
-
-        xhr.send();
-    }
-
-    function DownLoadFileProcessed(id, fileName) {
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', `/Files/DownloadFile?id=${id}`, true);
-        xhr.responseType = 'blob';
-
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var blob = xhr.response;
-                var downloadLink = document.createElement('a');
-                downloadLink.href = window.URL.createObjectURL(blob);
-                downloadLink.setAttribute('download', fileName);
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-            } else {
-                console.error('Error downloading file:', xhr.statusText);
-            }
-        };
-
-        xhr.onerror = function () {
-            console.error('Network error occurred while downloading the file.');
-        };
-
-        xhr.send();
-
-    }
-
-    async function DeleteAttachment(id) {
-
-        if (!confirm("Are you sure you want to delete this attachment ?")) {
-            return false;
-        }
-
-        await $.ajax({
-            url: '@Url.Action("DeleteFile", "Files")',
-            method: 'GET',
-            data: { Id: id }
-        });
-        await GetTheFilePath(@ViewBag.paramID);
-    }
-
-    $('#btnApprove').on('click', async function () {
-
-        event.preventDefault();
-        var comment = $('#reviewerComment').val();
-
-        if (isApproverUpdate) {
-
-            var obj = {
-                Id: '@ViewBag.paramID',
-                ApproverComment: comment,
-                SentToCountryManager: $('#sentToCountryManager').is(':checked'),
-                Status: 'approve'
-            }
-            try {
-                let data = await $.ajax({
-                    url: '@Url.Action("UpdateApprovalForPO", "PO")',
-                    type: 'post',
-                    data: obj
-                });
-                $('#btnCancel').click();
-            } catch (error) {
-                console.log(error);
-            }
-        } else {
-
-            var obj = {
-                Id: '@ViewBag.paramID',
-                ReviewerComment: comment,
-                Status: 'approve'
-            }
-            try {
-                let data = await $.ajax({
-                    url: '@Url.Action("UpdateReviewForPO", "PO")',
-                    type: 'post',
-                    data: obj
-                });
-                $('#btnCancel').click();
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    });
-
-    $('#btnDeny').on('click', async function () {
-
-        event.preventDefault();
-        var comment = $('#reviewerComment').val();
-
-        if (isNullOrEmpty(comment)) {
-            alert("Please Give Comment.");
-            return false;
-        }
-
-        if (isApproverUpdate) {
-            var obj = {
-                Id: '@ViewBag.paramID',
-                ApproverComment: comment,
-                SentToCountryManager: $('#sentToCountryManager').is(':checked'),
-                Status: 'deny'
-            }
-
-            try {
-                let data = await $.ajax({
-                    url: '@Url.Action("UpdateApprovalForPO", "PO")',
-                    type: 'post',
-                    data: obj
-                });
-                $('#btnCancel').click();
-            } catch (error) {
-                console.log(error);
-            }
-        } else {
-
-            var obj = {
-                Id: '@ViewBag.paramID',
-                ReviewerComment: comment,
-                Status: 'deny'
-            }
-
-            try {
-                let data = await $.ajax({
-                    url: '@Url.Action("UpdateReviewForPO", "PO")',
-                    type: 'post',
-                    data: obj
-                });
-                $('#btnCancel').click();
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    });
-
-    $('.fileUpload').on('change', async function () {
-        debugger;
-        var extension = $(this).val().split('.').pop().toLowerCase();
-        if ($.inArray(extension, allowedExtensions) === -1) {
-            alert('Invalid file type.');
-            $(this).val(''); // Clear the file input
-            event.preventDefault(); // Prevent form submission
-            return false;
-        }
-    });
-
-    $('.maxLengthValidation').on('input paste', function () {
-        var maxLength = $(this).attr('maxlength');
-        var currentLength = $(this).val().length;
-        var remaining = (maxLength - 1) - currentLength;
-
-        if (remaining < 0) {
-            // Display validation message or take appropriate action
-            event.preventDefault();
-        } else {
-            // Clear validation message
-        }
-    });
-
-    $('.toUpperCaseString').on('input paste', function () {
-        $(this).val($(this).val().toLocaleUpperCase());
     });
 
 </script>
