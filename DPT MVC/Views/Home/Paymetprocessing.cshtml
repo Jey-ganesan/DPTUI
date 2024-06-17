@@ -1,0 +1,506 @@
+﻿    @using System.Text.Json
+    @using DPT.MVC.Helper
+    @inject IConfiguration Configuration
+
+@{
+    int decimalRoundOff = Configuration.GetValue<int>("NumberSettings:DecimalRoundOff");
+    int t1TBLength = Configuration.GetValue<int>("CharacterSettings:T1TypeTextbox");
+    int t2TBLength = Configuration.GetValue<int>("CharacterSettings:T2TypeTextbox");
+    int t3TBLength = Configuration.GetValue<int>("CharacterSettings:T3TypeTextbox");
+    int t4TBLength = Configuration.GetValue<int>("CharacterSettings:T4TypeTextbox");
+    int t5TBLength = Configuration.GetValue<int>("CharacterSettings:T5TypeTextbox");
+    string? dateFormat = Configuration.GetValue<string>("Date:dateFormat");
+    string? dateFormatForbinding = Configuration.GetValue<string>("Date:dateFormatForbinding");
+    string mode = ViewBag.mode;
+    string url = ViewBag.url;
+    int pageId = ViewBag.pageId;
+    int userId = Convert.ToInt32(SessionHelper.GetStringValueFromSession(Context, "UserId"));
+    string userName = SessionHelper.GetStringValueFromSession(Context, "DisplayName");
+
+}
+
+<head>
+    <style>
+
+
+    </style>
+</head>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mx-auto col-lg-12">
+            <div class="card shadow-lg">
+                <div class="card-header text-white bg-warning d-flex">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-lg-start">
+                            Payment Processing
+                        </h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <span class="text-danger"> * Required fields</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="CPOForm">
+                        <div class="readonlyPortation">
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <label class="form-labell" for="tranNo">TRAN NO<span class="text-danger">*</span></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" name="TRANNO" id="tranNo" />
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="tranDate">DATE<span class="text-danger">*</span></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="date" class="form-control rounded-0" name="TRANDATE" id="tranDate" />
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="remarks1">REMARKS1</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t3TBLength" name="remarks1" id="remarks1" />
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="remarks2">REMARKS2</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t3TBLength" name="remarks2" id="remarks2" />
+                                </div>
+                                @* <div class="col-sm-2">
+                                <div class="col-sm-1">
+                                <label class="form-label" for="poType">MODE<span class="text-danger">*</span></label>
+                                </div>
+                                <Select class="form-control rounded-0 chosn" id="poType">
+                                <option value="" >-- Select Option --</option>
+                                <option value="demo">MODE1</option>
+                                <option value="demo1">MODE2</option>
+                                </Select>
+                                </div>
+                                <div class="col-sm-1">
+                                <label class="form-label" for="AMOUNT">AMOUNT<span class="text-danger">*</span></label>
+                                </div>
+                                <div class="col-sm-2">
+                                <input type="text" class="form-control rounded-0 maxLengthValidation" name="AMOUNT" id="AMOUNT" />
+                                </div> *@
+                            </div>
+                            <br />
+                            @* <div class="row">
+                            <div class="col-sm-1">
+                            <label class="form-label" for="remarks1">REMARKS1</label>
+                            </div>
+                            <div class="col-sm-5">
+                            <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t3TBLength" name="remarks1" id="remarks1" />
+                            </div>
+                            <div class="col-sm-1">
+                            <label class="form-label" for="remarks2">REMARKS2</label>
+                            </div>
+                            <div class="col-sm-5">
+                            <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t3TBLength" name="remarks2" id="remarks2" />
+                            </div>
+                            </div>
+                            <br /> *@
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="requestNo">REQUEST NO<span class="text-danger">*</span></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <Select class="form-control rounded-0 chosn" id="requestNo">
+                                        <option value="">Select Option</option>
+                                    </Select>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="requestDate">REQUSTED DATE<span class="text-danger">*</span></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="date" class="form-control rounded-0" maxlength="@t2TBLength" name="REQUESTDATE" id="requestDate" disabled />
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="jobNo">JOB NO<span class="text-danger">*</span></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control rounded-0 maxLengthValidation" name="JOBNO" id="jobNo" readonly />
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="totalRequestamount">AMOUNT<span class="text-danger">*</span></label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control rounded-0" name="TOTALREQUESTAMOUNT" id="totalRequestamount" readonly />
+                                </div>
+                            </div>
+                            <br />
+                            @* <div style="border: 2px solid black;padding: 10px">
+                            <div class="row">
+                            <div class="col-sm-1">
+                            <label class="form-label" for="charge1">CHARGE 1</label>
+                            </div>
+                            <div class="col-sm-1">
+                            <input type="text" class="form-control rounded-0" name="CHARGE1" id="charge1" readonly />
+                            </div>
+                            <div class="col-sm-1">
+                            <label class="form-label" for="description">AMOUNT 1</label>
+                            </div>
+                            <div class="col-sm-1">
+                            <input type="text" class="form-control rounded-0" name="AMOUNT1" id="amount1" readonly />
+                            </div>
+                            <div class="col-sm-1">
+                            <label class="form-label" for="charge2">CHARGE 2</label>
+                            </div>
+                            <div class="col-sm-1">
+                            <input type="text" class="form-control rounded-0" name="CHARGE2" id="charge2" readonly />
+                            </div>
+                            <div class="col-sm-1">
+                            <label class="form-label" for="description">AMOUNT 2</label>
+                            </div>
+                            <div class="col-sm-1">
+                            <input type="text" class="form-control rounded-0" name="AMOUNT2" id="amount2" readonly />
+                            </div>
+                            <div class="col-sm-1" style="white-space:nowrap">
+                            <input type="checkbox" id="Adddetailsofcharges" value="true">
+                            <label class="form-label" style="white-space:nowrap" for="dofr">Do you like to continue with the current charges?</label>
+                            </div>
+                            </div>
+                            <br />
+
+                            </div>
+                            <br /> *@
+                            <div style="border: 2px solid black;padding: 10px">
+                                <div class="row">
+                                    <div class="col-sm-1">
+                                        <label class="form-label" for="receiptNo">RECEIPT NO</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control rounded-0" name="RECEIPTNO" id="receiptNo" />
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <label class="form-label" for="receiptDate">DATE</label>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <input type="date" class="form-control rounded-0" name="RECEIPTDATE" id="receiptDate" />
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <label class="form-label" for="amount">AMOUNT</label>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <input type="text" class="form-control rounded-0" name="AMOUNT" id="amount" />
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <label class="form-label" for="remarks1rec">REMARKS</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control rounded-0" name="REMARKS1" id="remarks1rec" />
+                                    </div>
+                                    <div class="col-sm-1" style="padding-left: 60px;">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button class="btn btn-outline-primary" onclick="Addrows()">Add Row</button>
+                                    </div>
+                                </div>
+                                <br />
+                                <table width="100%" id="itemGrid" class='table table-bordered'>
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:center;">CHARGE</th>
+                                            <th style="text-align:center;">AMOUNT</th>
+                                            <th style="text-align:center;">REMARKS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="itemTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                            @* <table width="100%" id="itemGrid" class='table table-bordered'>
+                            <thead>
+                            <tr>
+                            <th style="text-align: center;">NO</th>
+                            <th style="text-align: center;">CHARGE</th>
+                            <th style="text-align: center;">AMOUNT</th>
+                            <th style="text-align: center;">REMARKS</th>
+                            </tr>
+                            </thead>
+                            <tbody id="itemTableBody">
+                            </tbody>
+                            </table>
+                            <br /> *@
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button class="btn btn-primary" id="btnAdd" onclick="Submitrequest()">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Start Model *@
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Attach Files</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @* Start Model Body *@
+                <div class="row">
+                    <div class="col-md-12"><input class="form-control fileUpload" type="file" id="fileUpload1" /></div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12"><input class="form-control fileUpload" type="file" id="fileUpload2" /></div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12"><input class="form-control fileUpload" type="file" id="fileUpload3" /></div>
+                </div>
+                @* End Model Body *@
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* End Model *@
+
+<script type="text/javascript">
+
+    var Requestnos = [];
+    var detailsofrequestno = [];
+    var CHARGESData;
+    var requestid;
+
+    $(document).ready(async function () {
+
+        await BindRequestnos();
+        await Requestnodropdown(Requestnos);
+        await Chargesdata();
+        await Addrows();
+        // await BindTerms();
+        // await BindItem();
+
+        $('#requestNo').chosen({
+            width: '100%' // Ensure the chosen dropdown is 100% width
+        });
+
+
+        //ref date flatpicker initialization
+
+        flatpickr("#tranDate", {
+            dateFormat: "@dateFormat",
+            altInput: true,
+            allowInput: true,
+            altFormat: "@dateFormat",
+            maxDate: new Date(),
+            defaultDate: new Date() // You can set the default date here
+        });
+        flatpickr("#receiptDate", {
+            dateFormat: "@dateFormat",
+            altInput: true,
+            allowInput: true,
+            altFormat: "@dateFormat",
+            maxDate: new Date(),
+            defaultDate: new Date() // You can set the default date here
+        });
+    });
+
+    function Flatpicker(defaultDateValue) {
+        flatpickr("#requestDate", {
+            dateFormat: "@dateFormatForbinding", // Set the desired format for input (YYYY-MM-DD)
+            altInput: true,
+            altFormat: "@dateFormat", // Set the format for the alternative input display (14-Jun-2024)
+            maxDate: new Date(),
+            defaultDate: defaultDateValue // Ensure defaultDate is set to 'YYYY-MM-DD' format
+        });
+    }
+
+    // $('#Adddetailsofcharges').change(async function () {
+    //     debugger
+    //     if (this.checked) {
+    //         // Get values from CHARGE 1 and AMOUNT 1
+    //         var charge1 = $('#charge1').val();
+    //         var amount1 = $('#amount1').val();
+
+    //         // Append a new row to the table body
+    //         $('#itemTableBody').append(
+    //             '<tr>' +
+    //             '<td>1</td>' + // Assuming you want a sequential number
+    //             '<td>' + charge1 + '</td>' +
+    //             '<td>' + amount1 + '</td>' +
+    //             '<td>Remarks</td>' + // You can add remarks or leave it blank
+    //             '</tr>'
+    //         );
+    //         var charge2 = $('#charge2').val();
+    //         var amount2 = $('#amount2').val();
+    //         if (charge2 != '') {
+    //             $('#itemTableBody').append(
+    //                 '<tr>' +
+    //                 '<td>1</td>' + // Assuming you want a sequential number
+    //                 '<td>' + charge2 + '</td>' +
+    //                 '<td>' + amount2 + '</td>' +
+    //                 '<td>Remarks</td>' + // You can add remarks or leave it blank
+    //                 '</tr>'
+    //             );
+    //         } else {
+    //             $('#itemTableBody').html('')
+    //         }
+    //     }
+    // });
+
+    $('#requestNo').change(async function () {
+        var selectedId = this.value;
+        requestid = this.value;
+        try {
+            let data = await $.ajax({
+                url: '@Url.Action("GetdetailsByRequestid", "PAYMENTHDR")',
+                type: 'Get',
+                data: { Hdrid: selectedId }
+            });
+            detailsofrequestno = data;
+            var dateString = data[0].requestdate
+            var Formateddate = dateString.split('T')[0]
+            Flatpicker(Formateddate);
+            $('#totalRequestamount').val(data[0].totalrequestamount);
+            $('#jobNo').val(data[0].jobno);
+            
+
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+    async function Requestnodropdown(Requestnodata) {
+        const dropdown = document.getElementById("requestNo");
+        dropdown.innerHTML = "<option value=''>--Select Request No--</option>";
+
+        Requestnodata.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item.id;
+            option.text = `${item.requestno}`;
+            dropdown.appendChild(option);
+        });
+        $('#requestNo').trigger("chosen:updated")
+    }
+
+    async function BindRequestnos() {
+
+        try {
+            let data = await $.ajax({
+                url: '@Url.Action("GetRequestnos", "PAYMENTHDR")',
+                type: 'Get'
+            });
+            Requestnos = data
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function Chargesdata() {
+        CHARGESData = await $.ajax({
+            url: '@Url.Action("GetCharges", "MasterCHARGES")',
+            type: 'get',
+        });
+    }
+
+    function addRow() {
+        const table = document.querySelector('#itemGrid tbody');
+        const newRow = document.createElement('tr');
+
+        newRow.innerHTML = `
+                <td>
+                    <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
+                        <option value="">Select</option>
+                        ${CHARGESData.map(item => `<option value="${item.id}">${item.type}</option>`).join('')}
+                    </select>
+                </td>
+                <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+                <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t4TBLength"></td>
+            `;
+
+        table.appendChild(newRow);
+        $('.chosen-select').chosen();
+        $('.chosen-container').css('width', '100%'); // Ensures the chosen container takes full width
+        $('.date-picker').flatpickr({
+            dateFormat: "@dateFormat",
+            defaultDate: new Date()
+        });
+    }
+
+    function validateNumericInput(input) {
+        input.value = input.value.replace(/[^\d]/g, '');
+    }
+
+    async function Addrows() {
+        for (let i = 0; i < 5; i++) {
+            await addRow();
+        }
+    }
+
+    $('#btnAdd').on('click', async function () {
+        event.preventDefault();
+        debugger
+        var headerdata1 = {
+            TRANNO: $('#tranNo').val(),
+            TRANDATE: $('#tranDate').val(),
+            REQUESTID: requestid,
+            REMARKS1: $('#remarks1').val(),
+            REMARKS2: $('#remarks2').val(),
+            PAIDBY: "@userName"
+        }
+        const res1 = await $.ajax({
+            url: '@Url.Action("SavePAYMENTHDR", "PAYMENTHDR")',
+            method: 'POST',
+            data: headerdata1
+        });
+        debugger
+        const PAYMENTHDRID = res1.hdrid;
+        var headerdata2 = {
+            HDRID: PAYMENTHDRID,
+            REQUESTID: requestid,
+            RECEIPTNO: $('#receiptNo').val(),
+            RECEIPTDATE: $('#receiptDate').val(),
+            RECEIPTAMOUNT: $('#amount').val(),
+            REMARKS1: $('#remarks1rec').val()
+        }
+        const res2 = await $.ajax({
+            url: '@Url.Action("SavePAYMENTRECEIPTS", "PAYMENTRECEIPTS")',
+            method: 'POST',
+            data: headerdata2
+        });
+        debugger
+        const PAYMENTRECEIPTID = res2.hdrid;
+        const rows = document.querySelectorAll('#itemGrid tbody tr');
+        for (const row of rows) {
+            const charge = row.querySelector('select[name="CHARGE"]').value;
+            const amount = row.querySelector('input[name="AMOUNT"]').value;
+            const remarks1 = row.querySelector('input[name="REMARKS1"]').value;
+
+            var headerdata3 = {
+                CHARGETYPEID: charge,
+                AMOUNT: amount,
+                REMARKS1: remarks1,
+                PAYMENTHDRID: PAYMENTHDRID,
+                PAYMENTRECEIPTID: PAYMENTRECEIPTID,
+                REQUESTID: requestid,
+
+            };
+
+            await $.ajax({
+                url: '@Url.Action("SavePAYMENTRECEIPTCHARGES", "PAYMENTRECEIPTCHARGES")',
+                method: 'POST',
+                data: headerdata3
+            });
+        }
+    });
+
+</script>

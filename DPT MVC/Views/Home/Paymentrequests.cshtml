@@ -132,7 +132,7 @@
 
     $(document).ready(async function () {
         await Customerdata();
-        await Currencydata();
+        // await Currencydata();
         await Chargesdata();
         for (let i = 0; i < 5; i++) {
             await addRow();
@@ -170,7 +170,7 @@
         const newRow = document.createElement('tr');
 
         newRow.innerHTML = `
-                <td><input type="date" name="REQUESTDATE" class="chosen-border form-control rounded-0     date-picker"></td>
+                <td><input type="date" name="REQUESTDATE" class="chosen-border form-control rounded-0 date-picker"></td>
                 <td><input type="text" name="JOBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
                 <td><input type="text" name="HAWBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
                 <td>
@@ -203,7 +203,7 @@
         $('.chosen-select').chosen();
         $('.chosen-drop').css('width', '310px');
         $('.date-picker').flatpickr({
-            dateFormat: "d-M-Y",
+            dateFormat: "@dateFormat",
             defaultDate: new Date()
         });
         newRow.querySelectorAll('.amount-field').forEach(field => {
