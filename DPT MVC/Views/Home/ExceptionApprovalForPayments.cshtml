@@ -1,15 +1,260 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using System.Text.Json
+@using DPT.MVC.Models
+@inject IConfiguration Configuration
 @{
-
-
-
+    int decimalRoundOff = Configuration.GetValue<int>("NumberSettings:DecimalRoundOff");
+    int t1TBLength = Configuration.GetValue<int>("CharacterSettings:T1TypeTextbox");
+    int t2TBLength = Configuration.GetValue<int>("CharacterSettings:T2TypeTextbox");
+    int t3TBLength = Configuration.GetValue<int>("CharacterSettings:T3TypeTextbox");
+    string? dateFormat = Configuration.GetValue<string>("Date:dateFormat");
+    string mode = ViewBag.mode;
+    string url = ViewBag.url;
+    int pageId = ViewBag.pageId;
+    var userInfo = Context.Session.GetString("UserInfo");
+    var UserModel = System.Text.Json.JsonSerializer.Deserialize<Users>(userInfo, new System.Text.Json.JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
 }
+<head>
+    <style>
+        /* Center table headings */
+        th {
+            text-align: center !important;
+        }
 
-<h5>This Screen is Under Development</h5>
+        table td:nth-child(6) {
+            text-align: right;
+        }
 
+        table td:nth-child(8) {
+            text-align: center;
+        }
 
+        table td:nth-child(9) {
+            text-align: center;
+        }
+    </style>
+</head>
 
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mx-auto col-lg-12">
+            <div class="card shadow-lg">
+                <div class="card-header text-white bg-warning d-flex">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-lg-start">
+                            Exception Approve For Payments
+                        </h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <span class="text-danger"> * Required fields</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <fieldset>
+                            <div class="row">
+                            </div>
+                            <br />
+                            <div class="row">
+                                <table width="100%" id="exceptionApproveForPaymentsGrid" class='table table-bordered table-striped dataTable dtr-inline'>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button class="btn btn-primary" onclick="SubmitApprovalRecord()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+                @* <div class="card-footer"></div> *@
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
 
+    //It will call this method when page is load.
+    $(document).ready(async function () {
 
+        // bind the Exceptional approve data into grid which is pending for Approve/Deny ---- Nuthan
+
+        await BindExceptionApprovalForPaymentGrid();
+
+    });
+    var poRecords = [];
+
+    async function BindExceptionApprovalForPaymentGrid() {
+        debugger
+        try {
+            //Get Method to Bind the data into grid datatable
+            let data = await $.ajax({
+                url: '@Url.Action("GetAllExceptionApproveRequest", "REQUESTHDR")',
+                type: 'Get'
+            });
+
+            poRecords = data;
+
+            var table = new DataTable('#exceptionApproveForPaymentsGrid', {
+                data: data,
+                columns: [
+                    {
+                        title: 'PAYMENT REQUEST NO',
+                        data: 'requestno',
+                        render: (data, type, row) => {
+                            return '<input type="text" id="rowId" value="' + row.id + '" hidden /><a href="#"">' + data + '</a>';
+                        }
+                    },
+                    { title: 'PAYMENT REQUEST DATE', data: Date.now },
+                    { title: 'PAYMENT TOTAL AMOUNT', data: "" },
+                    { title: 'REQUEST NO', data: "" },
+                    { title: 'REQUEST DATE', data: Date.now },
+                    { title: 'CUTOMER NAME', data: 'customername' },
+                    { title: 'JOB NO', data: 'jobno' },
+                    { title: 'REQUEST TOTAL AMOUNT', data: 'totalrequestamount' },
+                    {
+                        title: 'APPROVE',
+                        orderable: false,
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<input type="radio" value="Approved" id="approveRadio" name="radio' + row.id + '" data-id="' + row.id + '">';
+                        }
+                    },
+                    {
+                        title: 'DENY',
+                        orderable: false,
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<input type="radio" value="Deny" name="radio' + row.id + '" data-id="' + row.id + '">';
+                        }
+                    },
+                    {
+                        title: 'COMMENT',
+                        orderable: false,
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<input type="text" name="approverComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
+                        }
+                    }
+                ],
+                columnDefs: [
+                    {
+                        targets: 1,
+                        type: 'moment',
+                        width: '75px',
+                        render: function (data, type, row, meta) {
+                            return moment(data).format('DD-MMM-yyyy')
+                        }
+                    },
+                    {
+                        targets: 4,
+                        type: 'moment',
+                        width: '75px',
+                        render: function (data, type, row, meta) {
+                            return moment(data).format('DD-MMM-yyyy')
+                        }
+                    },
+                    {
+                        targets: 2,
+                        render: function (data, type, row, meta) {
+                            return formatNumericData(data);
+                        }
+                    },
+                    {
+                        targets: 7,
+                        render: function (data, type, row, meta) {
+                            return formatNumericData(data);
+                        }
+                    }
+                ],
+                lengthChange: true,
+                autoWidth: false,
+                paging: true,
+                scrollY: 300,
+                pagingType: 'full_numbers',
+                search: true,
+                destroy: true
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function SubmitApprovalRecord() {
+        debugger
+        let isValid = await ValidateApprovedRecords();
+
+        if (isValid) {
+            await UpdateRecords();
+
+            // await BindExceptionApprovalForPaymentGrid();
+            loadPageWithParams('ExceptionApproval', '', '', '@pageId');
+        } else {
+            alert('Please Give Comments For Denied Orders');
+        }
+    }
+    async function ValidateApprovedRecords() {
+
+        let isValid = true;
+
+        $('#exceptionApproveForPaymentsGrid tbody tr').each(async function () {
+
+            var rowId = $(this).find("input[id='rowId']").val();
+
+            var isApproved = $(this).find("input[name='radio" + rowId + "']:checked").val();
+
+            var comment = $(this).find("input[name='approverComment']").val();
+
+            if (isApproved) {
+                if (isApproved == 'deny' && comment == '')
+                    isValid = false;
+            }
+        });
+        return isValid;
+    }
+
+    async function UpdateRecords() {
+
+        $('#exceptionApproveForPaymentsGrid tbody tr').each(async function () {
+
+            var rowId = $(this).find("input[id='rowId']").val();
+
+            var isApproved = $(this).find("input[name='radio" + rowId + "']:checked").val();
+            var comment = $(this).find("input[name='approverComment']").val();
+
+            if (isApproved) {
+                try {
+                    let data = await $.ajax({
+                        url: '@Url.Action("ExceptionalApproveSelectedRequest", "REQUESTHDR")',
+                        type: 'Get',
+                        data: { id: rowId, approved: isApproved, comments: comment }
+                    });
+
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        });
+
+        await BindExceptionApprovalForPaymentGrid();
+
+    }
+    $('.maxLengthValidation').on('input paste', function () {
+        var maxLength = $(this).attr('maxlength');
+        var currentLength = $(this).val().length;
+        var remaining = (maxLength - 1) - currentLength;
+        $(this).val($(this).val().toLocaleUpperCase());
+
+        if (remaining < 0) {
+            // Display validation message or take appropriate action
+            event.preventDefault();
+        } else {
+            // Clear validation message
+        }
+    });
+
+</script>

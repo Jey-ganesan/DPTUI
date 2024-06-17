@@ -82,12 +82,12 @@
 
         // bind the Exceptional approve data into grid which is pending for Approve/Deny ---- Nuthan
 
-        await BindExcetionApprovalGrid();
+        await BindExceptionApprovalGrid();
 
     });
     var poRecords = [];
 
-    async function BindExcetionApprovalGrid() {
+    async function BindExceptionApprovalGrid() {
         debugger
         try {
             //Get Method to Bind the data into grid datatable
@@ -180,7 +180,7 @@
         if (isValid) {
             await UpdateRecords();
 
-            // await BindExcetionApprovalGrid();
+            // await BindExceptionApprovalGrid();
             loadPageWithParams('ExceptionApproval', '', '', '@pageId');
         } else {
             alert('Please Give Comments For Denied Orders');
@@ -229,7 +229,7 @@
             }
         });
 
-        await BindExcetionApprovalGrid();
+        await BindExceptionApprovalGrid();
 
     }
     $('.maxLengthValidation').on('input paste', function () {
