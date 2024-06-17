@@ -33,7 +33,7 @@
                 <div class="card-header text-white bg-warning d-flex">
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <h4 class="text-lg-start">
-                            Payment Processing
+                            PAYMENT PROCESSING
                         </h4>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
@@ -191,13 +191,13 @@
                                     <div class="col-sm-2">
                                         <input type="text" class="form-control rounded-0" name="REMARKS1" id="remarks1rec" />
                                     </div>
-                                    <div class="col-sm-1" style="padding-left: 60px;">
+                                    <div class="col-sm-1">
+                                        <label class="form-label">ATTACHMENTS</label>
+                                    </div>
+                                    <div class="col-sm-1">
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                                             <i class="fa fa-paperclip" aria-hidden="true"></i>
                                         </button>
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <button class="btn btn-outline-primary" onclick="Addrows()">Add Row</button>
                                     </div>
                                 </div>
                                 <br />
@@ -227,9 +227,12 @@
                             </table>
                             <br /> *@
                         </div>
-                        <div class="row">
-                            <div class="col-md-4">
+                        <div class="row" style="padding-top:20px">
+                            <div class="col-md-1">
                                 <button class="btn btn-primary" id="btnAdd" onclick="Submitrequest()">Submit</button>
+                            </div>
+                            <div class="col-sm-1">
+                                <button class="btn btn-outline-primary" onclick="Addrows()">Add More Rows</button>
                             </div>
                         </div>
                     </form>
@@ -380,7 +383,7 @@
 
     async function Requestnodropdown(Requestnodata) {
         const dropdown = document.getElementById("requestNo");
-        dropdown.innerHTML = "<option value=''>--Select Request No--</option>";
+        dropdown.innerHTML = "<option value=''>--SELECT REQUEST NO--</option>";
 
         Requestnodata.forEach(item => {
             const option = document.createElement("option");
@@ -419,7 +422,7 @@
         newRow.innerHTML = `
                 <td>
                     <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
-                        <option value="">Select</option>
+                        <option value="">--SELECT CHARGES--</option>
                         ${CHARGESData.map(item => `<option value="${item.id}">${item.type}</option>`).join('')}
                     </select>
                 </td>
@@ -439,7 +442,7 @@
     function validateNumericInput(input) {
         input.value = input.value.replace(/[^\d]/g, '');
     }
-
+    
     async function Addrows() {
         for (let i = 0; i < 5; i++) {
             await addRow();
@@ -479,28 +482,137 @@
         });
         debugger
         const PAYMENTRECEIPTID = res2.hdrid;
+
+        await uploadFile1(PAYMENTRECEIPTID);
+        await uploadFile2(PAYMENTRECEIPTID);
+        await uploadFile3(PAYMENTRECEIPTID);
+
         const rows = document.querySelectorAll('#itemGrid tbody tr');
-        for (const row of rows) {
+        rows.forEach(async (row) => {
             const charge = row.querySelector('select[name="CHARGE"]').value;
             const amount = row.querySelector('input[name="AMOUNT"]').value;
             const remarks1 = row.querySelector('input[name="REMARKS1"]').value;
 
-            var headerdata3 = {
-                CHARGETYPEID: charge,
-                AMOUNT: amount,
-                REMARKS1: remarks1,
-                PAYMENTHDRID: PAYMENTHDRID,
-                PAYMENTRECEIPTID: PAYMENTRECEIPTID,
-                REQUESTID: requestid,
+            let hasValues = false;
 
-            };
+            if (charge !== '' && amount !== '') {
+                hasValues = true;
+            } else {
+                row.remove();
+            }
 
-            await $.ajax({
-                url: '@Url.Action("SavePAYMENTRECEIPTCHARGES", "PAYMENTRECEIPTCHARGES")',
-                method: 'POST',
-                data: headerdata3
-            });
-        }
+            if (hasValues) {
+
+                var headerdata3 = {
+                    CHARGETYPEID: charge,
+                    AMOUNT: amount,
+                    REMARKS1: remarks1,
+                    PAYMENTHDRID: PAYMENTHDRID,
+                    PAYMENTRECEIPTID: PAYMENTRECEIPTID,
+                    REQUESTID: requestid,
+
+                };
+
+                await $.ajax({
+                    url: '@Url.Action("SavePAYMENTRECEIPTCHARGES", "PAYMENTRECEIPTCHARGES")',
+                    method: 'POST',
+                    data: headerdata3
+                });
+            }
+        });
     });
+
+    async function uploadFile1(headerId) {
+
+        var files = document.getElementById("fileUpload1").files;
+
+        if (files.length === 0) {
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            debugger;
+            var formData = new FormData();
+            formData.append('file', files[i]);
+            formData.append('typeId', '2');
+            formData.append('transName', 'PaymentProcessing');
+
+            try {
+                await $.ajax({
+                    url: "@Url.Action("SaveFile", "Home")",
+                    type: "POST",
+                    headers: { 'ProdId': headerId },
+                    data: formData,
+                    contentType: false,
+                    processData: false
+                });
+                console.log("File uploaded successfully:", files[i].name);
+            } catch (error) {
+                console.error("Error uploading file:", error);
+            }
+        }
+    }
+
+    async function uploadFile2(headerId) {
+
+        var files = document.getElementById("fileUpload2").files;
+
+        if (files.length === 0) {
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            debugger;
+            var formData = new FormData();
+            formData.append('file', files[i]);
+            formData.append('typeId', '3');
+            formData.append('transName', 'PaymentProcessing');
+
+            try {
+                await $.ajax({
+                    url: "@Url.Action("SaveFile", "Home")",
+                    type: "POST",
+                    headers: { 'ProdId': headerId },
+                    data: formData,
+                    contentType: false,
+                    processData: false
+                });
+                console.log("File uploaded successfully:", files[i].name);
+            } catch (error) {
+                console.error("Error uploading file:", error);
+            }
+        }
+    }
+
+    async function uploadFile3(headerId) {
+
+        var files = document.getElementById("fileUpload2").files;
+
+        if (files.length === 0) {
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            debugger;
+            var formData = new FormData();
+            formData.append('file', files[i]);
+            formData.append('typeId', '4');
+            formData.append('transName', 'PaymentProcessing');
+
+            try {
+                await $.ajax({
+                    url: "@Url.Action("SaveFile", "Home")",
+                    type: "POST",
+                    headers: { 'ProdId': headerId },
+                    data: formData,
+                    contentType: false,
+                    processData: false
+                });
+                console.log("File uploaded successfully:", files[i].name);
+            } catch (error) {
+                console.error("Error uploading file:", error);
+            }
+        }
+    }
 
 </script>
