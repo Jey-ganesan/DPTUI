@@ -47,7 +47,7 @@
                 <div class="card-header text-white bg-warning d-flex">
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <h4 class="text-lg-start">
-                            Approve Request
+                            APPROVE REQUEST
                         </h4>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
@@ -144,15 +144,16 @@
                         render: function (data, type, row) {
                             return '<input type="text" name="approverComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
                         }
-                    },
-                    {
-                        title: 'EXCEPTION APPROVE',
-                        orderable: false,
-                        data: null,
-                        render: function (data, type, row) {
-                            return '<input type="checkbox" disabled name="forExceptionApprove" />';
-                        }
                     }
+                    // ,
+                    // {
+                    //     title: 'EXCEPTION APPROVE',
+                    //     orderable: false,
+                    //     data: null,
+                    //     render: function (data, type, row) {
+                    //         return '<input type="checkbox" disabled name="forExceptionApprove" />';
+                    //     }
+                    // }
                 ],
                 columnDefs: [
                     {
@@ -255,6 +256,7 @@
 
     }
     $('.maxLengthValidation').on('input paste', function () {
+        debugger
         var maxLength = $(this).attr('maxlength');
         var currentLength = $(this).val().length;
         var remaining = (maxLength - 1) - currentLength;
