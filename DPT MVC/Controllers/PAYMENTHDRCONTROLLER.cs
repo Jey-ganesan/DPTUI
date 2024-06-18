@@ -142,5 +142,28 @@ namespace DPT.MVC.Controllers
 
             return Json(data);
         }
+        [HttpGet]
+        public async Task<JsonResult> GetAllPaymentExceptionForApprove()
+        {
+            var userId = HttpContext.Session.GetString("UserId");
+            var client = _httpClientFactory.CreateClient("DPTClient");
+            var response = await client.GetAsync("/api/PAYMENTHDR/GetAllPaymentExceptionForApprove?UserId="+userId);
+            var content = await response.Content.ReadAsStringAsync();
+            var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
+
+            return Json(data);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> ExceptionalApproveSelectedPayments(int id, string approved, string comments)
+        {
+            var client = _httpClientFactory.CreateClient("DPTClient");
+            var UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            var response = await client.GetAsync("/api/PAYMENTHDR/UpdateWhenExceptionalPaymentIsApproved?Id=" + id + "&approved=" + approved + "&comments=" + comments + "&UpdatedBy=" + UserId);
+            var content = await response.Content.ReadAsStringAsync();
+            var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
+
+            return Json(data);
+        }
     }
 }
