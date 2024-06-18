@@ -124,7 +124,7 @@ namespace DPT.MVC.Controllers
         {
             try
             {
-                var client = _httpClientFactory.CreateClient("DPTClient");
+                var client = _httpClientFactory.CreateClient("DPTClient");                
                 var requestBody = new HttpRequestMessage();
                 var jsonRequest = JsonConvert.SerializeObject(data);
                 requestBody = new HttpRequestMessage(HttpMethod.Post, "/api/REQUESTHDR/PostRequestforpayment");
@@ -151,14 +151,38 @@ namespace DPT.MVC.Controllers
             }
         }
         [HttpGet]
-        public async Task<JsonResult> ApproveSelectedRequest(int id , string approved, string comments)
+        public async Task<JsonResult> ApproveSelectedRequest(int id , string approved, string comments , bool ExceptionApprove)
         {
             var client = _httpClientFactory.CreateClient("DPTClient");
             var UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-            var response = await client.GetAsync("/api/REQUESTHDR/UpdateWhenApproved?Id="+ id +"&approved=" + approved +"&comments=" + comments +"&UpdatedBy=" + UserId);
+            var response = await client.GetAsync("/api/REQUESTHDR/UpdateWhenApproved?Id="+ id +"&approved=" + approved +"&comments=" + comments +"&UpdatedBy=" + UserId + "&ExceptionApprove="+ ExceptionApprove);
             var content = await response.Content.ReadAsStringAsync();
             var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
              
+            return Json(data);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAllExceptionApproveRequest()
+        {
+            var userId = HttpContext.Session.GetString("UserId");
+            var client = _httpClientFactory.CreateClient("DPTClient");
+            var response = await client.GetAsync("/api/REQUESTHDR/GetAllExceptionApprovalRequest?userId=" + userId);
+            var content = await response.Content.ReadAsStringAsync();
+            var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
+
+            return Json(data);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> ExceptionalApproveSelectedRequest(int id, string approved, string comments)
+        {
+            var client = _httpClientFactory.CreateClient("DPTClient");
+            var UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            var response = await client.GetAsync("/api/REQUESTHDR/UpdateWhenExceptionalApproved?Id=" + id + "&approved=" + approved + "&comments=" + comments + "&UpdatedBy=" + UserId);
+            var content = await response.Content.ReadAsStringAsync();
+            var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
+
             return Json(data);
         }
     }
