@@ -13,5 +13,7 @@
         public int? CREATEDBY { get; set; }
         public DateTime? LASTUPDATED { get; set; }
         public int? LASTUPDATEDBY { get; set; }
+        public string? STATUS { get; set; }
+        public string? EXCEPTIONALREMARKS { get; set; }
     }
 }
