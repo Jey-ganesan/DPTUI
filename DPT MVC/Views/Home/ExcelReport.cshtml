@@ -1,0 +1,340 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@{
+    string url = ViewBag.url;
+    int pageId = ViewBag.pageId;
+    // Access access = ViewBag.access;
+}
+<head>
+
+    <link href="~/css
+/daterangepicker.css" rel="stylesheet" />
+    @* <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" / > *@
+
+</head>
+<body>
+    <section class='content' style="padding-top: 10px;">
+        <div class='container-fluid'>
+            <div class='card'>
+                @* <div class='card card-warning'> *@
+                <div class='card-header'>
+                    <div class='row'>
+                        <div class='col-md-4 col-sm-6 col-lg-4'>
+                            <h4 class='text-lg-start'>Reports</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class='card-body'>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Select Report :</label>
+                        </div>
+                        <div class="col-md-4">
+                            <Select class="form-control" id="reportDropDown" onchange="getReportParams(this.value)">
+                                <option value='' selected disabled>Please select option</option>
+                            </Select>
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div class='card-body' id="reportBody">
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <button type='button' class='btn btn-primary rounded-0 me-2' onclick="getReportData(false,false)">
+                                View
+                            </button>
+                            &nbsp;
+                            <button type='reset' class='btn btn-success rounded-0 me-2' onclick="getReportData(true,false)">
+                                Download
+                            </button>
+                            &nbsp;
+                            <button type='reset' class='btn btn-danger rounded-0 me-2' onclick="loadPage('ExcelReport')">
+                                Cancel
+                            </button>          
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='col-lg-12 mt-2'>
+                            <label class='form-label' id="recordCount"></label>
+                            <div class='table-responsive'>
+                                <table class='table table-bordered' id="reportTable">
+                                    <thead class='text-white bg-dhlcolor'>
+                                        <tr id="tableHead"></tr>
+                                    </thead>
+                                    <tbody id="tableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+<script src="~/js/daterangepicker.min.js"></script>
+@* <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> *@
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#loader').show();
+        fetch("/Reports/GetReport")
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(key => {
+                    const aTag = document.createElement("option");
+                    aTag.textContent = key.name;
+                    aTag.value = key.id;
+                    aTag.classList.add("dropdown-item");
+                    document.getElementById("reportDropDown").appendChild(aTag);
+                });
+                $('#reportDropDown').chosen();
+                $('#loader').hide();
+            })
+            .catch(error =>
+                $('#loader').hide());
+    })
+    var reportId = 0;
+    var reportName;
+    async function getReportParams(report) {
+        $('#loader').show();
+        document.getElementById("tableHead").innerHTML = '';
+        document.getElementById("tableBody").innerHTML = '';
+        reportId = report;
+        var reportDropDown = document.getElementById("reportDropDown");
+        reportName = reportDropDown.selectedOptions[0].textContent;
+        await fetch("/Reports/GetProcParams/" + report)
+            .then(response => response.json())
+            .then(async (data) => {
+                await onSuccess(data);
+                $('#loader').hide();
+            })
+            .catch(error => $('#loader').hide());
+    }
+
+    var params = [];
+
+    async function onSuccess(res) {
+
+        params = res;
+
+        document.getElementById("reportBody").innerHTML = '';
+        var dateRangeCount = 0;
+
+        res.forEach(async (k) => {
+
+            const row = document.createElement("div");
+            row.classList.add("row");
+
+            const col1 = document.createElement("div");
+            col1.classList.add("col-md-4");
+
+            const col2 = document.createElement("div");
+            col2.classList.add("col-md-4");
+
+            const col3 = document.createElement("div");
+            col3.classList.add("col-md-4");
+
+            if ((k.columnName == 'fromdate' || k.columnName == 'todate') && dateRangeCount == 0) {
+                dateRangeCount++;
+                const labelTag = document.createElement("span");
+                labelTag.textContent = "Select Period:";
+
+                const nullAble = document.createElement("span");
+                nullAble.setAttribute("class", "text-danger");
+                nullAble.textContent = "*";
+
+                const inputTag = document.createElement("input");
+                inputTag.setAttribute("type", "text");
+                inputTag.setAttribute("name", "daterange");
+                inputTag.setAttribute("class", "form-control");
+                inputTag.setAttribute("id", "dateRange");
+                inputTag.setAttribute("value", "");
+
+                row.appendChild(col1);
+                row.appendChild(col2);
+                row.appendChild(col3);
+                col1.appendChild(labelTag);
+                col2.appendChild(inputTag);
+
+                if (k.nullAble) {
+                    col1.appendChild(nullAble);
+                }
+
+                document.getElementById("reportBody").appendChild(row);
+                document.getElementById("reportBody").appendChild(document.createElement("br"));
+
+                $("#dateRange").daterangepicker({
+                    startDate: moment().startOf('month'),
+                    endDate: moment().endOf('month'),
+                    locale: {
+                        format: 'DD-MMM-YYYY'
+                    }
+                });
+            }
+            // else if (k.columnName == 'empid') {
+            else if ((k.columnName != 'fromdate' && k.columnName != 'todate')) {
+
+                const labelTag = document.createElement("span");
+                labelTag.setAttribute("id", k.columnName + "span");
+                labelTag.textContent = "Select :";
+
+                const nullAble = document.createElement("span");
+                nullAble.setAttribute("class", "text-danger");
+                nullAble.textContent = "*";
+
+                const inputTag = document.createElement("select");
+                inputTag.setAttribute("name", k.columnName);
+                inputTag.setAttribute("class", "form-control");
+                inputTag.setAttribute("id", k.columnName);
+
+                row.appendChild(col1);
+                row.appendChild(col2);
+                row.appendChild(col3);
+                col1.appendChild(labelTag);
+                col2.appendChild(inputTag);
+
+                if (k.nullAble) {
+                    col1.appendChild(nullAble);
+                }
+
+                document.getElementById("reportBody").appendChild(row);
+                document.getElementById("reportBody").appendChild(document.createElement("br"));
+
+                await bindStatus(k.columnName);
+            }
+          
+        });
+    }
+
+    async function bindStatus(ddTag) {
+
+        $('#loader').show();
+        await fetch(`/Reports/GetStatusList?paramName=${ddTag}`)
+            .then(response => response.json())
+            .then(data => {
+                const ph = document.createElement("option");
+                ph.textContent = "Select An Option";
+                ph.value = 0;
+                ph.classList.add("dropdown-item");
+                document.getElementById(ddTag).appendChild(ph);
+
+                data.forEach(async (key) => {
+                    const aTag = document.createElement("option");
+                    aTag.textContent = key.text;
+                    aTag.value = key.value;
+                    aTag.classList.add("dropdown-item");
+                    document.getElementById(ddTag).appendChild(aTag);
+                });
+                document.getElementById(ddTag + "span").textContent = "Select " + data[0].caption;
+
+                $('#' + ddTag).chosen();
+                $('#loader').hide();
+            })
+            .catch(error =>
+                $('#loader').hide());
+    }
+
+    var mailId;
+    function getReportData(view, isMail) {
+        $('#loader').show();
+        var urlParams = {};
+
+        var dateRangeCount = 0;
+
+        params.forEach(data => {
+            debugger;
+            if ((data.columnName == 'fromdate' || data.columnName == 'todate') && dateRangeCount == 0) {
+                dateRangeCount++;
+
+                var fromDate = $("#dateRange").data("daterangepicker").startDate.format('YYYY-MM-DD');
+                var toDate = $("#dateRange").data("daterangepicker").endDate.format('YYYY-MM-DD');
+
+                urlParams['pfromdate'] = fromDate;
+                urlParams['ptodate'] = toDate;
+
+            } else if (data.columnName != 'fromdate' && data.columnName != 'todate') {
+                var value = $("#" + data.columnName).val();
+                urlParams['p' + data.columnName] = value;
+            }
+        });
+
+        urlParams['reportId'] = reportId;
+        var tmp = JSON.stringify(urlParams);
+
+        fetch(`/Reports/GetReportData1?model=${tmp}&mailId=${isMail}&emailId=${mailId}&reportName=${reportName}`)
+            .then(response => response.json())
+            .then(response => {
+
+                $('#loader').hide();
+                if (response.length > 0) {
+                    $('#reportTable').hide();
+                    renderGrid(response);
+                    if (view) {
+                        downloadExcel();
+                    } else {
+                        $('#reportTable').show();
+                    }
+                } else {
+                    document.getElementById("tableHead").innerHTML = '';
+                    document.getElementById("tableBody").innerHTML = '';
+                    alert('No Data Found..');
+                }
+            })
+            .catch(error =>
+                $('#loader').hide());
+    }
+
+    function renderGrid(data) {
+        $('#loader').show();
+        document.getElementById("tableHead").innerHTML = '';
+        document.getElementById("tableBody").innerHTML = '';
+        var cols = Object.keys(data[0]);
+
+        cols.forEach(key => {
+            const th = document.createElement("th");
+            th.textContent = key;
+            th.classList.add("sorting");
+            th.classList.add("sorting_asc");
+            // th.classList.add("bg-warning");
+            th.style.backgroundColor = "@Configuration["Theme:Color"]";
+            th.style.color = "black";
+            th.setAttribute("scope", "col");
+            document.getElementById("tableHead").appendChild(th);
+        });
+
+        data.map(item => {
+            const row = document.createElement("tr");
+            cols.forEach(key => {
+                const td = document.createElement("td");
+                td.textContent = item[key] || "";
+                td.classList.add("text-left");
+                row.appendChild(td);
+            });
+            document.getElementById("tableBody").appendChild(row);
+        })
+        $('#loader').hide();
+    }
+
+    function downloadExcel() {
+        $("#reportTable").table2excel({
+            filename: $("#reportDropDown option:selected").text() + "_" + getCurrentDateTime() + ".xls"
+        });
+    }
+
+    function getCurrentDateTime() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        return `${day}_${month}_${year}_${hours}${minutes}`;
+    }
+</script>
