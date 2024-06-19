@@ -1,4 +1,4 @@
-﻿    @using System.Text.Json
+    @using System.Text.Json
     @using DPT.MVC.Helper
     @inject IConfiguration Configuration
 
@@ -21,7 +21,52 @@
 
 <head>
     <style>
+        .table-container {
+            height: 320px; /* Adjust the height as needed */
+            overflow-y: auto;
+            position: relative;
+        }
 
+            .table-container table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .table-container thead th {
+                position: sticky;
+                top: 0;
+                background: white;
+                z-index: 1;
+                border: 1px solid #ccc; /* Ensure the border matches */
+                padding: 8px;
+            }
+
+            .table-container th, .table-container td {
+                border: 1px solid #ccc;
+                padding: 8px;
+            }
+
+        .chosen-container {
+            width: 100% !important;
+        }
+
+        .alignright {
+            text-align: right;
+        }
+
+        /* .overlay {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background: rgba(255, 255, 255, 0.8);
+                            z-index: 10;
+                            display: none;
+                        }
+                        .table-container {
+                            position: relative;
+                        } */
 
     </style>
 </head>
@@ -44,29 +89,29 @@
                     <form id="CPOForm">
                         <div class="readonlyPortation">
                             <div class="row">
-                                <div class="col-sm-1">
+                                <div class="col-sm-1 alignright">
                                     <label class="form-labell" for="tranNo">TRAN NO<span class="text-danger">*</span></label>
                                 </div>
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" name="TRANNO" id="tranNo" />
+                                    <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t2TBLength" name="TRANNO" id="tranNo" />
                                 </div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-1 alignright">
                                     <label class="form-label" for="tranDate">DATE<span class="text-danger">*</span></label>
                                 </div>
                                 <div class="col-sm-2">
                                     <input type="date" class="form-control rounded-0" name="TRANDATE" id="tranDate" />
                                 </div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-1 alignright">
                                     <label class="form-label" for="remarks1">REMARKS1</label>
                                 </div>
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t3TBLength" name="remarks1" id="remarks1" />
+                                    <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t4TBLength" name="remarks1" id="remarks1" />
                                 </div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-1 alignright">
                                     <label class="form-label" for="remarks2">REMARKS2</label>
                                 </div>
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t3TBLength" name="remarks2" id="remarks2" />
+                                    <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t4TBLength" name="remarks2" id="remarks2" />
                                 </div>
                                 @* <div class="col-sm-2">
                                 <div class="col-sm-1">
@@ -102,7 +147,7 @@
                             </div>
                             <br /> *@
                             <div class="row">
-                                <div class="col-sm-1">
+                                <div class="col-sm-1 alignright">
                                     <label class="form-label" for="requestNo">REQUEST NO<span class="text-danger">*</span></label>
                                 </div>
                                 <div class="col-sm-2">
@@ -110,19 +155,19 @@
                                         <option value="">Select Option</option>
                                     </Select>
                                 </div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-1 alignright">
                                     <label class="form-label" for="requestDate">REQUSTED DATE<span class="text-danger">*</span></label>
                                 </div>
                                 <div class="col-sm-2">
-                                    <input type="date" class="form-control rounded-0" maxlength="@t2TBLength" name="REQUESTDATE" id="requestDate" disabled />
+                                    <input type="date" class="form-control rounded-0" name="REQUESTDATE" id="requestDate" disabled />
                                 </div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-1 alignright">
                                     <label class="form-label" for="jobNo">JOB NO<span class="text-danger">*</span></label>
                                 </div>
                                 <div class="col-sm-2">
                                     <input type="text" class="form-control rounded-0 maxLengthValidation" name="JOBNO" id="jobNo" readonly />
                                 </div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-1 alignright">
                                     <label class="form-label" for="totalRequestamount">AMOUNT<span class="text-danger">*</span></label>
                                 </div>
                                 <div class="col-sm-2">
@@ -165,53 +210,119 @@
 
                             </div>
                             <br /> *@
+                            <label class="form-label">RECEIPT 1</label>
                             <div style="border: 2px solid black;padding: 10px">
                                 <div class="row">
-                                    <div class="col-sm-1">
-                                        <label class="form-label" for="receiptNo">RECEIPT NO</label>
+                                    <div class="col-sm-1 alignright">
+                                        <label class="form-label toUpperCaseString" for="receiptNo1">RECEIPT NO 1<span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control rounded-0" name="RECEIPTNO" id="receiptNo" />
+                                        <input type="text" class="form-control rounded-0" name="RECEIPTNO" id="receiptNo1" />
+                                    </div>
+                                    <div class="col-sm-1 alignright">
+                                        <label class="form-label" for="receiptDate1">DATE<span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-sm-1">
-                                        <label class="form-label" for="receiptDate">DATE</label>
+                                        <input type="date" class="form-control rounded-0" name="RECEIPTDATE" id="receiptDate1" />
+                                    </div>
+                                    <div class="col-sm-1 alignright">
+                                        <label class="form-label" for="amount1">AMOUNT<span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-sm-1">
-                                        <input type="date" class="form-control rounded-0" name="RECEIPTDATE" id="receiptDate" />
+                                        <input type="text" oninput="validateNumericInput(this);" maxlength="@t5TBLength" class="form-control rounded-0" name="AMOUNT" id="amount1" />
                                     </div>
-                                    <div class="col-sm-1">
-                                        <label class="form-label" for="amount">AMOUNT</label>
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <input type="text" class="form-control rounded-0" name="AMOUNT" id="amount" />
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <label class="form-label" for="remarks1rec">REMARKS</label>
+                                    <div class="col-sm-1 alignright">
+                                        <label class="form-label" for="remarks1rec1">REMARKS</label>
                                     </div>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control rounded-0" name="REMARKS1" id="remarks1rec" />
+                                        <input type="text" class="form-control rounded-0 toUpperCaseString" maxlength="@t4TBLength" name="REMARKS1" id="remarks1rec1" />
                                     </div>
-                                    <div class="col-sm-1">
+                                    <div class="col-sm-1 alignright">
                                         <label class="form-label">ATTACHMENTS</label>
                                     </div>
                                     <div class="col-sm-1">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter1">
                                             <i class="fa fa-paperclip" aria-hidden="true"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <br />
-                                <table width="100%" id="itemGrid" class='table table-bordered'>
-                                    <thead>
-                                        <tr>
-                                            <th style="text-align:center;">CHARGE</th>
-                                            <th style="text-align:center;">AMOUNT</th>
-                                            <th style="text-align:center;">REMARKS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="itemTableBody">
-                                    </tbody>
-                                </table>
+                                <div class="table-container">
+                                    <div id="overlay" class="overlay">
+                                        <table width="100%" id="itemGrid1" class='table table-bordered'>
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align:center;">CHARGE<span class="text-danger">*</span></th>
+                                                    <th style="text-align:center;">AMOUNT<span class="text-danger">*</span></th>
+                                                    <th style="text-align:center;">REMARKS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="itemTableBody">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-top:10px">
+                                    <div class="col-sm-1">
+                                        <button class="btn btn-outline-primary" id="btnAddrow1">Add More Rows</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="form-label">RECEIPT 2</label>
+                            <div style="border: 2px solid black;padding: 10px">
+                                <div class="row">
+                                    <div class="col-sm-1 alignright">
+                                        <label class="form-label" for="receiptNo">RECEIPT NO 2</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control rounded-0" name="RECEIPTNO" id="receiptNo2" />
+                                    </div>
+                                    <div class="col-sm-1 alignright">
+                                        <label class="form-label" for="receiptDate">DATE</label>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <input type="date" class="form-control rounded-0" name="RECEIPTDATE" id="receiptDate2" />
+                                    </div>
+                                    <div class="col-sm-1 alignright">
+                                        <label class="form-label" for="amount">AMOUNT</label>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <input type="text" oninput="validateNumericInput(this);" maxlength="@t5TBLength" class="form-control rounded-0" name="AMOUNT" id="amount2" />
+                                    </div>
+                                    <div class="col-sm-1 alignright">
+                                        <label class="form-label" for="remarks1rec">REMARKS</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control rounded-0 toUpperCaseString" maxlength="@t4TBLength" name="REMARKS1" id="remarks1rec2" />
+                                    </div>
+                                    <div class="col-sm-1 alignright">
+                                        <label class="form-label">ATTACHMENTS</label>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter2">
+                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="table-container">
+                                    <table width="100%" id="itemGrid2" class='table table-bordered'>
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align:center;">CHARGE</th>
+                                                <th style="text-align:center;">AMOUNT</th>
+                                                <th style="text-align:center;">REMARKS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="itemTableBody">
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="row" style="padding-top:10px">
+                                    <div class="col-sm-1">
+                                        <button class="btn btn-outline-primary" id="btnAddrow2">Add More Rows</button>
+                                    </div>
+                                </div>
                             </div>
                             @* <table width="100%" id="itemGrid" class='table table-bordered'>
                             <thead>
@@ -229,10 +340,13 @@
                         </div>
                         <div class="row" style="padding-top:20px">
                             <div class="col-md-1">
-                                <button class="btn btn-primary" id="btnAdd" onclick="Submitrequest()">Submit</button>
+                                <button class="btn btn-primary" id="btnAdd">Submit</button>
                             </div>
-                            <div class="col-sm-1">
-                                <button class="btn btn-outline-primary" onclick="Addrows()">Add More Rows</button>
+                            <div id="exception1" style="display:none" class="col-sm-2 alignright">
+                                <label class="form-label" style="white-space:nowrap" for="exceptionalremarks">EXCEPTIONAL REMARKS<span class="text-danger">*</span></label>
+                            </div>
+                            <div id="exception2" style="display:none" class="col-sm-3">
+                                <input type="text" class="form-control rounded-0" maxlength="@t4TBLength" name="EXCEPTIONALREMARKS" id="exceptionalremarks" />
                             </div>
                         </div>
                     </form>
@@ -243,7 +357,7 @@
 </div>
 
 @* Start Model *@
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -274,6 +388,38 @@
     </div>
 </div>
 @* End Model *@
+@* Start Model *@
+<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Attach Files</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @* Start Model Body *@
+                <div class="row">
+                    <div class="col-md-12"><input class="form-control fileUpload" type="file" id="fileUpload11" /></div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12"><input class="form-control fileUpload" type="file" id="fileUpload22" /></div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12"><input class="form-control fileUpload" type="file" id="fileUpload33" /></div>
+                </div>
+                @* End Model Body *@
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* End Model *@
 
 <script type="text/javascript">
 
@@ -287,9 +433,8 @@
         await BindRequestnos();
         await Requestnodropdown(Requestnos);
         await Chargesdata();
-        await Addrows();
-        // await BindTerms();
-        // await BindItem();
+        await Addrows1();
+        await Addrows2();
 
         $('#requestNo').chosen({
             width: '100%' // Ensure the chosen dropdown is 100% width
@@ -306,7 +451,15 @@
             maxDate: new Date(),
             defaultDate: new Date() // You can set the default date here
         });
-        flatpickr("#receiptDate", {
+        flatpickr("#receiptDate1", {
+            dateFormat: "@dateFormat",
+            altInput: true,
+            allowInput: true,
+            altFormat: "@dateFormat",
+            maxDate: new Date(),
+            defaultDate: new Date() // You can set the default date here
+        });
+        flatpickr("#receiptDate2", {
             dateFormat: "@dateFormat",
             altInput: true,
             allowInput: true,
@@ -359,6 +512,20 @@
     //     }
     // });
 
+    $('#amount1, #amount2').on('input', function () {
+        var amount1 = parseFloat($('#amount1').val()) || 0;
+        var amount2 = parseFloat($('#amount2').val()) || 0;
+        var totalRequestAmount = parseFloat($('#totalRequestamount').val()) || 0;
+
+        if (amount1 + amount2 > totalRequestAmount) {
+            $('#exception1').show();
+            $('#exception2').show();
+        } else {
+            $('#exception1').hide();
+            $('#exception2').hide();
+        }
+    });
+
     $('#requestNo').change(async function () {
         var selectedId = this.value;
         requestid = this.value;
@@ -374,7 +541,7 @@
             Flatpicker(Formateddate);
             $('#totalRequestamount').val(data[0].totalrequestamount);
             $('#jobNo').val(data[0].jobno);
-            
+
 
         } catch (error) {
             console.log(error);
@@ -415,20 +582,20 @@
         });
     }
 
-    function addRow() {
-        const table = document.querySelector('#itemGrid tbody');
+    function addRow1() {
+        const table = document.querySelector('#itemGrid1 tbody');
         const newRow = document.createElement('tr');
 
         newRow.innerHTML = `
-                <td>
-                    <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
-                        <option value="">--SELECT CHARGES--</option>
-                        ${CHARGESData.map(item => `<option value="${item.id}">${item.type}</option>`).join('')}
-                    </select>
-                </td>
-                <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
-                <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t4TBLength"></td>
-            `;
+           <td>
+               <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
+                   <option value="">--SELECT CHARGE--</option>
+                   ${CHARGESData.map(item => `<option value="${item.id}">${item.type} - [${item.type}]</option>`).join('')}
+               </select>
+           </td>
+           <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+               <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t4TBLength"></td>
+       `;
 
         table.appendChild(newRow);
         $('.chosen-select').chosen();
@@ -437,43 +604,257 @@
             dateFormat: "@dateFormat",
             defaultDate: new Date()
         });
+        $('.toUpperCaseString').on('input paste', function () {
+            $(this).val($(this).val().toLocaleUpperCase());
+        });
+
+        $('.toUpperCaseString').on('input', function () {
+            $(this).val($(this).val().toLocaleUpperCase());
+        });
+    }
+
+    function addRow2() {
+        const table = document.querySelector('#itemGrid2 tbody');
+        const newRow = document.createElement('tr');
+
+        newRow.innerHTML = `
+           <td>
+               <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
+                   <option value="">--SELECT CHARGE--</option>
+                   ${CHARGESData.map(item => `<option value="${item.id}">${item.name} - [${item.type}]</option>`).join('')}
+               </select>
+           </td>
+           <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+               <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t4TBLength"></td>
+       `;
+
+        table.appendChild(newRow);
+        $('.chosen-select').chosen();
+        $('.chosen-container').css('width', '100%'); // Ensures the chosen container takes full width
+        $('.date-picker').flatpickr({
+            dateFormat: "@dateFormat",
+            defaultDate: new Date()
+        });
+        $('.toUpperCaseString').on('input paste', function () {
+            $(this).val($(this).val().toLocaleUpperCase());
+        });
+
+        $('.toUpperCaseString').on('input', function () {
+            $(this).val($(this).val().toLocaleUpperCase());
+        });
     }
 
     function validateNumericInput(input) {
-        input.value = input.value.replace(/[^\d]/g, '');
-    }
-    
-    async function Addrows() {
-        for (let i = 0; i < 5; i++) {
-            await addRow();
+        input.value = input.value.replace(/[^0-9.]/g, ''); // Allow digits and decimal points
+        if ((input.value.match(/\./g) || []).length > 1) {
+            input.value = input.value.slice(0, -1); // Remove the extra decimal point if more than one exists
         }
+    }
+
+    async function Addrows1() {
+        for (let i = 0; i < 5; i++) {
+            await addRow1();
+        }
+    }
+    async function Addrows2() {
+        for (let i = 0; i < 5; i++) {
+            await addRow2();
+        }
+    }
+
+    $('#btnAddrow1').on('click', async function () {
+        event.preventDefault();
+        for (let i = 0; i < 5; i++) {
+            await addRow1();
+        }
+    });
+
+    $('#btnAddrow2').on('click', async function () {
+        event.preventDefault();
+        for (let i = 0; i < 5; i++) {
+            await addRow2();
+        }
+    });
+
+    function validateForm() {
+        let isValid = true;
+
+        if ($('#tranNo').val() == '' || $('#tranDate').val() == '' || $('#requestNo').val() == '' || $('#receiptNo1').val() == '' || $('#receiptDate1').val() == '' || $('#amount1').val() == '') {
+
+            isValid = false;
+            return isValid;
+        }
+
+        const firstRow = document.querySelector('#itemGrid1 tbody tr:first-child');
+        if (firstRow) {
+            const charge = firstRow.querySelector('select[name="CHARGE"]').value;
+            const amount = firstRow.querySelector('input[name="AMOUNT"]').value;
+            const remarks = firstRow.querySelector('input[name="REMARKS1"]').value;
+
+            if (charge == '' || amount == '') {
+                isValid = false;
+                return isValid;
+            }
+        }
+
+        const rows = document.querySelectorAll('#itemGrid1 tbody tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const charge = row.querySelector('select[name="CHARGE"]').value;
+            const amount = row.querySelector('input[name="AMOUNT"]').value;
+            const remarks1 = row.querySelector('input[name="REMARKS1"]').value;
+
+            if (charge == '' && amount == '') {
+                row.remove();
+            } else {
+                if ((charge !== '' && amount == '') || (charge == '' && amount !== '')) {
+                    isValid = false;
+                    return isValid;
+                }
+            }
+        }
+
+        if ($('#receiptNo2').val() !== '' || $('#amount2').val() !== '') {
+            if ($('#receiptNo2').val() == '' || $('#receiptDate2').val() == '' || $('#amount2').val() == '') {
+
+                isValid = false;
+                return isValid;
+            }
+
+            const firstRow = document.querySelector('#itemGrid2 tbody tr:first-child');
+            if (firstRow) {
+                const charge = firstRow.querySelector('select[name="CHARGE"]').value;
+                const amount = firstRow.querySelector('input[name="AMOUNT"]').value;
+                const remarks = firstRow.querySelector('input[name="REMARKS1"]').value;
+
+                if (charge == '' || amount == '') {
+                    isValid = false;
+                    return isValid;
+                }
+            }
+
+            const rows = document.querySelectorAll('#itemGrid2 tbody tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const charge = row.querySelector('select[name="CHARGE"]').value;
+                const amount = row.querySelector('input[name="AMOUNT"]').value;
+                const remarks1 = row.querySelector('input[name="REMARKS1"]').value;
+
+                if (charge == '' && amount == '') {
+                    row.remove();
+                } else {
+                    if ((charge !== '' && amount == '') || (charge == '' && amount !== '')) {
+                        isValid = false;
+                        return isValid;
+                    }
+                }
+            }
+        }
+        return isValid;
+    }
+
+    function validateTotalAmount1() {
+        let isValid = true;
+        const mainAmount = parseFloat(document.getElementById('amount1').value) || 0;
+        const tableAmounts = document.querySelectorAll('#itemGrid1 tbody input[name="AMOUNT"]');
+        let totalAmount = 0;
+        tableAmounts.forEach(input => {
+            totalAmount += parseFloat(input.value) || 0;
+        });
+
+        if (totalAmount !== mainAmount) {
+            isValid = false;
+            return isValid;
+        }
+        return isValid;
+    }
+
+    function validateTotalAmount2() {
+        let isValid = true;
+        const mainAmount = parseFloat(document.getElementById('amount2').value) || 0;
+        const tableAmounts = document.querySelectorAll('#itemGrid2 tbody input[name="AMOUNT"]');
+        let totalAmount = 0;
+        tableAmounts.forEach(input => {
+            totalAmount += parseFloat(input.value) || 0;
+        });
+
+        if (totalAmount !== mainAmount) {
+            isValid = false;
+            return isValid;
+        }
+        return isValid;
+    }
+
+    function checkDisplayofexception() {
+        let isValid = true;
+        var exception1 = document.getElementById('exception1');
+
+        // Check if the exception1 div is displayed
+        if (window.getComputedStyle(exception1).display === 'block') {
+            if ($('#exceptionalremarks').val() == '') {
+                isValid = false;
+                return isValid;
+            }
+        } 
+        return isValid;
     }
 
     $('#btnAdd').on('click', async function () {
         event.preventDefault();
+        if (!validateForm() || !checkDisplayofexception()) {
+            alert('Please fill all the required fields.')
+            return;
+        }
+
+        if (!validateTotalAmount1()) {
+            alert('The total amount of charges present in receipt does not match the receipt 1 amount.')
+            return;
+        }
+        if ($('#receiptNo2').val() !== '') {
+            if (!validateTotalAmount2()) {
+                alert('The total amount of charges present in receipt does not match the receipt 2 amount.')
+                return;
+            }
+        }
         debugger
+
+        var status = "";
+        var amount1forex = parseFloat($('#amount1').val()) || 0;
+        var amount2forex = parseFloat($('#amount2').val()) || 0;
+        var totalRequestAmountforex = parseFloat($('#totalRequestamount').val()) || 0;
+
+        if (amount1forex + amount2forex > totalRequestAmountforex) {
+            status = 'Exception'
+        } else {
+            status = ''
+        }
+
         var headerdata1 = {
             TRANNO: $('#tranNo').val(),
             TRANDATE: $('#tranDate').val(),
             REQUESTID: requestid,
             REMARKS1: $('#remarks1').val(),
             REMARKS2: $('#remarks2').val(),
-            PAIDBY: "@userName"
+            PAIDBY: "@userName",
+            STATUS: status,
+            EXCEPTIONALREMARKS: $('#exceptionalremarks').val(),
         }
         const res1 = await $.ajax({
             url: '@Url.Action("SavePAYMENTHDR", "PAYMENTHDR")',
             method: 'POST',
             data: headerdata1
         });
-        debugger
+
         const PAYMENTHDRID = res1.hdrid;
         var headerdata2 = {
             HDRID: PAYMENTHDRID,
             REQUESTID: requestid,
-            RECEIPTNO: $('#receiptNo').val(),
-            RECEIPTDATE: $('#receiptDate').val(),
-            RECEIPTAMOUNT: $('#amount').val(),
-            REMARKS1: $('#remarks1rec').val()
+            RECEIPTNO: $('#receiptNo1').val(),
+            RECEIPTDATE: $('#receiptDate1').val(),
+            RECEIPTAMOUNT: $('#amount1').val(),
+            REMARKS1: $('#remarks1rec1').val()
         }
         const res2 = await $.ajax({
             url: '@Url.Action("SavePAYMENTRECEIPTS", "PAYMENTRECEIPTS")',
@@ -487,7 +868,7 @@
         await uploadFile2(PAYMENTRECEIPTID);
         await uploadFile3(PAYMENTRECEIPTID);
 
-        const rows = document.querySelectorAll('#itemGrid tbody tr');
+        const rows = document.querySelectorAll('#itemGrid1 tbody tr');
         rows.forEach(async (row) => {
             const charge = row.querySelector('select[name="CHARGE"]').value;
             const amount = row.querySelector('input[name="AMOUNT"]').value;
@@ -509,6 +890,61 @@
                     REMARKS1: remarks1,
                     PAYMENTHDRID: PAYMENTHDRID,
                     PAYMENTRECEIPTID: PAYMENTRECEIPTID,
+                    REQUESTID: requestid,
+
+                };
+
+                await $.ajax({
+                    url: '@Url.Action("SavePAYMENTRECEIPTCHARGES", "PAYMENTRECEIPTCHARGES")',
+                    method: 'POST',
+                    data: headerdata3
+                });
+            }
+        });
+
+        const PAYMENTHDRID2 = res1.hdrid;
+        var headerdata22 = {
+            HDRID: PAYMENTHDRID2,
+            REQUESTID: requestid,
+            RECEIPTNO: $('#receiptNo2').val(),
+            RECEIPTDATE: $('#receiptDate2').val(),
+            RECEIPTAMOUNT: $('#amount2').val(),
+            REMARKS1: $('#remarks1rec2').val()
+        }
+        const res22 = await $.ajax({
+            url: '@Url.Action("SavePAYMENTRECEIPTS", "PAYMENTRECEIPTS")',
+            method: 'POST',
+            data: headerdata22
+        });
+
+        const PAYMENTRECEIPTID2 = res22.hdrid;
+
+        await uploadFile11(PAYMENTRECEIPTID2);
+        await uploadFile22(PAYMENTRECEIPTID2);
+        await uploadFile33(PAYMENTRECEIPTID2);
+
+        const rows2 = document.querySelectorAll('#itemGrid2 tbody tr');
+        rows2.forEach(async (row) => {
+            const charge = row.querySelector('select[name="CHARGE"]').value;
+            const amount = row.querySelector('input[name="AMOUNT"]').value;
+            const remarks1 = row.querySelector('input[name="REMARKS1"]').value;
+
+            let hasValues = false;
+
+            if (charge !== '' && amount !== '') {
+                hasValues = true;
+            } else {
+                row.remove();
+            }
+
+            if (hasValues) {
+
+                var headerdata3 = {
+                    CHARGETYPEID: charge,
+                    AMOUNT: amount,
+                    REMARKS1: remarks1,
+                    PAYMENTHDRID: PAYMENTHDRID2,
+                    PAYMENTRECEIPTID: PAYMENTRECEIPTID2,
                     REQUESTID: requestid,
 
                 };
@@ -586,7 +1022,7 @@
 
     async function uploadFile3(headerId) {
 
-        var files = document.getElementById("fileUpload2").files;
+        var files = document.getElementById("fileUpload3").files;
 
         if (files.length === 0) {
             return;
@@ -614,5 +1050,106 @@
             }
         }
     }
+
+    async function uploadFile11(headerId) {
+
+        var files = document.getElementById("fileUpload11").files;
+
+        if (files.length === 0) {
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            debugger;
+            var formData = new FormData();
+            formData.append('file', files[i]);
+            formData.append('typeId', '2');
+            formData.append('transName', 'PaymentProcessing');
+
+            try {
+                await $.ajax({
+                    url: "@Url.Action("SaveFile", "Home")",
+                    type: "POST",
+                    headers: { 'ProdId': headerId },
+                    data: formData,
+                    contentType: false,
+                    processData: false
+                });
+                console.log("File uploaded successfully:", files[i].name);
+            } catch (error) {
+                console.error("Error uploading file:", error);
+            }
+        }
+    }
+
+    async function uploadFile22(headerId) {
+
+        var files = document.getElementById("fileUpload22").files;
+
+        if (files.length === 0) {
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            debugger;
+            var formData = new FormData();
+            formData.append('file', files[i]);
+            formData.append('typeId', '3');
+            formData.append('transName', 'PaymentProcessing');
+
+            try {
+                await $.ajax({
+                    url: "@Url.Action("SaveFile", "Home")",
+                    type: "POST",
+                    headers: { 'ProdId': headerId },
+                    data: formData,
+                    contentType: false,
+                    processData: false
+                });
+                console.log("File uploaded successfully:", files[i].name);
+            } catch (error) {
+                console.error("Error uploading file:", error);
+            }
+        }
+    }
+
+    async function uploadFile33(headerId) {
+
+        var files = document.getElementById("fileUpload33").files;
+
+        if (files.length === 0) {
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            debugger;
+            var formData = new FormData();
+            formData.append('file', files[i]);
+            formData.append('typeId', '4');
+            formData.append('transName', 'PaymentProcessing');
+
+            try {
+                await $.ajax({
+                    url: "@Url.Action("SaveFile", "Home")",
+                    type: "POST",
+                    headers: { 'ProdId': headerId },
+                    data: formData,
+                    contentType: false,
+                    processData: false
+                });
+                console.log("File uploaded successfully:", files[i].name);
+            } catch (error) {
+                console.error("Error uploading file:", error);
+            }
+        }
+    }
+
+    $('.toUpperCaseString').on('input paste', function () {
+        $(this).val($(this).val().toLocaleUpperCase());
+    });
+
+    $('.toUpperCaseString').on('input', function () {
+        $(this).val($(this).val().toLocaleUpperCase());
+    });
 
 </script>
