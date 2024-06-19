@@ -39,8 +39,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12 mx-auto col-lg-12">
-            <div class="card shadow-lg">
+        <div class="col-md-12 mx-auto col-lg-12">            <div class="card shadow-lg">
                 <div class="card-header text-white bg-warning d-flex">
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <h4 class="text-lg-start">
@@ -92,7 +91,7 @@
         try {
             //Get Method to Bind the data into grid datatable
             let data = await $.ajax({
-                url: '@Url.Action("GetAllExceptionApproveRequest", "REQUESTHDR")',
+                url: '@Url.Action("GetAllPaymentExceptionForApprove", "PAYMENTHDR")',
                 type: 'Get'
             });
 
@@ -103,18 +102,18 @@
                 columns: [
                     {
                         title: 'PAYMENT REQUEST NO',
-                        data: 'requestno',
+                        data: 'tranNo',
                         render: (data, type, row) => {
                             return '<input type="text" id="rowId" value="' + row.id + '" hidden /><a href="#"">' + data + '</a>';
                         }
                     },
-                    { title: 'PAYMENT REQUEST DATE', data: Date.now },
-                    { title: 'PAYMENT TOTAL AMOUNT', data: "" },
-                    { title: 'REQUEST NO', data: "" },
-                    { title: 'REQUEST DATE', data: Date.now },
-                    { title: 'CUTOMER NAME', data: 'customername' },
-                    { title: 'JOB NO', data: 'jobno' },
-                    { title: 'REQUEST TOTAL AMOUNT', data: 'totalrequestamount' },
+                    { title: 'PAYMENT REQUEST DATE', data: 'tranDate' },
+                    { title: 'PAYMENT TOTAL AMOUNT', data: "receiptAmount" },
+                    { title: 'REQUEST NO', data: "requestNo" },
+                    { title: 'REQUEST DATE', data: 'requestDate' },
+                    { title: 'CUSTOMER NAME', data: 'customerName' },
+                    { title: 'JOB NO', data: 'jobNo' },
+                    { title: 'REQUEST TOTAL AMOUNT', data: 'totalRequestAmount' },
                     {
                         title: 'APPROVE',
                         orderable: false,
@@ -210,7 +209,7 @@
             var comment = $(this).find("input[name='approverComment']").val();
 
             if (isApproved) {
-                if (isApproved == 'deny' && comment == '')
+                if (isApproved == 'Deny' && comment == '')
                     isValid = false;
             }
         });
@@ -229,7 +228,7 @@
             if (isApproved) {
                 try {
                     let data = await $.ajax({
-                        url: '@Url.Action("ExceptionalApproveSelectedRequest", "REQUESTHDR")',
+                        url: '@Url.Action("ExceptionalApproveSelectedPayments", "PAYMENTHDR")',
                         type: 'Get',
                         data: { id: rowId, approved: isApproved, comments: comment }
                     });
