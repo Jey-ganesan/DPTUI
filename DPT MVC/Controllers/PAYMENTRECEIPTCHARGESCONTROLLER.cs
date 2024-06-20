@@ -83,7 +83,23 @@ namespace DPT.MVC.Controllers
             try
             {
                 var client = _httpClientFactory.CreateClient("DPTClient");
-                var response = await client.GetAsync($"/api/PAYMENTRECEIPTS");
+                var response = await client.GetAsync($"/api/PAYMENTRECEIPTCHARGES");
+                var content = await response.Content.ReadAsStringAsync();
+                var res = System.Text.Json.JsonSerializer.Deserialize<object>(content);
+                return Json(res);
+            }
+            catch (System.Exception ex)
+            {
+                return Json(ex);
+            }
+        }
+
+        public async Task<JsonResult> GetAllPAYMENTRECEIPTCHARGESbyhdrid(int Hdrid)
+        {
+            try
+            {
+                var client = _httpClientFactory.CreateClient("DPTClient");
+                var response = await client.GetAsync($"/api/PAYMENTRECEIPTCHARGES/GetAllPAYMENTRECEIPTCHARGESbyhdrid?Hdrid=" + Hdrid);
                 var content = await response.Content.ReadAsStringAsync();
                 var res = System.Text.Json.JsonSerializer.Deserialize<object>(content);
                 return Json(res);

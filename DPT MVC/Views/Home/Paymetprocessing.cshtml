@@ -55,18 +55,18 @@
         }
 
         /* .overlay {
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-                            width: 100%;
-                            height: 100%;
-                            background: rgba(255, 255, 255, 0.8);
-                            z-index: 10;
-                            display: none;
-                        }
-                        .table-container {
-                            position: relative;
-                        } */
+                                                                                            position: absolute;
+                                                                                            top: 0;
+                                                                                            left: 0;
+                                                                                            width: 100%;
+                                                                                            height: 100%;
+                                                                                            background: rgba(255, 255, 255, 0.8);
+                                                                                            z-index: 10;
+                                                                                            display: none;
+                                                                                        }
+                                                                                        .table-container {
+                                                                                            position: relative;
+                                                                                        } */
 
     </style>
 </head>
@@ -78,7 +78,14 @@
                 <div class="card-header text-white bg-warning d-flex">
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <h4 class="text-lg-start">
-                            PAYMENT PROCESSING
+                            @if (mode == "View")
+                            {
+                                @:VIEW PAYMENT PROCESSED DETAILS
+                            }
+                            else
+                            {
+                                @:PAYMENT PROCESSING
+                            }
                         </h4>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
@@ -113,39 +120,8 @@
                                 <div class="col-sm-2">
                                     <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t4TBLength" name="remarks2" id="remarks2" />
                                 </div>
-                                @* <div class="col-sm-2">
-                                <div class="col-sm-1">
-                                <label class="form-label" for="poType">MODE<span class="text-danger">*</span></label>
-                                </div>
-                                <Select class="form-control rounded-0 chosn" id="poType">
-                                <option value="" >-- Select Option --</option>
-                                <option value="demo">MODE1</option>
-                                <option value="demo1">MODE2</option>
-                                </Select>
-                                </div>
-                                <div class="col-sm-1">
-                                <label class="form-label" for="AMOUNT">AMOUNT<span class="text-danger">*</span></label>
-                                </div>
-                                <div class="col-sm-2">
-                                <input type="text" class="form-control rounded-0 maxLengthValidation" name="AMOUNT" id="AMOUNT" />
-                                </div> *@
                             </div>
                             <br />
-                            @* <div class="row">
-                            <div class="col-sm-1">
-                            <label class="form-label" for="remarks1">REMARKS1</label>
-                            </div>
-                            <div class="col-sm-5">
-                            <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t3TBLength" name="remarks1" id="remarks1" />
-                            </div>
-                            <div class="col-sm-1">
-                            <label class="form-label" for="remarks2">REMARKS2</label>
-                            </div>
-                            <div class="col-sm-5">
-                            <input type="text" class="form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t3TBLength" name="remarks2" id="remarks2" />
-                            </div>
-                            </div>
-                            <br /> *@
                             <div class="row">
                                 <div class="col-sm-1 alignright">
                                     <label class="form-label" for="requestNo">REQUEST NO<span class="text-danger">*</span></label>
@@ -175,41 +151,6 @@
                                 </div>
                             </div>
                             <br />
-                            @* <div style="border: 2px solid black;padding: 10px">
-                            <div class="row">
-                            <div class="col-sm-1">
-                            <label class="form-label" for="charge1">CHARGE 1</label>
-                            </div>
-                            <div class="col-sm-1">
-                            <input type="text" class="form-control rounded-0" name="CHARGE1" id="charge1" readonly />
-                            </div>
-                            <div class="col-sm-1">
-                            <label class="form-label" for="description">AMOUNT 1</label>
-                            </div>
-                            <div class="col-sm-1">
-                            <input type="text" class="form-control rounded-0" name="AMOUNT1" id="amount1" readonly />
-                            </div>
-                            <div class="col-sm-1">
-                            <label class="form-label" for="charge2">CHARGE 2</label>
-                            </div>
-                            <div class="col-sm-1">
-                            <input type="text" class="form-control rounded-0" name="CHARGE2" id="charge2" readonly />
-                            </div>
-                            <div class="col-sm-1">
-                            <label class="form-label" for="description">AMOUNT 2</label>
-                            </div>
-                            <div class="col-sm-1">
-                            <input type="text" class="form-control rounded-0" name="AMOUNT2" id="amount2" readonly />
-                            </div>
-                            <div class="col-sm-1" style="white-space:nowrap">
-                            <input type="checkbox" id="Adddetailsofcharges" value="true">
-                            <label class="form-label" style="white-space:nowrap" for="dofr">Do you like to continue with the current charges?</label>
-                            </div>
-                            </div>
-                            <br />
-
-                            </div>
-                            <br /> *@
                             <label class="form-label">RECEIPT 1</label>
                             <div style="border: 2px solid black;padding: 10px">
                                 <div class="row">
@@ -241,26 +182,24 @@
                                         <label class="form-label">ATTACHMENTS</label>
                                     </div>
                                     <div class="col-sm-1">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter1">
+                                        <button type="button" class="btn btn-primary" id="Enablefile2" data-toggle="modal" data-target="#exampleModalCenter1">
                                             <i class="fa fa-paperclip" aria-hidden="true"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <br />
                                 <div class="table-container">
-                                    <div id="overlay" class="overlay">
-                                        <table width="100%" id="itemGrid1" class='table table-bordered'>
-                                            <thead>
-                                                <tr>
-                                                    <th style="text-align:center;">CHARGE<span class="text-danger">*</span></th>
-                                                    <th style="text-align:center;">AMOUNT<span class="text-danger">*</span></th>
-                                                    <th style="text-align:center;">REMARKS</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="itemTableBody">
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <table width="100%" id="itemGrid1" class='table table-bordered'>
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align:center;">CHARGE<span class="text-danger">*</span></th>
+                                                <th style="text-align:center;">AMOUNT<span class="text-danger">*</span></th>
+                                                <th style="text-align:center;">REMARKS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="itemTableBody">
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <div class="row" style="padding-top:10px">
                                     <div class="col-sm-1">
@@ -268,8 +207,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <label class="form-label">RECEIPT 2</label>
-                            <div style="border: 2px solid black;padding: 10px">
+                            <label id="receipt2disable1" class="form-label">RECEIPT 2</label>
+                            <div id="receipt2disable2" style="border: 2px solid black;padding: 10px">
                                 <div class="row">
                                     <div class="col-sm-1 alignright">
                                         <label class="form-label" for="receiptNo">RECEIPT NO 2</label>
@@ -299,7 +238,7 @@
                                         <label class="form-label">ATTACHMENTS</label>
                                     </div>
                                     <div class="col-sm-1">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter2">
+                                        <button type="button" class="btn btn-primary" id="Enablefile1" data-toggle="modal" data-target="#exampleModalCenter2">
                                             <i class="fa fa-paperclip" aria-hidden="true"></i>
                                         </button>
                                     </div>
@@ -324,31 +263,27 @@
                                     </div>
                                 </div>
                             </div>
-                            @* <table width="100%" id="itemGrid" class='table table-bordered'>
-                            <thead>
-                            <tr>
-                            <th style="text-align: center;">NO</th>
-                            <th style="text-align: center;">CHARGE</th>
-                            <th style="text-align: center;">AMOUNT</th>
-                            <th style="text-align: center;">REMARKS</th>
-                            </tr>
-                            </thead>
-                            <tbody id="itemTableBody">
-                            </tbody>
-                            </table>
-                            <br /> *@
                         </div>
-                        <div class="row" style="padding-top:20px">
-                            <div class="col-md-1">
-                                <button class="btn btn-primary" id="btnAdd">Submit</button>
-                            </div>
-                            <div id="exception1" style="display:none" class="col-sm-2 alignright">
+                        <br />
+                        <div id="exception1" style="display:none" class="row">
+                            <div class="col-sm-2">
                                 <label class="form-label" style="white-space:nowrap" for="exceptionalremarks">EXCEPTIONAL REMARKS<span class="text-danger">*</span></label>
                             </div>
-                            <div id="exception2" style="display:none" class="col-sm-3">
+                            <div class="col-sm-3">
                                 <input type="text" class="form-control rounded-0" maxlength="@t4TBLength" name="EXCEPTIONALREMARKS" id="exceptionalremarks" />
                             </div>
                         </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-sm-12">
+                                @if (mode != "View")
+                                {
+                                    @:<button id="btnAdd" class="btn btn-primary rounded-0 me-2">Submit</button>
+                                }
+                                <a class="btn btn-warning rounded-0 me-2" href="#" onclick="loadPageWithParams('GridMastersParam','','',@ViewBag.pageId)">Cancel</a>
+                            </div>
+                        </div>
+                        <br />
                     </form>
                 </div>
             </div>
@@ -429,48 +364,391 @@
     var requestid;
 
     $(document).ready(async function () {
+        if ('@mode' == 'View') {
+            // $(".readonlyPortation").css({
+            //     'pointer-events': 'none',
+            //     'opacity': '0.7'
+            // });
+            $("#CPOForm :input").prop('disabled', true);
+            await BindDatatoForm(@ViewBag.paramID);
+        } else {
+            await BindRequestnos();
+            await Requestnodropdown(Requestnos);
+            await Chargesdata();
+            await Addrows1();
+            await Addrows2();
 
-        await BindRequestnos();
-        await Requestnodropdown(Requestnos);
-        await Chargesdata();
-        await Addrows1();
-        await Addrows2();
+            $('#requestNo').chosen({
+                width: '100%' // Ensure the chosen dropdown is 100% width
+            });
 
-        $('#requestNo').chosen({
-            width: '100%' // Ensure the chosen dropdown is 100% width
-        });
+            //ref date flatpicker initialization
 
-
-        //ref date flatpicker initialization
-
-        flatpickr("#tranDate", {
-            dateFormat: "@dateFormat",
-            altInput: true,
-            allowInput: true,
-            altFormat: "@dateFormat",
-            maxDate: new Date(),
-            defaultDate: new Date() // You can set the default date here
-        });
-        flatpickr("#receiptDate1", {
-            dateFormat: "@dateFormat",
-            altInput: true,
-            allowInput: true,
-            altFormat: "@dateFormat",
-            maxDate: new Date(),
-            defaultDate: new Date() // You can set the default date here
-        });
-        flatpickr("#receiptDate2", {
-            dateFormat: "@dateFormat",
-            altInput: true,
-            allowInput: true,
-            altFormat: "@dateFormat",
-            maxDate: new Date(),
-            defaultDate: new Date() // You can set the default date here
-        });
+            flatpickr("#tranDate", {
+                dateFormat: "@dateFormat",
+                altInput: true,
+                allowInput: true,
+                altFormat: "@dateFormat",
+                maxDate: new Date(),
+                defaultDate: new Date() // You can set the default date here
+            });
+            flatpickr("#receiptDate1", {
+                dateFormat: "@dateFormat",
+                altInput: true,
+                allowInput: true,
+                altFormat: "@dateFormat",
+                maxDate: new Date(),
+                defaultDate: new Date() // You can set the default date here
+            });
+            flatpickr("#receiptDate2", {
+                dateFormat: "@dateFormat",
+                altInput: true,
+                allowInput: true,
+                altFormat: "@dateFormat",
+                maxDate: new Date(),
+                defaultDate: new Date() // You can set the default date here
+            });
+        }
     });
 
     function Flatpicker(defaultDateValue) {
         flatpickr("#requestDate", {
+            dateFormat: "@dateFormatForbinding", // Set the desired format for input (YYYY-MM-DD)
+            altInput: true,
+            altFormat: "@dateFormat", // Set the format for the alternative input display (14-Jun-2024)
+            maxDate: new Date(),
+            defaultDate: defaultDateValue // Ensure defaultDate is set to 'YYYY-MM-DD' format
+        });
+    }
+
+    async function BindDatatoForm(Hdrid) {
+        try {
+            let RequestRecord = await $.ajax({
+                url: '@Url.Action("GetAllPaymentsTobindbyhdrid", "PAYMENTHDR")',
+                type: 'Get',
+                data: { Hdrid: Hdrid }
+            });
+
+            // await GetAttachmentFile('PaymentRequest', Hdrid)
+
+            // $('#Formview').show();
+
+            var dateString = RequestRecord[0].trandate
+            var Formateddate = dateString.split('T')[0]
+            Flatpickerfortrandate(Formateddate);
+
+            var uniquePairs = [];
+
+            // Track seen REQUESTNOs to ensure uniqueness
+            var seenRequestNos = {};
+
+            // Iterate over requestRecords
+            RequestRecord.forEach(function (record) {
+                // Check if REQUESTNO is already seen
+                if (!seenRequestNos[record.requestno]) {
+                    // If not seen, add to uniquePairs array
+                    uniquePairs.push({ REQUESTID: record.requestid, REQUESTNO: record.requestno });
+                    // Mark REQUESTNO as seen
+                    seenRequestNos[record.requestno] = true;
+                }
+            });
+
+            populateDropdown(uniquePairs);
+            $('#requestNo').val(RequestRecord[0].requestid);
+
+            var dateString1 = RequestRecord[0].requestdate
+            var Formateddate1 = dateString1.split('T')[0]
+            FlatpickerforrequestDate(Formateddate1);
+
+            $('#tranNo').val(RequestRecord[0].tranno);
+            $('#remarks1').val(RequestRecord[0].paymentremarkS1);
+            $('#remarks2').val(RequestRecord[0].paymentremarkS2);
+            $('#jobNo').val(RequestRecord[0].jobno);
+            $('#totalRequestamount').val(RequestRecord[0].totalrequestamount);
+
+            let PaymentreceiptRecord = await $.ajax({
+                url: '@Url.Action("GetAllPAYMENTRECEIPTSbyhdrid", "PAYMENTRECEIPTS")',
+                type: 'Get',
+                data: { Hdrid: Hdrid }
+            });
+
+
+            $('#receiptNo1').val(PaymentreceiptRecord[0].receiptno);
+            debugger
+            var dateString2 = PaymentreceiptRecord[0].receiptdate
+            var Formateddate2 = dateString2.split('T')[0]
+            Flatpickerforreceipt1Date(Formateddate2)
+
+            $('#amount1').val(PaymentreceiptRecord[0].receiptamount);
+            $('#remarks1rec1').val(PaymentreceiptRecord[0].remarkS1);
+
+            if (PaymentreceiptRecord.length > 1) {
+                $('#receiptNo2').val(PaymentreceiptRecord[1].receiptno);
+
+                var dateString3 = PaymentreceiptRecord[0].receiptdate
+                var Formateddate3 = dateString3.split('T')[0]
+                Flatpickerforreceipt2Date(Formateddate3)
+                $('#amount2').val(PaymentreceiptRecord[1].receiptamount);
+                $('#remarks1rec2').val(PaymentreceiptRecord[1].remarkS1);
+            }
+
+            let PaymentreceiptchargeRecord = await $.ajax({
+                url: '@Url.Action("GetAllPAYMENTRECEIPTCHARGESbyhdrid", "PAYMENTRECEIPTCHARGES")',
+                type: 'Get',
+                data: { Hdrid: Hdrid }
+            });
+
+            var paymentreceipt1id = PaymentreceiptRecord[0].id
+            var charge1data = PaymentreceiptchargeRecord.filter(q => q.paymentreceiptid == paymentreceipt1id)
+
+            // $('#exceptionalremarks').val(RequestRecord.);
+            BindReceipt1data(charge1data);
+            if (PaymentreceiptRecord.length > 1) {
+                var paymentreceipt2id = PaymentreceiptRecord[1].id
+                var charge2data = PaymentreceiptchargeRecord.filter(q => q.paymentreceiptid == paymentreceipt2id)
+                BindReceipt2data(charge2data)
+            } else {
+                $('#receipt2disable1').hide()
+                $('#receipt2disable2').hide()
+            }
+            $("#Enablefile2").prop('disabled', false);
+            $("#Enablefile1").prop('disabled', false);
+            document.getElementById('fileUpload1').type = 'text'
+            document.getElementById('fileUpload2').type = 'text'
+            document.getElementById('fileUpload3').type = 'text'
+            document.getElementById('fileUpload11').type = 'text'
+            document.getElementById('fileUpload22').type = 'text'
+            document.getElementById('fileUpload33').type = 'text'
+            GetAttachmentFileforrecp1File1("PaymentProcessing1", PaymentreceiptRecord[0].id)
+            GetAttachmentFileforrecp1File2('PaymentProcessing2', PaymentreceiptRecord[0].id)
+            GetAttachmentFileforrecp1File3("PaymentProcessing3", PaymentreceiptRecord[0].id)
+            if (PaymentreceiptRecord.length > 1) {
+                GetAttachmentFileforrecp2File1('PaymentProcessing1', PaymentreceiptRecord[1].id)
+                GetAttachmentFileforrecp2File2("PaymentProcessing2", PaymentreceiptRecord[1].id)
+                GetAttachmentFileforrecp2File3('PaymentProcessing3', PaymentreceiptRecord[1].id)
+            }
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    function BindReceipt1data(rdata) {
+        var table = new DataTable('#itemGrid1', {
+            data: rdata,
+            columns: [
+                { title: 'CHARGE', data: 'chargename', },
+                { title: 'AMOUNT', data: 'amount' },
+                { title: 'REMARKS', data: 'remarkS1' },
+            ],
+            paging: false,
+            info: false,
+            searching: false,
+            destroy: true
+        })
+    }
+
+    function BindReceipt2data(rdata) {
+        var table = new DataTable('#itemGrid2', {
+            data: rdata,
+            columns: [
+                { title: 'CHARGE', data: 'chargename', },
+                { title: 'AMOUNT', data: 'amount' },
+                { title: 'REMARKS', data: 'remarkS1' },
+            ],
+            paging: false,
+            info: false,
+            searching: false,
+            destroy: true
+        })
+    }
+
+    async function GetAttachmentFileforrecp1File1(TransName, TransId) {
+
+        await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
+            .then(response => response.json())
+            .then(data4 => {
+                if (data4.length > 0) {
+                    $("#fileUpload1").val(data4[0].fileName);
+
+                    var downloadLink = $('<a>', {
+                        text: data4[0].fileName,
+                        href: '#',
+                        click: async function () {
+                            await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                        }
+                    });
+                    $('#fileUpload1').replaceWith(downloadLink);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    async function GetAttachmentFileforrecp1File2(TransName, TransId) {
+
+        await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
+            .then(response => response.json())
+            .then(data4 => {
+                if (data4.length > 0) {
+                    $("#fileUpload2").val(data4[0].fileName);
+
+                    var downloadLink = $('<a>', {
+                        text: data4[0].fileName,
+                        href: '#',
+                        click: async function () {
+                            await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                        }
+                    });
+                    $('#fileUpload2').replaceWith(downloadLink);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    async function GetAttachmentFileforrecp1File3(TransName, TransId) {
+
+        await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
+            .then(response => response.json())
+            .then(data4 => {
+                if (data4.length > 0) {
+                    $("#fileUpload3").val(data4[0].fileName);
+
+                    var downloadLink = $('<a>', {
+                        text: data4[0].fileName,
+                        href: '#',
+                        click: async function () {
+                            await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                        }
+                    });
+                    $('#fileUpload3').replaceWith(downloadLink);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    async function GetAttachmentFileforrecp2File1(TransName, TransId) {
+
+        await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
+            .then(response => response.json())
+            .then(data4 => {
+                if (data4.length > 0) {
+                    $("#fileUpload11").val(data4[0].fileName);
+
+                    var downloadLink = $('<a>', {
+                        text: data4[0].fileName,
+                        href: '#',
+                        click: async function () {
+                            await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                        }
+                    });
+                    $('#fileUpload11').replaceWith(downloadLink);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    async function GetAttachmentFileforrecp2File2(TransName, TransId) {
+
+        await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
+            .then(response => response.json())
+            .then(data4 => {
+                if (data4.length > 0) {
+                    $("#fileUpload22").val(data4[0].fileName);
+
+                    var downloadLink = $('<a>', {
+                        text: data4[0].fileName,
+                        href: '#',
+                        click: async function () {
+                            await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                        }
+                    });
+                    $('#fileUpload22').replaceWith(downloadLink);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    async function GetAttachmentFileforrecp2File3(TransName, TransId) {
+
+        await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
+            .then(response => response.json())
+            .then(data4 => {
+                if (data4.length > 0) {
+                    $("#fileUpload33").val(data4[0].fileName);
+
+                    var downloadLink = $('<a>', {
+                        text: data4[0].fileName,
+                        href: '#',
+                        click: async function () {
+                            await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                        }
+                    });
+                    $('#fileUpload33').replaceWith(downloadLink);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    function populateDropdown(uniquePairs) {
+        var selectDropdown = document.getElementById('requestNo');
+
+        // Clear existing options
+        selectDropdown.innerHTML = '<option value="">Select Option</option>';
+
+        // Loop through uniquePairs and add options to the dropdown
+        uniquePairs.forEach(function (pair) {
+            var option = document.createElement('option');
+            option.value = pair.REQUESTID; // Set the value attribute
+            option.textContent = pair.REQUESTNO; // Set the text content
+            selectDropdown.appendChild(option);
+        });
+    }
+
+    function Flatpickerfortrandate(defaultDateValue) {
+        flatpickr("#tranDate", {
+            dateFormat: "@dateFormatForbinding", // Set the desired format for input (YYYY-MM-DD)
+            altInput: true,
+            altFormat: "@dateFormat", // Set the format for the alternative input display (14-Jun-2024)
+            maxDate: new Date(),
+            defaultDate: defaultDateValue // Ensure defaultDate is set to 'YYYY-MM-DD' format
+        });
+    }
+
+    function FlatpickerforrequestDate(defaultDateValue) {
+        flatpickr("#requestDate", {
+            dateFormat: "@dateFormatForbinding", // Set the desired format for input (YYYY-MM-DD)
+            altInput: true,
+            altFormat: "@dateFormat", // Set the format for the alternative input display (14-Jun-2024)
+            maxDate: new Date(),
+            defaultDate: defaultDateValue // Ensure defaultDate is set to 'YYYY-MM-DD' format
+        });
+    }
+
+    function Flatpickerforreceipt1Date(defaultDateValue) {
+        flatpickr("#receiptDate1", {
+            dateFormat: "@dateFormatForbinding", // Set the desired format for input (YYYY-MM-DD)
+            altInput: true,
+            altFormat: "@dateFormat", // Set the format for the alternative input display (14-Jun-2024)
+            maxDate: new Date(),
+            defaultDate: defaultDateValue // Ensure defaultDate is set to 'YYYY-MM-DD' format
+        });
+    }
+
+    function Flatpickerforreceipt2Date(defaultDateValue) {
+        flatpickr("#receiptDate2", {
             dateFormat: "@dateFormatForbinding", // Set the desired format for input (YYYY-MM-DD)
             altInput: true,
             altFormat: "@dateFormat", // Set the format for the alternative input display (14-Jun-2024)
@@ -519,10 +797,8 @@
 
         if (amount1 + amount2 > totalRequestAmount) {
             $('#exception1').show();
-            $('#exception2').show();
         } else {
             $('#exception1').hide();
-            $('#exception2').hide();
         }
     });
 
@@ -535,6 +811,7 @@
                 type: 'Get',
                 data: { Hdrid: selectedId }
             });
+
             detailsofrequestno = data;
             var dateString = data[0].requestdate
             var Formateddate = dateString.split('T')[0]
@@ -587,15 +864,15 @@
         const newRow = document.createElement('tr');
 
         newRow.innerHTML = `
-           <td>
-               <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
-                   <option value="">--SELECT CHARGE--</option>
-                   ${CHARGESData.map(item => `<option value="${item.id}">${item.type} - [${item.type}]</option>`).join('')}
-               </select>
-           </td>
-           <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
-               <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t4TBLength"></td>
-       `;
+                                           <td>
+                                               <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
+                                                   <option value="">--SELECT CHARGE--</option>
+                                                   ${CHARGESData.map(item => `<option value="${item.id}">${item.name} - [${item.type}]</option>`).join('')}
+                                               </select>
+                                           </td>
+                                           <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+                                               <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t4TBLength"></td>
+                                       `;
 
         table.appendChild(newRow);
         $('.chosen-select').chosen();
@@ -618,15 +895,15 @@
         const newRow = document.createElement('tr');
 
         newRow.innerHTML = `
-           <td>
-               <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
-                   <option value="">--SELECT CHARGE--</option>
-                   ${CHARGESData.map(item => `<option value="${item.id}">${item.name} - [${item.type}]</option>`).join('')}
-               </select>
-           </td>
-           <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
-               <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t4TBLength"></td>
-       `;
+                                           <td>
+                                               <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
+                                                   <option value="">--SELECT CHARGE--</option>
+                                                   ${CHARGESData.map(item => `<option value="${item.id}">${item.name} - [${item.type}]</option>`).join('')}
+                                               </select>
+                                           </td>
+                                           <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+                                               <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t4TBLength"></td>
+                                       `;
 
         table.appendChild(newRow);
         $('.chosen-select').chosen();
@@ -797,7 +1074,7 @@
                 isValid = false;
                 return isValid;
             }
-        } 
+        }
         return isValid;
     }
 
@@ -818,7 +1095,6 @@
                 return;
             }
         }
-        debugger
 
         var status = "";
         var amount1forex = parseFloat($('#amount1').val()) || 0;
@@ -902,60 +1178,63 @@
             }
         });
 
-        const PAYMENTHDRID2 = res1.hdrid;
-        var headerdata22 = {
-            HDRID: PAYMENTHDRID2,
-            REQUESTID: requestid,
-            RECEIPTNO: $('#receiptNo2').val(),
-            RECEIPTDATE: $('#receiptDate2').val(),
-            RECEIPTAMOUNT: $('#amount2').val(),
-            REMARKS1: $('#remarks1rec2').val()
+        if ($('#receiptNo2').val() !== '') {
+            const PAYMENTHDRID2 = res1.hdrid;
+            var headerdata22 = {
+                HDRID: PAYMENTHDRID2,
+                REQUESTID: requestid,
+                RECEIPTNO: $('#receiptNo2').val(),
+                RECEIPTDATE: $('#receiptDate2').val(),
+                RECEIPTAMOUNT: $('#amount2').val(),
+                REMARKS1: $('#remarks1rec2').val()
+            }
+            const res22 = await $.ajax({
+                url: '@Url.Action("SavePAYMENTRECEIPTS", "PAYMENTRECEIPTS")',
+                method: 'POST',
+                data: headerdata22
+            });
+
+            const PAYMENTRECEIPTID2 = res22.hdrid;
+
+            await uploadFile11(PAYMENTRECEIPTID2);
+            await uploadFile22(PAYMENTRECEIPTID2);
+            await uploadFile33(PAYMENTRECEIPTID2);
+
+            const rows2 = document.querySelectorAll('#itemGrid2 tbody tr');
+            rows2.forEach(async (row) => {
+                const charge = row.querySelector('select[name="CHARGE"]').value;
+                const amount = row.querySelector('input[name="AMOUNT"]').value;
+                const remarks1 = row.querySelector('input[name="REMARKS1"]').value;
+
+                let hasValues = false;
+
+                if (charge !== '' && amount !== '') {
+                    hasValues = true;
+                } else {
+                    row.remove();
+                }
+
+                if (hasValues) {
+
+                    var headerdata3 = {
+                        CHARGETYPEID: charge,
+                        AMOUNT: amount,
+                        REMARKS1: remarks1,
+                        PAYMENTHDRID: PAYMENTHDRID2,
+                        PAYMENTRECEIPTID: PAYMENTRECEIPTID2,
+                        REQUESTID: requestid,
+
+                    };
+
+                    await $.ajax({
+                        url: '@Url.Action("SavePAYMENTRECEIPTCHARGES", "PAYMENTRECEIPTCHARGES")',
+                        method: 'POST',
+                        data: headerdata3
+                    });
+                }
+            });
         }
-        const res22 = await $.ajax({
-            url: '@Url.Action("SavePAYMENTRECEIPTS", "PAYMENTRECEIPTS")',
-            method: 'POST',
-            data: headerdata22
-        });
-
-        const PAYMENTRECEIPTID2 = res22.hdrid;
-
-        await uploadFile11(PAYMENTRECEIPTID2);
-        await uploadFile22(PAYMENTRECEIPTID2);
-        await uploadFile33(PAYMENTRECEIPTID2);
-
-        const rows2 = document.querySelectorAll('#itemGrid2 tbody tr');
-        rows2.forEach(async (row) => {
-            const charge = row.querySelector('select[name="CHARGE"]').value;
-            const amount = row.querySelector('input[name="AMOUNT"]').value;
-            const remarks1 = row.querySelector('input[name="REMARKS1"]').value;
-
-            let hasValues = false;
-
-            if (charge !== '' && amount !== '') {
-                hasValues = true;
-            } else {
-                row.remove();
-            }
-
-            if (hasValues) {
-
-                var headerdata3 = {
-                    CHARGETYPEID: charge,
-                    AMOUNT: amount,
-                    REMARKS1: remarks1,
-                    PAYMENTHDRID: PAYMENTHDRID2,
-                    PAYMENTRECEIPTID: PAYMENTRECEIPTID2,
-                    REQUESTID: requestid,
-
-                };
-
-                await $.ajax({
-                    url: '@Url.Action("SavePAYMENTRECEIPTCHARGES", "PAYMENTRECEIPTCHARGES")',
-                    method: 'POST',
-                    data: headerdata3
-                });
-            }
-        });
+        loadPageWithParams('Paymetprocessing')
     });
 
     async function uploadFile1(headerId) {
@@ -971,11 +1250,11 @@
             var formData = new FormData();
             formData.append('file', files[i]);
             formData.append('typeId', '2');
-            formData.append('transName', 'PaymentProcessing');
+            formData.append('transName', 'PaymentProcessing1');
 
             try {
                 await $.ajax({
-                    url: "@Url.Action("SaveFile", "Home")",
+                    url: "@Url.Action("SaveFile", "Files")",
                     type: "POST",
                     headers: { 'ProdId': headerId },
                     data: formData,
@@ -1002,11 +1281,11 @@
             var formData = new FormData();
             formData.append('file', files[i]);
             formData.append('typeId', '3');
-            formData.append('transName', 'PaymentProcessing');
+            formData.append('transName', 'PaymentProcessing2');
 
             try {
                 await $.ajax({
-                    url: "@Url.Action("SaveFile", "Home")",
+                    url: "@Url.Action("SaveFile", "Files")",
                     type: "POST",
                     headers: { 'ProdId': headerId },
                     data: formData,
@@ -1033,11 +1312,11 @@
             var formData = new FormData();
             formData.append('file', files[i]);
             formData.append('typeId', '4');
-            formData.append('transName', 'PaymentProcessing');
+            formData.append('transName', 'PaymentProcessing3');
 
             try {
                 await $.ajax({
-                    url: "@Url.Action("SaveFile", "Home")",
+                    url: "@Url.Action("SaveFile", "Files")",
                     type: "POST",
                     headers: { 'ProdId': headerId },
                     data: formData,
@@ -1064,11 +1343,11 @@
             var formData = new FormData();
             formData.append('file', files[i]);
             formData.append('typeId', '2');
-            formData.append('transName', 'PaymentProcessing');
+            formData.append('transName', 'PaymentProcessing1');
 
             try {
                 await $.ajax({
-                    url: "@Url.Action("SaveFile", "Home")",
+                    url: "@Url.Action("SaveFile", "Files")",
                     type: "POST",
                     headers: { 'ProdId': headerId },
                     data: formData,
@@ -1095,11 +1374,11 @@
             var formData = new FormData();
             formData.append('file', files[i]);
             formData.append('typeId', '3');
-            formData.append('transName', 'PaymentProcessing');
+            formData.append('transName', 'PaymentProcessing2');
 
             try {
                 await $.ajax({
-                    url: "@Url.Action("SaveFile", "Home")",
+                    url: "@Url.Action("SaveFile", "Files")",
                     type: "POST",
                     headers: { 'ProdId': headerId },
                     data: formData,
@@ -1126,11 +1405,11 @@
             var formData = new FormData();
             formData.append('file', files[i]);
             formData.append('typeId', '4');
-            formData.append('transName', 'PaymentProcessing');
+            formData.append('transName', 'PaymentProcessing3');
 
             try {
                 await $.ajax({
-                    url: "@Url.Action("SaveFile", "Home")",
+                    url: "@Url.Action("SaveFile", "Files")",
                     type: "POST",
                     headers: { 'ProdId': headerId },
                     data: formData,
@@ -1151,5 +1430,38 @@
     $('.toUpperCaseString').on('input', function () {
         $(this).val($(this).val().toLocaleUpperCase());
     });
+
+    async function DownLoadFileProcessed(id, fileName) {
+        event.preventDefault();
+        debugger;
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', `/Files/DownloadFile?id=${id}`, true);
+        xhr.responseType = 'blob';
+
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var blob = xhr.response;
+                var downloadLink = document.createElement('a');
+                downloadLink.href = window.URL.createObjectURL(blob);
+                downloadLink.setAttribute('download', fileName);
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            } else {
+                alert('File Not Found.');
+            }
+        };
+
+
+        xhr.onerror = function () {
+            console.error('Network error occurred while downloading the file.');
+        };
+
+
+        xhr.send();
+
+
+    }
 
 </script>
