@@ -586,7 +586,12 @@
                 }
             }
         });
-        loadPageWithParams('Paymentrequests')
+        await loadForm();
+    }
+
+    async function loadForm() {
+        alert('Record created successfully')
+        loadPageWithParams('GridMastersParam', '', '', '15')
     }
 
     async function uploadFile(headerId, row) {
