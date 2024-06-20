@@ -1,7 +1,6 @@
 ﻿@using System.Text.Json
 @using DPT.MVC.Models
 @inject IConfiguration Configuration
-
 @{
     int decimalRoundOff = Configuration.GetValue<int>("NumberSettings:DecimalRoundOff");
     int t1TBLength = Configuration.GetValue<int>("CharacterSettings:T1TypeTextbox");
@@ -16,9 +15,7 @@
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
-    // Access access = ViewBag.access;
 }
-
 <head>
     <style>
         /* Center table headings */
@@ -42,12 +39,11 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12 mx-auto col-lg-12">
-            <div class="card shadow-lg">
+        <div class="col-md-12 mx-auto col-lg-12">            <div class="card shadow-lg">
                 <div class="card-header text-white bg-warning d-flex">
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <h4 class="text-lg-start">
-                            APPROVE REQUEST
+                            EXCEPTION APPROVE FOR PAYMENTS
                         </h4>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
@@ -61,7 +57,7 @@
                             </div>
                             <br />
                             <div class="row">
-                                <table width="100%" id="poHdrGrid" class='table table-bordered table-striped dataTable dtr-inline'>
+                                <table width="100%" id="exceptionApproveForPaymentsGrid" class='table table-bordered table-striped dataTable dtr-inline'>
                                 </table>
                             </div>
                         </fieldset>
@@ -83,44 +79,41 @@
     //It will call this method when page is load.
     $(document).ready(async function () {
 
-        // bind the data into grid which is pending for Approve/Deny ---- Nuthan
-        
-        await BindPOHdrGrid();
+        // bind the Exceptional approve data into grid which is pending for Approve/Deny ---- Nuthan
+
+        await BindExceptionApprovalForPaymentGrid();
 
     });
     var poRecords = [];
 
-    async function BindPOHdrGrid() {
+    async function BindExceptionApprovalForPaymentGrid() {
         debugger
         try {
             //Get Method to Bind the data into grid datatable
             let data = await $.ajax({
-                url: '@Url.Action("GetRequestPendingForApproval", "REQUESTHDR")',
+                url: '@Url.Action("GetAllPaymentExceptionForApprove", "PAYMENTHDR")',
                 type: 'Get'
             });
 
             poRecords = data;
 
-            var table = new DataTable('#poHdrGrid', {
+            var table = new DataTable('#exceptionApproveForPaymentsGrid', {
                 data: data,
                 columns: [
                     {
-                        title: 'REQUEST NO',
-                        data: 'requestno',
+                        title: 'PAYMENT REQUEST NO',
+                        data: 'tranNo',
                         render: (data, type, row) => {
                             return '<input type="text" id="rowId" value="' + row.id + '" hidden /><a href="#"">' + data + '</a>';
                         }
                     },
-                    { title: 'REQUEST DATE', data: 'requestdate' },
-                    { title: 'CUTOMER NAME', data: 'customername' },
-                    { title: 'JOB NO', data: 'jobno' },
-                    { title: 'HAWB NO', data: 'hawbno' },
-                    { title: 'CHARGE 1', data: 'chargE1' },
-                    { title: 'AMOUNT 1', data: 'amounT1' },
-                    { title: 'CHARGE 2', data: 'chargE2' },
-                    { title: 'AMOUNT 2', data: 'amounT2' }, 
-                    { title: 'BAYAN NO', data: 'bayanno' },
-                    { title: 'TOTAL AMOUNT', data: 'totalrequestamount' },
+                    { title: 'PAYMENT REQUEST DATE', data: 'tranDate' },
+                    { title: 'PAYMENT TOTAL AMOUNT', data: "receiptAmount" },
+                    { title: 'REQUEST NO', data: "requestNo" },
+                    { title: 'REQUEST DATE', data: 'requestDate' },
+                    { title: 'CUSTOMER NAME', data: 'customerName' },
+                    { title: 'JOB NO', data: 'jobNo' },
+                    { title: 'REQUEST TOTAL AMOUNT', data: 'totalRequestAmount' },
                     {
                         title: 'APPROVE',
                         orderable: false,
@@ -145,15 +138,6 @@
                             return '<input type="text" name="approverComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
                         }
                     }
-                    // ,
-                    // {
-                    //     title: 'EXCEPTION APPROVE',
-                    //     orderable: false,
-                    //     data: null,
-                    //     render: function (data, type, row) {
-                    //         return '<input type="checkbox" disabled name="forExceptionApprove" />';
-                    //     }
-                    // }
                 ],
                 columnDefs: [
                     {
@@ -162,6 +146,20 @@
                         width: '75px',
                         render: function (data, type, row, meta) {
                             return moment(data).format('DD-MMM-yyyy')
+                        }
+                    },
+                    {
+                        targets: 4,
+                        type: 'moment',
+                        width: '75px',
+                        render: function (data, type, row, meta) {
+                            return moment(data).format('DD-MMM-yyyy')
+                        }
+                    },
+                    {
+                        targets: 2,
+                        render: function (data, type, row, meta) {
+                            return formatNumericData(data);
                         }
                     },
                     {
@@ -180,16 +178,6 @@
                 destroy: true
             });
 
-            $('#poHdrGrid tbody').on('change', 'input[type="radio"]', function () {
-                var row = $(this).closest('tr');
-                if ($(this).val() == 'Approved') {
-                    row.find('input[type="checkbox"]').prop('disabled', false);
-                } else if ($(this).val() == 'Deny') {
-                    row.find('input[type="checkbox"]').prop('disabled', true);
-                    row.find('input[type="checkbox"]').prop('checked', false);
-                }
-            });
-
         } catch (error) {
             console.log(error);
         }
@@ -202,8 +190,8 @@
         if (isValid) {
             await UpdateRecords();
 
-            // await BindPOHdrGrid();
-            loadPageWithParams('ApproveRequest', '', '', '@pageId');
+            // await BindExceptionApprovalForPaymentGrid();
+            loadPageWithParams('ExceptionApprovalForPayments', '', '', '@pageId');
         } else {
             alert('Please Give Comments For Denied Orders');
         }
@@ -212,7 +200,7 @@
 
         let isValid = true;
 
-        $('#poHdrGrid tbody tr').each(async function () {
+        $('#exceptionApproveForPaymentsGrid tbody tr').each(async function () {
 
             var rowId = $(this).find("input[id='rowId']").val();
 
@@ -230,20 +218,19 @@
 
     async function UpdateRecords() {
 
-        $('#poHdrGrid tbody tr').each(async function () {
+        $('#exceptionApproveForPaymentsGrid tbody tr').each(async function () {
 
             var rowId = $(this).find("input[id='rowId']").val();
 
             var isApproved = $(this).find("input[name='radio" + rowId + "']:checked").val();
             var comment = $(this).find("input[name='approverComment']").val();
-            var exceptionApprove = $(this).find("input[name='forExceptionApprove']").is(':checked');
 
             if (isApproved) {
                 try {
                     let data = await $.ajax({
-                        url: '@Url.Action("ApproveSelectedRequest", "REQUESTHDR")',
+                        url: '@Url.Action("ExceptionalApproveSelectedPayments", "PAYMENTHDR")',
                         type: 'Get',
-                        data: { id: rowId, approved: isApproved, comments: comment, ExceptionApprove: exceptionApprove }
+                        data: { id: rowId, approved: isApproved, comments: comment }
                     });
 
                 } catch (error) {
@@ -252,11 +239,10 @@
             }
         });
 
-        await BindPOHdrGrid();
+        await BindExceptionApprovalForPaymentGrid();
 
     }
     $('.maxLengthValidation').on('input paste', function () {
-        debugger
         var maxLength = $(this).attr('maxlength');
         var currentLength = $(this).val().length;
         var remaining = (maxLength - 1) - currentLength;

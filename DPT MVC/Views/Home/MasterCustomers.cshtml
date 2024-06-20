@@ -1,5 +1,9 @@
 @using DPT.MVC.Models
+@using System.Text.Json
+@using DPT.MVC.Helper
+@inject IConfiguration Configuration
 @{
+    string? NumberFieldRegex = Configuration.GetValue<string>("Regx:NumberFieldRegex");
     // Get the ViewBag.Mode value
     string mode = ViewBag.mode;
     string url = ViewBag.url;
@@ -153,7 +157,7 @@
                                 <div class="col-sm-4">
                                     <div class="mb-3">
                                         <label class="form-label" for="primaryContactNo">Primary Contact No @*<span class="text-danger"> *</span>*@</label>
-                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="50" name="primaryContactNo" id="primaryContactNo" type="text" placeholder="Enter primary contact no" value="" />
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="15" name="primaryContactNo" id="primaryContactNo" type="tel" placeholder="Enter primary contact no" value="" pattern="@NumberFieldRegex" />
                                     </div>
                                 </div>
 
@@ -175,7 +179,7 @@
                                 <div class="col-sm-4">
                                     <div class="mb-3">
                                         <label class="form-label" for="secondaryContactNo">Secondary Contact No @*<span class="text-danger"> *</span>*@</label>
-                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="50" name="secondaryContactNo" id="secondaryContactNo" type="text" placeholder="Enter secondary contact no" value="" />
+                                        <input class="form-control rounded-0 maxLengthValidation" maxlength="50" name="secondaryContactNo" id="secondaryContactNo" type="tel" placeholder="Enter secondary contact no" value="" pattern="@NumberFieldRegex" />
                                     </div>
                                 </div>
 
