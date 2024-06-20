@@ -55,18 +55,18 @@
         }
 
         /* .overlay {
-                                                                                            position: absolute;
-                                                                                            top: 0;
-                                                                                            left: 0;
-                                                                                            width: 100%;
-                                                                                            height: 100%;
-                                                                                            background: rgba(255, 255, 255, 0.8);
-                                                                                            z-index: 10;
-                                                                                            display: none;
-                                                                                        }
-                                                                                        .table-container {
-                                                                                            position: relative;
-                                                                                        } */
+                                                                                                            position: absolute;
+                                                                                                            top: 0;
+                                                                                                            left: 0;
+                                                                                                            width: 100%;
+                                                                                                            height: 100%;
+                                                                                                            background: rgba(255, 255, 255, 0.8);
+                                                                                                            z-index: 10;
+                                                                                                            display: none;
+                                                                                                        }
+                                                                                                        .table-container {
+                                                                                                            position: relative;
+                                                                                                        } */
 
     </style>
 </head>
@@ -864,15 +864,15 @@
         const newRow = document.createElement('tr');
 
         newRow.innerHTML = `
-                                           <td>
-                                               <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
-                                                   <option value="">--SELECT CHARGE--</option>
-                                                   ${CHARGESData.map(item => `<option value="${item.id}">${item.name} - [${item.type}]</option>`).join('')}
-                                               </select>
-                                           </td>
-                                           <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
-                                               <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t4TBLength"></td>
-                                       `;
+                                                   <td>
+                                                       <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
+                                                           <option value="">--SELECT CHARGE--</option>
+                                                           ${CHARGESData.map(item => `<option value="${item.id}">${item.name} - [${item.type}]</option>`).join('')}
+                                                       </select>
+                                                   </td>
+                                                   <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+                                                       <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t4TBLength"></td>
+                                               `;
 
         table.appendChild(newRow);
         $('.chosen-select').chosen();
@@ -895,15 +895,15 @@
         const newRow = document.createElement('tr');
 
         newRow.innerHTML = `
-                                           <td>
-                                               <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
-                                                   <option value="">--SELECT CHARGE--</option>
-                                                   ${CHARGESData.map(item => `<option value="${item.id}">${item.name} - [${item.type}]</option>`).join('')}
-                                               </select>
-                                           </td>
-                                           <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
-                                               <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t4TBLength"></td>
-                                       `;
+                                                   <td>
+                                                       <select name="CHARGE" class="status-dropdown chosen-select" style="width: 100%;">
+                                                           <option value="">--SELECT CHARGE--</option>
+                                                           ${CHARGESData.map(item => `<option value="${item.id}">${item.name} - [${item.type}]</option>`).join('')}
+                                                       </select>
+                                                   </td>
+                                                   <td><input name="AMOUNT" type="text" name="reviewerComment" oninput="validateNumericInput(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+                                                       <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation toUpperCaseString" maxlength="@t4TBLength"></td>
+                                               `;
 
         table.appendChild(newRow);
         $('.chosen-select').chosen();
@@ -1066,10 +1066,20 @@
 
     function checkDisplayofexception() {
         let isValid = true;
-        var exception1 = document.getElementById('exception1');
+        // var exception1 = document.getElementById('exception1');
 
-        // Check if the exception1 div is displayed
-        if (window.getComputedStyle(exception1).display === 'block') {
+        // // Check if the exception1 div is displayed
+        // if (window.getComputedStyle(exception1).display === 'block') {
+        //     if ($('#exceptionalremarks').val() == '') {
+        //         isValid = false;
+        //         return isValid;
+        //     }
+        // }
+        var amount1 = parseFloat($('#amount1').val()) || 0;
+        var amount2 = parseFloat($('#amount2').val()) || 0;
+        var totalRequestAmount = parseFloat($('#totalRequestamount').val()) || 0;
+
+        if (amount1 + amount2 > totalRequestAmount) {
             if ($('#exceptionalremarks').val() == '') {
                 isValid = false;
                 return isValid;
@@ -1080,6 +1090,7 @@
 
     $('#btnAdd').on('click', async function () {
         event.preventDefault();
+        debugger
         if (!validateForm() || !checkDisplayofexception()) {
             alert('Please fill all the required fields.')
             return;
@@ -1234,8 +1245,13 @@
                 }
             });
         }
-        loadPageWithParams('Paymetprocessing')
+        await loadForm();
     });
+
+    async function loadForm() {
+        alert('Record created successfully')
+        loadPageWithParams('GridMastersParam', '', '', '15')
+    }
 
     async function uploadFile1(headerId) {
 
