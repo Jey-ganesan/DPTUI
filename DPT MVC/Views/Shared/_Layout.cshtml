@@ -203,9 +203,6 @@
             <b>Version</b> 1.0
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script src="/plugins/jquery/jquery.min.js"></script>
     <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
@@ -234,6 +231,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="~/js/jquery.datatables.min.js"></script>
+    @* <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script> *@
+    <script src="~/js/datatables.colreorder.min.js"></script>
+    @* <script src="https://cdn.datatables.net/colreorder/1.7.0/js/dataTables.colReorder.min.js"></script> *@
+    <script src="~/js/datatables.responsive.min.js"></script>
+    @* <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script> *@
+    <script src="~/js/jquery.table2excel.min.js"></script>
+    @* <script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script> *@
+    <script src="~/js/select2.min.js"></script>
+    @* <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> *@
+    <script src="~/js/html2pdf.bundle.min.js"></script>
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script> *@
+    <script src="~/js/flatpickr.js"></script>
+    @* <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> *@
+    <script src="~/js/chosen.jquery.min.js"></script>
+    @* <script src="https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.jquery.min.js"></script> *@
+    <script src="~/js/jspdf.umd.min.js"></script>
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> *@
+    <script src="~/js/html2canvas.min.js"></script>
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> *@
+    <script src="~/js/loader.js"></script>
+    @* <script src="https://www.gstatic.com/charts/loader.js"></script> *@
+    <script src="~/js/sweetalert2@10.js"></script>
+    @* <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> *@
+    <script src="~/js/jstree.min.js"></script>
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/jstree.min.js"></script> *@
+
 
 
     @await RenderSectionAsync("Scripts", required: false)

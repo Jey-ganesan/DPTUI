@@ -182,7 +182,7 @@
                                         <label class="form-label">ATTACHMENTS</label>
                                     </div>
                                     <div class="col-sm-1">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter1">
+                                        <button type="button" class="btn btn-primary" id="Enablefile2" data-toggle="modal" data-target="#exampleModalCenter1">
                                             <i class="fa fa-paperclip" aria-hidden="true"></i>
                                         </button>
                                     </div>
@@ -238,7 +238,7 @@
                                         <label class="form-label">ATTACHMENTS</label>
                                     </div>
                                     <div class="col-sm-1">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter2">
+                                        <button type="button" class="btn btn-primary" id="Enablefile1" data-toggle="modal" data-target="#exampleModalCenter2">
                                             <i class="fa fa-paperclip" aria-hidden="true"></i>
                                         </button>
                                     </div>
@@ -503,7 +503,7 @@
 
             // $('#exceptionalremarks').val(RequestRecord.);
             BindReceipt1data(charge1data);
-            if (PaymentreceiptchargeRecord.length > 1) {
+            if (PaymentreceiptRecord.length > 1) {
                 var paymentreceipt2id = PaymentreceiptRecord[1].id
                 var charge2data = PaymentreceiptchargeRecord.filter(q => q.paymentreceiptid == paymentreceipt2id)
                 BindReceipt2data(charge2data)
@@ -511,6 +511,23 @@
                 $('#receipt2disable1').hide()
                 $('#receipt2disable2').hide()
             }
+            $("#Enablefile2").prop('disabled', false);
+            $("#Enablefile1").prop('disabled', false);
+            document.getElementById('fileUpload1').type = 'text'
+            document.getElementById('fileUpload2').type = 'text'
+            document.getElementById('fileUpload3').type = 'text'
+            document.getElementById('fileUpload11').type = 'text'
+            document.getElementById('fileUpload22').type = 'text'
+            document.getElementById('fileUpload33').type = 'text'
+            GetAttachmentFileforrecp1File1("PaymentProcessing1", PaymentreceiptRecord[0].id)
+            GetAttachmentFileforrecp1File2('PaymentProcessing2', PaymentreceiptRecord[0].id)
+            GetAttachmentFileforrecp1File3("PaymentProcessing3", PaymentreceiptRecord[0].id)
+            if (PaymentreceiptRecord.length > 1) {
+                GetAttachmentFileforrecp2File1('PaymentProcessing1', PaymentreceiptRecord[1].id)
+                GetAttachmentFileforrecp2File2("PaymentProcessing2", PaymentreceiptRecord[1].id)
+                GetAttachmentFileforrecp2File3('PaymentProcessing3', PaymentreceiptRecord[1].id)
+            }
+
 
         } catch (error) {
             console.log(error);
@@ -545,6 +562,144 @@
             searching: false,
             destroy: true
         })
+    }
+
+    async function GetAttachmentFileforrecp1File1(TransName, TransId) {
+
+        await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
+            .then(response => response.json())
+            .then(data4 => {
+                if (data4.length > 0) {
+                    $("#fileUpload1").val(data4[0].fileName);
+
+                    var downloadLink = $('<a>', {
+                        text: data4[0].fileName,
+                        href: '#',
+                        click: async function () {
+                            await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                        }
+                    });
+                    $('#fileUpload1').replaceWith(downloadLink);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    async function GetAttachmentFileforrecp1File2(TransName, TransId) {
+
+        await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
+            .then(response => response.json())
+            .then(data4 => {
+                if (data4.length > 0) {
+                    $("#fileUpload2").val(data4[0].fileName);
+
+                    var downloadLink = $('<a>', {
+                        text: data4[0].fileName,
+                        href: '#',
+                        click: async function () {
+                            await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                        }
+                    });
+                    $('#fileUpload2').replaceWith(downloadLink);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    async function GetAttachmentFileforrecp1File3(TransName, TransId) {
+
+        await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
+            .then(response => response.json())
+            .then(data4 => {
+                if (data4.length > 0) {
+                    $("#fileUpload3").val(data4[0].fileName);
+
+                    var downloadLink = $('<a>', {
+                        text: data4[0].fileName,
+                        href: '#',
+                        click: async function () {
+                            await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                        }
+                    });
+                    $('#fileUpload3').replaceWith(downloadLink);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    async function GetAttachmentFileforrecp2File1(TransName, TransId) {
+
+        await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
+            .then(response => response.json())
+            .then(data4 => {
+                if (data4.length > 0) {
+                    $("#fileUpload11").val(data4[0].fileName);
+
+                    var downloadLink = $('<a>', {
+                        text: data4[0].fileName,
+                        href: '#',
+                        click: async function () {
+                            await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                        }
+                    });
+                    $('#fileUpload11').replaceWith(downloadLink);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    async function GetAttachmentFileforrecp2File2(TransName, TransId) {
+
+        await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
+            .then(response => response.json())
+            .then(data4 => {
+                if (data4.length > 0) {
+                    $("#fileUpload22").val(data4[0].fileName);
+
+                    var downloadLink = $('<a>', {
+                        text: data4[0].fileName,
+                        href: '#',
+                        click: async function () {
+                            await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                        }
+                    });
+                    $('#fileUpload22').replaceWith(downloadLink);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    async function GetAttachmentFileforrecp2File3(TransName, TransId) {
+
+        await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
+            .then(response => response.json())
+            .then(data4 => {
+                if (data4.length > 0) {
+                    $("#fileUpload33").val(data4[0].fileName);
+
+                    var downloadLink = $('<a>', {
+                        text: data4[0].fileName,
+                        href: '#',
+                        click: async function () {
+                            await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                        }
+                    });
+                    $('#fileUpload33').replaceWith(downloadLink);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     }
 
     function populateDropdown(uniquePairs) {
@@ -1272,5 +1427,38 @@
     $('.toUpperCaseString').on('input', function () {
         $(this).val($(this).val().toLocaleUpperCase());
     });
+
+    async function DownLoadFileProcessed(id, fileName) {
+        event.preventDefault();
+        debugger;
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', `/Files/DownloadFile?id=${id}`, true);
+        xhr.responseType = 'blob';
+
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var blob = xhr.response;
+                var downloadLink = document.createElement('a');
+                downloadLink.href = window.URL.createObjectURL(blob);
+                downloadLink.setAttribute('download', fileName);
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            } else {
+                alert('File Not Found.');
+            }
+        };
+
+
+        xhr.onerror = function () {
+            console.error('Network error occurred while downloading the file.');
+        };
+
+
+        xhr.send();
+
+
+    }
 
 </script>

@@ -45,11 +45,11 @@
                     <div class="row">
                         <div class="col-md-4"></div>
                         <div class="col-md-4">
-                            <button type='button' class='btn btn-primary rounded-0 me-2' onclick="getReportData(false,false)">
+                            <button type='button' class='btn btn-primary rounded-0 me-2' onclick="getReportData(false)">
                                 View
                             </button>
                             &nbsp;
-                            <button type='reset' class='btn btn-success rounded-0 me-2' onclick="getReportData(true,false)">
+                            <button type='reset' class='btn btn-success rounded-0 me-2' onclick="getReportData(true)">
                                 Download
                             </button>
                             &nbsp;
@@ -83,7 +83,7 @@
 
     $(document).ready(function () {
         $('#loader').show();
-        fetch("/Reports/GetReport")
+        fetch("/Reports/GetReports")
             .then(response => response.json())
             .then(data => {
                 data.forEach(key => {
@@ -241,7 +241,7 @@
     }
 
     var mailId;
-    function getReportData(view, isMail) {
+    function getReportData(view) {
         $('#loader').show();
         var urlParams = {};
 
@@ -266,12 +266,9 @@
 
         urlParams['reportId'] = reportId;
         var tmp = JSON.stringify(urlParams);
-
-        fetch(`/Reports/GetReportData1?model=${tmp}&mailId=${isMail}&emailId=${mailId}&reportName=${reportName}`)
+        fetch(`/Reports/GetReportData1?model=${tmp}`)
             .then(response => response.json())
             .then(response => {
-
-                $('#loader').hide();
                 if (response.length > 0) {
                     $('#reportTable').hide();
                     renderGrid(response);
@@ -286,8 +283,8 @@
                     alert('No Data Found..');
                 }
             })
-            .catch(error =>
-                $('#loader').hide());
+            .catch(error => console.error("Error fetching Report data:", error));
+        $('#loader').hide();
     }
 
     function renderGrid(data) {
@@ -301,8 +298,7 @@
             th.textContent = key;
             th.classList.add("sorting");
             th.classList.add("sorting_asc");
-            // th.classList.add("bg-warning");
-            th.style.backgroundColor = "@Configuration["Theme:Color"]";
+             th.classList.add("bg-warning");
             th.style.color = "black";
             th.setAttribute("scope", "col");
             document.getElementById("tableHead").appendChild(th);

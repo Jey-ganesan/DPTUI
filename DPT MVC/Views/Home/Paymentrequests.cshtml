@@ -299,17 +299,18 @@
         await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
             .then(response => response.json())
             .then(data4 => {
-                debugger
-                $("#bayanCopy").val(data4[0].fileName);
+                if (data4.length > 0) {
+                    $("#bayanCopy").val(data4[0].fileName);
 
-                var downloadLink = $('<a>', {
-                    text: data4[0].fileName,
-                    href: '#',
-                    click: async function () {
-                        await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
-                    }
-                });
-                $('#bayanCopy').replaceWith(downloadLink);
+                    var downloadLink = $('<a>', {
+                        text: data4[0].fileName,
+                        href: '#',
+                        click: async function () {
+                            await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                        }
+                    });
+                    $('#bayanCopy').replaceWith(downloadLink);
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);
