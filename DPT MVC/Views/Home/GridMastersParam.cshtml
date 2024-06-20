@@ -1,0 +1,525 @@
+﻿@using DPT.MVC.Models
+@using DPT.MVC.Helper
+@using Microsoft.Extensions.Configuration;
+@{
+    string url = ViewBag.url;
+    int pageId = ViewBag.pageId;
+    Access access = ViewBag.access;
+    // Inject IConfiguration using @inject in your Razor view
+    @inject IConfiguration Configuration
+    int maxDataLength = Configuration.GetValue<int>("CharacterSettings:MaxLength");
+    int defaultDays = Configuration.GetValue<int>("Date:defaultFilterRange");
+    int decimalRoundOff = Configuration.GetValue<int>("NumberSettings:DecimalRoundOff");
+    int userId = Convert.ToInt32(SessionHelper.GetStringValueFromSession(Context, "UserId"));
+}
+<style>
+    /* Container for the table */
+    #tableContainer {
+        width: 100%;
+        overflow-x: auto;
+        position: relative; /* Add this */
+        max-height: 72vh; /* Adjust the height as needed */
+        overflow-y: auto;
+    }
+
+    /* Fix the first column and last column */
+    #dataTable tr td:first-child,
+    #dataTable tr th:first-child,
+    #dataTable tr td:last-child,
+    #dataTable tr th:last-child {
+        position: -webkit-sticky;
+        position: sticky;
+        left: 0;
+        right: 0; /* Added right: 0; to make the last column sticky */
+
+        min-width: 500px; /* Adjust as needed */
+        border-left: 1px solid #ccc; /* Add border to the left of the first column */
+        border-right: 1px solid #ccc;
+    }
+
+    /* Ensure that the first and last columns are in front */
+    #dataTable th:first-child,
+    #dataTable td:first-child {
+        z-index: 3;
+    }
+    /* Style even rows in the first and last columns */
+    #dataTable tr:nth-child(even) td:first-child,
+    #dataTable tr:nth-child(even) th:first-child,
+    #dataTable tr:nth-child(even) td:last-child,
+    #dataTable tr:nth-child(even) th:last-child {
+        background-color: #d0d0d0;
+    }
+
+    #dataTable tr:nth-child(odd) td:first-child,
+    #dataTable tr:nth-child(odd) th:first-child,
+    #dataTable tr:nth-child(odd) td:last-child,
+    #dataTable tr:nth-child(odd) th:last-child {
+        background-color: #f2f2f2;
+    }
+
+    #dataTable th:last-child,
+    #dataTable td:last-child {
+        z-index: 2;
+    }
+
+    /* The rest of the columns scroll horizontally */
+    #dataTable {
+        white-space: nowrap;
+        table-layout: fixed;
+    }
+
+    /* Add borders and styling to the table */
+    #dataTable {
+        border-collapse: collapse;
+        width: 100%;
+        border: 1px solid #ccc; /* Add border to the table */
+    }
+
+        /* Style the table header (optional) */
+        #dataTable th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Style the alternating rows (optional) */
+        #dataTable tr:nth-child(even) {
+            background-color: #d0d0d0; /* Change ## to # */
+        }
+
+        #dataTable thead {
+            position: sticky;
+            top: 0.1px;
+            z-index: 100;
+        }
+
+        #dataTable thead, th {
+            text-align: center;
+        }
+
+    span.details-control {
+        background: url('../../themes/images/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.shown span.details-control {
+        background: url('../../themes/images/details_close.png') no-repeat center center;
+    }
+</style>
+
+<section class='content' style="padding-top: 10px">
+    <div class='container-fluid'>
+        <div class='card card-warning'>
+            <div class='card-header'>
+                <div class='row' style="display: flex; justify-content: space-between">
+                    <div class='col-md-4 col-sm-6 col-lg-4'>
+                        <h4 class='text-lg-start'>
+                            <span id="caption"></span>
+                        </h4>
+                    </div>
+                    <div class='col-md-4 col-sm-6 col-lg-4' style="display: flex;">
+                        <div id="customFilterContainer">
+                        </div>
+                        <div id="headerr"></div>
+                        <div id="headerr1"></div>
+
+                    </div>
+
+                    @if (access.add)
+                    {
+                        <div class='col-md-4 col-sm-6 col-lg-1'>
+                            <a href='#' id="createPage" class='btn btn-outline-primary btn-sm float-sm-center'>
+                                Create
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class='card-body'>
+                <div id="dateSpace"></div>
+                <div class='row'>
+                    <div class='col-lg-12'>
+                        <div class="table-container">
+                            <div id="tableContainer">
+                                <div class="table-wrapper">
+                                    <table id="dataTable">
+                                        <!-- Your table content goes here -->
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+
+    localStorage.setItem('prevPage', JSON.stringify(['', '', '', '']));
+
+    document.getElementById('loader').style.display = 'block';
+    debugger
+    fetch(`/Home/GetGridData?id=@pageId&param1=@userId`).then(response => response.json()).then(data => onSuccess(data)).finally(() => {
+        document.getElementById('loader').style.display = 'none';
+    });
+    var page = '';
+    var tabType = '';
+
+    function onSuccess(data) {
+        debugger
+        document.getElementById('loader').style.display = 'block';
+        //var dateFieldName = data[0].dateFieldName;
+        if (typeof data[0].dateFieldName !== "undefined" && data[0].dateFieldName !== "") {
+
+            const datePicker = $('<input type="text" name="daterange" class="form-control" id="dateRange" value="" />');
+            const searchButton = $('<button class="btn btn-primary" id="searchButton" onClick="filterFunc()">Filter</button>');
+
+            $('#headerr').append('<div id="datePickers" class="form-group" style="display:flex;margin-bottom:0rem"></div>');
+            $('#datePickers')
+                //.append('<label class="form-label" for="dateRange">Select Period:</label>')
+                .append('<div class="input-group col-lg-12" style="display: flex;column-gap:12px; "></div>');
+            if (typeof data[0].checkColumn !== "undefined" && data[0].checkColumn !== "") {
+                $('.input-group')
+                    .append(datePicker)
+            } else {
+                $('.input-group')
+                    .append(datePicker).append(searchButton);
+            }
+
+
+            // Calculate startDate as today minus 30 days
+            var startDate = moment().subtract(@defaultDays, 'days');
+            // Calculate endDate as today
+            var endDate = moment();
+
+            // Initialize the DateRangePicker with the calculated startDate and endDate
+            $("#dateRange").daterangepicker({
+                startDate: startDate,
+                endDate: endDate,
+                locale: {
+                    format: 'DD-MMM-YYYY'
+                }
+            });
+        }
+        if (typeof data[0].checkColumn !== "undefined" && data[0].checkColumn !== "") {
+            var dropdownValues = data[0].checkColumn.split(";");
+            const selectDropdown = $('<select class="form-control" id="statusDropdown"></select>');
+            const searchButton = $('<button class="btn btn-primary" id="searchButton" onClick="filterFunc()">Filter</button>');
+            // Iterate over the dropdownValues array and add options dynamically
+            dropdownValues.forEach(function (value) {
+                // Trim the value to remove leading/trailing whitespace
+                value = value.trim();
+
+                // Append an option element for each value
+                selectDropdown.append($('<option>', {
+                    value: value,
+                    text: value
+                }));
+            });
+
+            $('#headerr1').append('<div id="statusPicker" class="form-group" style="display:flex;margin-bottom:0rem"></div>');
+            $('#statusPicker')
+                .append('<div class="input-group statusDrop col-lg-12" style="display: flex;column-gap:12px; "></div>');
+            $('.statusDrop').append(selectDropdown).append(searchButton);;
+
+            //
+            // Add a change event listener to the dropdown
+            //selectDropdown.on('change', function () {
+            //    // Get the selected value
+            //    const selectedValue = $(this).val();
+
+            //    // Call your function with the selected value as a parameter
+            //    changeStatus(selectedValue);
+            //});
+        }
+
+        page = data[0].page;
+        tabType = data[0].tabType;
+
+        $("#caption").text('LIST OF ' + data[0].caption);
+
+        bindTable(data);
+        document.getElementById('loader').style.display = 'none';
+
+    }
+
+    $("#createPage").on('click', function () {
+        debugger
+        loadPageWithParams(page, 0, '', @pageId)
+    });
+    function changeStatus(selectedValue) {
+        //console.log(selectedValue);
+        //debugger;
+        //document.getElementById('loader').style.display = 'block';
+
+        //const queryParams = `id=@pageId&from=${encodeURIComponent('')}&to=${encodeURIComponent('')}&status=${encodeURIComponent(selectedValue)}`;
+        //const url = `/Home/GetGridData?${queryParams}`;
+
+        //fetch(url)
+        //    .then(response => response.json()).then(data => bindTable(data)).finally(() => {
+        //        document.getElementById('loader').style.display = 'none';
+        //    });
+
+    }
+    function filterFunc() {
+        debugger;
+        document.getElementById('loader').style.display = 'block';
+        var selectedValue = $('#statusDropdown').val();
+        var fromDate = $("#dateRange").data("daterangepicker").startDate.format('YYYY-MM-DD');
+        var toDate = $("#dateRange").data("daterangepicker").endDate.format('YYYY-MM-DD');
+
+        const queryParams = `id=@pageId&from=${encodeURIComponent(fromDate)}&to=${encodeURIComponent(toDate)}&status=${encodeURIComponent(selectedValue)}`;
+        const url = `/Home/GetGridData?${queryParams}`;
+
+        fetch(url)
+            .then(response => response.json()).then(data => bindTable(data)).finally(() => {
+                document.getElementById('loader').style.display = 'none';
+            });
+
+    };
+
+    function bindTable(data) {
+        //i want to bind only the table data
+
+        $('#tableContainer').empty(); // Clear previous content
+
+        var tableData = data[0].resultData;
+        var columnWidths = data[0].widths.split(',');
+        var columnDataTypes = [];
+        if (typeof data[0].dataType === 'string') {
+            columnDataTypes = data[0].dataType.split(';');
+        }
+        //For Test Purpose only
+        if (tableData.length == 0) {
+            return false;
+        }
+        tableData = tableData.sort((a, b) => b.SLNO - a.SLNO);
+        //console.log(columnDataTypes);
+        const columns = Object.keys(tableData[0]).filter(key => key !== 'SLNO').map((key, index) => {
+            const width = parseInt(columnWidths[index]);
+            const dataType = columnDataTypes[index];
+            return {
+                title: formatColumnName(key),
+                data: key,
+                width: width !== 0 ? width : null, // Set column width or null to hide
+                render: function (data, type, row, meta) {
+                    if (typeof data == 'object') {
+                        return ' ';
+                    }
+                    if (meta.col === 0) {
+                        if (type === 'display') {
+                            if (data === null) {
+                                return ' ';
+                            }
+                            var displayData = data;
+                            var maxCharacters = @maxDataLength;
+                            if (typeof dataType !== 'undefined' && dataType.includes('text-')) {
+                                maxCharacters = dataType.split('-')[1];
+                            }
+                            if (data.length > maxCharacters) {
+                                displayData = data.substr(0, maxCharacters) + '...';
+                            }
+    @if (access.edit)
+    {
+        @:var child = '';
+        @:tabType == "Header" ? child = '<span class="details-control">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;' : '';
+        @:return `${child}<span style="cursor: pointer;color:#007bff;" href = "#"title="${data}" onclick="loadPageWithParams('${page}', ${row.SLNO}, 'View', @pageId)">${displayData}</span>`;
+    }
+                            return data;
+                        }
+                        return data;
+                    } else {
+                        if (type === 'display') {
+                            if (data === null) {
+                                return ' ';
+                            }
+                            if (dataType === 'number') {
+                                // Apply left alignment for number columns
+                                return '<div style="text-align: right;">' + formatNumericData(data) + '</div>';
+                            }
+                            else if (typeof dataType !== 'undefined' && dataType.includes('text-')) {
+                                var maxCharacter = dataType.split('-')[1];
+
+                                if (data.length > maxCharacter) {
+                                    // Display the first 10 characters with a tooltip
+
+                                    return '<div style="text-align: left;" title="' + data + '">' + data.substr(0, maxCharacter) + '...</div>';
+                                } else {
+                                    // Display the data as is
+                                    return '<div style="text-align: left;">' + data + '</div>';
+                                }
+                            }
+                            else {
+                                if (data.length > @maxDataLength) {
+                                    // Display the first 10 characters with a tooltip
+
+                                    return '<div style="text-align: left;" title="' + data + '">' + data.substr(0, @maxDataLength) + '...</div>';
+                                } else {
+                                    // Display the data as is
+                                    return '<div style="text-align: left;">' + data + '</div>';
+                                }
+                            }
+                        }
+                        return data;
+                    }
+
+                }
+            };
+        });
+        columns.push({
+            title: 'Actions',
+            render: renderActions,
+            width: 100
+        });
+
+        function renderActions(data, type, row) {
+
+            var actions = '';
+    @if (access.view)
+    {
+        @:actions += '<a href="#" title="View" onclick="loadPageWithParams(\'' + page + '\', ' + row.SLNO + ', \'View\', @pageId)"><i class="fa fa-eye"></i></a>&nbsp;';
+    }
+
+    @if (access.edit)
+    {
+        // @:actions += '<a href="#" title="Edit" onclick="loadPageWithParams(\'' + page + '\', ' + row.SLNO + ', \'Edit\',@pageId)"><i class="fa fa-pencil"></i></a>';
+    }
+
+                                                                return actions;
+        }
+
+        function formatColumnName(columnName) {
+            return columnName.replace(/([a-z])([A-Z])/g, '$1 $2');
+        }
+
+        $('#tableContainer').append('<table id="dataTable" class="table table-bordered table-striped dataTable dtr-inline"></table>');
+
+        var table = $('#dataTable').DataTable({
+            data: tableData,
+            autoWidth: false,
+            columns: columns,
+            paging: true,
+            searching: true,
+            ordering: false,
+            colReorder: false,
+            //responsive: true,
+            destroy: true,
+        });
+
+        $('#dataTable tbody').on('click', '.details-control', async function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open; close it
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Open this row with your content
+                var element = await formatChildRowData(row.data());
+                row.child(element).show();
+                tr.addClass('shown');
+            }
+        });
+
+        async function formatChildRowData(data) {
+            debugger;
+            try {
+                const response = await fetch('/Home/DrilDownDataForGrid?menuSlNo=@pageId&tranId=' + data.SLNO);
+                const rawData = await response.json();
+
+                var allData = rawData[0];
+
+                var tableHtml = '<p><h5>' + allData.caption + '</h5></p>';
+
+                var res = allData.resultData;
+
+                let keys = Object.keys(res[0]);
+                keys.pop();
+
+                tableHtml += '<hr />';
+
+                //tableHtml += '<table>';
+                //tableHtml += '<tr>';
+                //keys.forEach(item => {
+                //    tableHtml += '<th>'+ item +'</th>';
+                //});
+                //tableHtml += '</tr>';
+
+                //res.forEach(item => {
+                //    tableHtml += '<tr style="background-color:white;">';
+
+                //    keys.forEach(key => {
+                //        tableHtml += '<td>' + item[key] + '</td>';
+                //    });
+
+                //    tableHtml += '</tr>';
+                //});
+                //tableHtml += '</table>';
+
+                tableHtml += '<div class="row">'
+                keys.forEach(item => {
+                    tableHtml += '<div class="col"><b>' + item + '</b></div>';
+                });
+                tableHtml += '</div>'
+
+                res.forEach(item => {
+                    tableHtml += '<hr />';
+                    tableHtml += '<div class="row">';
+
+                    keys.forEach(key => {
+                        tableHtml += '<div class="col">' + item[key] + '</div>';
+                    });
+
+                    tableHtml += '</div>';
+                });
+
+                return tableHtml;
+            } catch (error) {
+                console.error(error);
+                return '';
+            }
+        }
+
+
+        $("#customFilterContainer").empty();
+        $(".dataTables_filter").hide();
+
+        // Move the default filter controls to the custom container
+        $(".dataTables_filter input").appendTo("#customFilterContainer");
+        $("#customFilterContainer input")
+            .attr("placeholder", "Search") // Add placeholder text
+            .css({
+                "border": "1px solid #ccc",
+                "padding": "6px",
+                "border-radius": "5px",
+                "width": "200px", // Adjust width as needed
+            });
+        var dataTableLengthElement = document.getElementById('dataTable_length');
+        var dataTableInfoElement = document.getElementById('dataTable_info');
+        var dataTablePaginateElement = document.getElementById('dataTable_paginate');
+
+        // Add the desired CSS properties as inline styles
+        //dataTablePaginateElement.style.position = 'sticky';
+        //dataTablePaginateElement.style.right = '62%';
+        dataTableInfoElement.style.position = 'sticky';
+        dataTableInfoElement.style.left = '2px';
+        dataTableLengthElement.style.position = 'sticky';
+        dataTableLengthElement.style.left = '2px';
+    }
+    //function formatNumericData(value) {
+    //    // Check if the value is a number
+    //    var roundOff = @decimalRoundOff;
+    //    if (!isNaN(parseFloat(value))) {
+    //        // Check if it's an integer
+    //        if (Number.isInteger(value)) {
+    //            return value.toLocaleString('en-US', { minimumFractionDigits: roundOff, maximumFractionDigits: roundOff }); // Format to two decimal places
+    //        } else {
+    //            return parseFloat(value).toLocaleString('en-US', { minimumFractionDigits: roundOff, maximumFractionDigits: roundOff }); // Format to two decimal places
+    //        }
+    //    }
+    //    return value; // Return as is if not a number
+    //}
+</script>

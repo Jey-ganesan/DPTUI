@@ -30,6 +30,7 @@ try
     // Add services to the container.
     builder.Services.AddControllersWithViews();
     builder.Services.AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>();
+    builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
     builder.Services.AddSession(option =>
     {
