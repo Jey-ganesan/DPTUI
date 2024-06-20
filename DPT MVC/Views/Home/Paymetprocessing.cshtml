@@ -1178,60 +1178,63 @@
             }
         });
 
-        const PAYMENTHDRID2 = res1.hdrid;
-        var headerdata22 = {
-            HDRID: PAYMENTHDRID2,
-            REQUESTID: requestid,
-            RECEIPTNO: $('#receiptNo2').val(),
-            RECEIPTDATE: $('#receiptDate2').val(),
-            RECEIPTAMOUNT: $('#amount2').val(),
-            REMARKS1: $('#remarks1rec2').val()
+        if ($('#receiptNo2').val() !== '') {
+            const PAYMENTHDRID2 = res1.hdrid;
+            var headerdata22 = {
+                HDRID: PAYMENTHDRID2,
+                REQUESTID: requestid,
+                RECEIPTNO: $('#receiptNo2').val(),
+                RECEIPTDATE: $('#receiptDate2').val(),
+                RECEIPTAMOUNT: $('#amount2').val(),
+                REMARKS1: $('#remarks1rec2').val()
+            }
+            const res22 = await $.ajax({
+                url: '@Url.Action("SavePAYMENTRECEIPTS", "PAYMENTRECEIPTS")',
+                method: 'POST',
+                data: headerdata22
+            });
+
+            const PAYMENTRECEIPTID2 = res22.hdrid;
+
+            await uploadFile11(PAYMENTRECEIPTID2);
+            await uploadFile22(PAYMENTRECEIPTID2);
+            await uploadFile33(PAYMENTRECEIPTID2);
+
+            const rows2 = document.querySelectorAll('#itemGrid2 tbody tr');
+            rows2.forEach(async (row) => {
+                const charge = row.querySelector('select[name="CHARGE"]').value;
+                const amount = row.querySelector('input[name="AMOUNT"]').value;
+                const remarks1 = row.querySelector('input[name="REMARKS1"]').value;
+
+                let hasValues = false;
+
+                if (charge !== '' && amount !== '') {
+                    hasValues = true;
+                } else {
+                    row.remove();
+                }
+
+                if (hasValues) {
+
+                    var headerdata3 = {
+                        CHARGETYPEID: charge,
+                        AMOUNT: amount,
+                        REMARKS1: remarks1,
+                        PAYMENTHDRID: PAYMENTHDRID2,
+                        PAYMENTRECEIPTID: PAYMENTRECEIPTID2,
+                        REQUESTID: requestid,
+
+                    };
+
+                    await $.ajax({
+                        url: '@Url.Action("SavePAYMENTRECEIPTCHARGES", "PAYMENTRECEIPTCHARGES")',
+                        method: 'POST',
+                        data: headerdata3
+                    });
+                }
+            });
         }
-        const res22 = await $.ajax({
-            url: '@Url.Action("SavePAYMENTRECEIPTS", "PAYMENTRECEIPTS")',
-            method: 'POST',
-            data: headerdata22
-        });
-
-        const PAYMENTRECEIPTID2 = res22.hdrid;
-
-        await uploadFile11(PAYMENTRECEIPTID2);
-        await uploadFile22(PAYMENTRECEIPTID2);
-        await uploadFile33(PAYMENTRECEIPTID2);
-
-        const rows2 = document.querySelectorAll('#itemGrid2 tbody tr');
-        rows2.forEach(async (row) => {
-            const charge = row.querySelector('select[name="CHARGE"]').value;
-            const amount = row.querySelector('input[name="AMOUNT"]').value;
-            const remarks1 = row.querySelector('input[name="REMARKS1"]').value;
-
-            let hasValues = false;
-
-            if (charge !== '' && amount !== '') {
-                hasValues = true;
-            } else {
-                row.remove();
-            }
-
-            if (hasValues) {
-
-                var headerdata3 = {
-                    CHARGETYPEID: charge,
-                    AMOUNT: amount,
-                    REMARKS1: remarks1,
-                    PAYMENTHDRID: PAYMENTHDRID2,
-                    PAYMENTRECEIPTID: PAYMENTRECEIPTID2,
-                    REQUESTID: requestid,
-
-                };
-
-                await $.ajax({
-                    url: '@Url.Action("SavePAYMENTRECEIPTCHARGES", "PAYMENTRECEIPTCHARGES")',
-                    method: 'POST',
-                    data: headerdata3
-                });
-            }
-        });
+        loadPageWithParams('Paymetprocessing')
     });
 
     async function uploadFile1(headerId) {
