@@ -46,6 +46,10 @@
                                         <button style="width: 275px; height: 40px; border-radius: 5px; color: #fff; background-color: #007bff; border: none; font-size: 16px; cursor: pointer;" class="btn btn-primary mt-3">
                                             Login
                                         </button>
+                                        @if (!string.IsNullOrEmpty(msg))
+                                        {
+                                            <p id="message" class="text-muted" style="margin-top: 10px; color:red;font-size: 12px;">@msg</p>
+                                        }
                                         <p class="small mb-5 pb-lg-3 ms-5" style="margin-top: 0px;">
                                             @*<a style="text-decoration: none; color: #6c757d; font-size: 12px;" class="text-muted" href="#!">
                                             Forgot
@@ -68,9 +72,12 @@
     document.addEventListener("DOMContentLoaded", function () {
         var mainDiv = document.getElementById("main");
         mainDiv.style.opacity = "1"; // Change opacity to 1 to trigger the animation
+        var message = document.getElementById("message");
+        if (message) {
+            setTimeout(function () {
+                message.style.display = 'none';
+            }, 3000); // 3 seconds
+        }
     });
-    @if (!string.IsNullOrEmpty(msg))
-    {
-        @:alert('@msg');
-    }
+
 </script>

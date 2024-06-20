@@ -62,7 +62,11 @@ namespace DPT.MVC.Controllers
                         //ViewBag.ReportData = GetReport();
                         return RedirectToAction("Index");
                     }
-                    return RedirectToAction("Index");
+                    else
+                    {
+                        ViewBag.msg = _configuration["InvalidCredentialMsg:msg"];
+                        return View("Login");
+                    }
 
                 }
 
@@ -90,7 +94,7 @@ namespace DPT.MVC.Controllers
                 var token = HttpContext.Session.GetString("Token");
                 if (string.IsNullOrEmpty(token))
                 {
-                    return View("Login");
+                    return View("Login");       
                 }
                 //var menuIds = permission.Select(x => x.menuId).ToList();
                 var response = await client.GetAsync("/api/menus");
