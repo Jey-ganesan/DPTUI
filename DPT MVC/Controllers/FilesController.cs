@@ -5,9 +5,9 @@ using Microsoft.Extensions.Primitives;
 
 namespace DPT.MVC.Controllers
 {
-    public class FileController : Controller
+    public class FilesController : Controller
     {
-        private readonly ILogger<FileController> _logger;
+        private readonly ILogger<FilesController> _logger;
         private readonly IConfiguration _configuration;
 
         private readonly IHttpClientFactory _httpClientFactory;
@@ -18,7 +18,7 @@ namespace DPT.MVC.Controllers
         public static List<MenuInfo> menus = new List<MenuInfo>();
 
 
-        public FileController(ILogger<FileController> logger, IConfiguration configuration, FileExtensionContentTypeProvider fileExtensionContentProvider,IHttpClientFactory httpClientFactory)
+        public FilesController(ILogger<FilesController> logger, IConfiguration configuration, FileExtensionContentTypeProvider fileExtensionContentProvider,IHttpClientFactory httpClientFactory)
         {
             _FileExtentionContentProvider = fileExtensionContentProvider;
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));

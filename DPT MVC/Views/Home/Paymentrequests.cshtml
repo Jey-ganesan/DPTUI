@@ -10,6 +10,7 @@
     int t4TBLength = Configuration.GetValue<int>("CharacterSettings:T4TypeTextbox");
     int t5TBLength = Configuration.GetValue<int>("CharacterSettings:T5TypeTextbox");
     string? dateFormat = Configuration.GetValue<string>("Date:dateFormat");
+    string? dateFormatForbinding = Configuration.GetValue<string>("Date:dateFormatForbinding");
     string mode = ViewBag.mode;
     string url = ViewBag.url;
     int pageId = ViewBag.pageId;
@@ -50,12 +51,12 @@
         }
 
         /* #requestHdrGrid tbody tr:nth-child(odd) {
-                    background-color: #d0d0d0;
-                }
+                                                    background-color: #d0d0d0;
+                                                }
 
-                #requestHdrGrid tbody tr:nth-child(even) {
-                    background-color: #f2f2f2;
-                } */
+                                                #requestHdrGrid tbody tr:nth-child(even) {
+                                                    background-color: #f2f2f2;
+                                                } */
 
     </style>
 </head>
@@ -67,20 +68,27 @@
                 <div class="card-header text-white bg-warning d-flex">
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <h4 class="text-lg-start">
-                            PAYMENT REQUEST
+                            @if (mode == "View")
+                            {
+                                @:VIEW PAYMENT DETAILS
+                            }
+                            else
+                            {
+                                @:PAYMENT REQUEST
+                            }
                         </h4>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <span class="text-danger"> * Required fields</span>
                     </div>
-                    <div class='col-md-4 col-sm-6 col-lg-1'>
-                        <a href='#' id="viewrequest" class='btn btn-outline-primary btn-sm float-sm-center'>
-                            View Requests
-                        </a>
-                    </div>
+                    @*                     <div class='col-md-4 col-sm-6 col-lg-1'>
+                    <a href='#' id="viewrequest" class='btn btn-outline-primary btn-sm float-sm-center'>
+                    View Requests
+                    </a>
+                    </div> *@
                 </div>
                 <div class="card-body">
-                    <form id="countryForm">
+                    <form id="Requestform">
                         <fieldset>
                             <div class="row">
                             </div>
@@ -109,13 +117,102 @@
                             </div>
                         </fieldset>
                     </form>
-                    <br />
+                    <form id="Formview" style="display:none">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="requestno">REQUEST NO</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control rounded-0" name="requestno" id="requestno" type="text" disabled />
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="requestdate">REQUEST DATE</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control rounded-0" name="date" id="requestdate" type="date" disabled />
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="jobNo">JOB NO</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control rounded-0" name="jobNo" id="jobNo" type="text" disabled />
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="hawb">HAWB</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control rounded-0" name="hawb" id="hawb" type="text" disabled />
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="customer">CUSTOMER</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control rounded-0" name="customer" id="customer" type="text" disabled />
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="charge1">CHARGE 1</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control rounded-0" name="charge1" id="charge1" type="text" disabled />
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="amount1">AMOUNT 1</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control rounded-0" name="amount1" id="amount1" type="number" disabled />
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="charge2">CHARGE 2</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control rounded-0" name="charge2" id="charge2" type="text" disabled />
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="amount2">AMOUNT 2</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control rounded-0" name="amount2" id="amount2" type="number" disabled />
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="totalAmount">TOTAL AMOUNT</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control rounded-0" name="totalAmount" id="totalAmount" type="number" disabled />
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="bayanNo">BAYAN NO</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control rounded-0" name="bayanNo" id="bayanNo" type="text" disabled />
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="form-label" for="bayanCopy">UPLOAD BAYAN COPY</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control rounded-0" name="bayanCopy" id="bayanCopy" type="text" disabled />
+                                </div>
+                            </div>
+                            <br />
+                        </fieldset>
+                    </form>
                     <div class="row">
-                        <div class="col-sm-1">
-                            <button class="btn btn-outline-primary" id="addRowBtn">Add More Rows</button>
-                        </div>
-                        <div class="col-md-1">
-                            <button class="btn btn-primary" onclick="SubmitrequestedRecord()">Submit</button>
+                        <div class="col-sm-12">
+                            @if (mode != "View")
+                            {
+                                @:<button id="addRowBtn" class="btn btn-primary rounded-0 me-2">Add More Rows</button>
+                                @:<button onclick="SubmitrequestedRecord()" class="btn btn-primary rounded-0 me-2">Submit</button>
+                            }
+                            <a class="btn btn-warning rounded-0 me-2" href="#" onclick="loadPageWithParams('GridMastersParam','','',@ViewBag.pageId)">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -126,11 +223,16 @@
 <script type="text/javascript">
 
     $(document).ready(async function () {
-        await Customerdata();
-        // await Currencydata();
-        await Chargesdata();
-        for (let i = 0; i < 5; i++) {
-            await addRow();
+        if ('@mode' == 'View') {
+            $('#Requestform').hide();
+            await BindDatatoForm(@ViewBag.paramID);
+        } else {
+            await Customerdata();
+            // await Currencydata();
+            await Chargesdata();
+            for (let i = 0; i < 5; i++) {
+                await addRow();
+            }
         }
     });
 
@@ -160,39 +262,126 @@
         });
     }
 
+    async function BindDatatoForm(Hdrid) {
+        try {
+            let RequestRecord = await $.ajax({
+                url: '@Url.Action("GetRequestToviewByid", "REQUESTHDR")',
+                type: 'Get',
+                data: { Hdrid: Hdrid }
+            });
+            
+            await GetAttachmentFile('PaymentRequest', Hdrid)
+
+            $('#Formview').show();
+
+            var dateString = RequestRecord.requestdate
+            var Formateddate = dateString.split('T')[0]
+            Flatpicker(Formateddate);
+
+            $('#requestno').val(RequestRecord.requestno);
+            $('#jobNo').val(RequestRecord.jobno);
+            $('#hawb').val(RequestRecord.hawbno);
+            $('#customer').val(RequestRecord.customername);
+            $('#charge1').val(RequestRecord.chargE1);
+            $('#amount1').val(RequestRecord.amounT1);
+            $('#charge2').val(RequestRecord.chargE2);
+            $('#amount2').val(RequestRecord.amounT2);
+            $('#totalAmount').val(RequestRecord.totalrequestamount);
+            $('#bayanNo').val(RequestRecord.bayanno);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function GetAttachmentFile(TransName, TransId) {
+
+        await fetch(`/Files/GetFilesPath?transName=${TransName}&Id=${TransId}`)
+            .then(response => response.json())
+            .then(data4 => {
+                debugger
+                $("#bayanCopy").val(data4[0].fileName);
+
+                var downloadLink = $('<a>', {
+                    text: data4[0].fileName,
+                    href: '#',
+                    click: async function () {
+                        await DownLoadFileProcessed(data4[0].id, data4[0].fileName);
+                    }
+                });
+                $('#bayanCopy').replaceWith(downloadLink);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    async function DownLoadFileProcessed(id, fileName) {
+        event.preventDefault();
+        debugger;
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', `/Files/DownloadFile?id=${id}`, true);
+        xhr.responseType = 'blob';
+
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var blob = xhr.response;
+                var downloadLink = document.createElement('a');
+                downloadLink.href = window.URL.createObjectURL(blob);
+                downloadLink.setAttribute('download', fileName);
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            } else {
+                alert('File Not Found.');
+            }
+        };
+
+
+        xhr.onerror = function () {
+            console.error('Network error occurred while downloading the file.');
+        };
+
+
+        xhr.send();
+
+
+    }
+
     function addRow() {
         const table = document.querySelector('#requestHdrGrid tbody');
         const newRow = document.createElement('tr');
 
         newRow.innerHTML = `
-                    <td><input type="date" name="REQUESTDATE" class="chosen-border form-control rounded-0 date-picker"></td>
-                    <td><input type="text" name="JOBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
-                    <td><input type="text" name="HAWBNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
-                    <td>
-                        <select name="CUSTOMERID" class="status-dropdown chosen-select" style="width: 100px;">
-                            <option value="">Select</option>
-                            ${CustomerData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
-                        </select>
-                    </td>
-                    <td>
-                        <select name="CHARGETYPEID1" class="status-dropdown chosen-select" style="width: 100px;">
-                            <option value="">Select</option>
-                            ${CHARGESData.map(item => `<option value="${item.id}">${item.type}</option>`).join('')}
-                        </select>
-                    </td>
-                    <td><input name="AMOUNT1" type="text" name="reviewerComment" oninput="updateTotalAmount1(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
-                    <td>
-                        <select name="CHARGETYPEID2" class="status-dropdown chosen-select" style="width: 100px;">
-                            <option value="">Select</option>
-                            ${CHARGESData.map(item => `<option value="${item.id}">${item.type}</option>`).join('')}
-                        </select>
-                    </td>
-                    <td><input type="text" name="AMOUNT2" oninput="updateTotalAmount2(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
-                    <td><input type="text" name="TOTALREQUESTAMOUNT" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"disabled></td>
-                    <td><input type="text" name="REMARKS1" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t4TBLength"></td>
-                    <td><input type="text" name="BAYANNO" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
-                    <td><input type="file" name="file" class="chosen-border form-control"></td>
-                `;
+            <td><input type="date" name="REQUESTDATE" class="chosen-border form-control rounded-0 date-picker"></td>
+            <td><input type="text" name="JOBNO" class="chosen-border toUpperCaseString form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
+            <td><input type="text" name="HAWBNO" class="chosen-border form-control toUpperCaseString rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
+            <td>
+                <select name="CUSTOMERID" class="status-dropdown chosen-select" style="width: 100px;">
+                    <option value="">Select</option>
+                    ${CustomerData.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                </select>
+            </td>
+            <td>
+                <select name="CHARGETYPEID1" class="status-dropdown chosen-select" style="width: 100px;">
+                    <option value="">Select</option>
+                    ${CHARGESData.map(item => `<option value="${item.id}">${item.type}</option>`).join('')}
+                </select>
+            </td>
+            <td><input name="AMOUNT1" type="text" name="reviewerComment" oninput="updateTotalAmount1(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+            <td>
+                <select name="CHARGETYPEID2" class="status-dropdown chosen-select" style="width: 100px;">
+                    <option value="">Select</option>
+                    ${CHARGESData.map(item => `<option value="${item.id}">${item.type}</option>`).join('')}
+                </select>
+            </td>
+            <td><input type="text" name="AMOUNT2" oninput="updateTotalAmount2(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+            <td><input type="text" name="TOTALREQUESTAMOUNT" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"disabled></td>
+            <td><input type="text" name="REMARKS1" class="chosen-border form-control toUpperCaseString rounded-0 maxLengthValidation" maxlength="@t4TBLength"></td>
+            <td><input type="text" name="BAYANNO" class="chosen-border toUpperCaseString form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
+            <td><input type="file" name="file" class="chosen-border form-control"></td>
+        `;
 
         table.appendChild(newRow);
         $('.chosen-select').chosen();
@@ -203,6 +392,13 @@
         });
         newRow.querySelectorAll('.amount-field').forEach(field => {
             field.addEventListener('input', updateTotalAmount);
+        });
+        $('.toUpperCaseString').on('input paste', function () {
+            $(this).val($(this).val().toLocaleUpperCase());
+        });
+
+        $('.toUpperCaseString').on('input', function () {
+            $(this).val($(this).val().toLocaleUpperCase());
         });
     }
 
@@ -397,7 +593,6 @@
         var files = fileInput.files;
 
         if (files.length === 0) {
-            console.log("No files selected for upload.");
             return;
         }
 
@@ -410,14 +605,13 @@
 
             try {
                 await $.ajax({
-                    url: "@Url.Action("SaveFile", "Home")",
+                    url: "@Url.Action("SaveFile", "Files")",
                     type: "POST",
                     headers: { 'ProdId': headerId },
                     data: formData,
                     contentType: false,
                     processData: false
                 });
-                console.log("File uploaded successfully:", files[i].name);
             } catch (error) {
                 console.error("Error uploading file:", error);
             }
@@ -525,178 +719,14 @@
             }
         });
     });
-    // rows.forEach(row => {
-    //     let hasValues1 = false;
-    //     const customerSelect1validation = row.querySelector('select[name="CUSTOMERID"]');
-    //     const customerID1validation = customerSelect1?.value || '';
-    //     const requestdatevalidation = row.querySelector('input[name="REQUESTDATE"]')?.value || '';
-    //     const jobnovalidation = row.querySelector('input[name="JOBNO"]')?.value || '';
-    //     const bayannovalidation = row.querySelector('input[name="BAYANNO"]')?.value || '';
-    //     const totalamountvalidation = row.querySelector('input[name="TOTALREQUESTAMOUNT"]')?.value || '';
-    //     const charge11validation = row.querySelector('select[name="CHARGETYPEID"]')?.value;
-    //     const amount11validation = row.querySelector('input[name="AMOUNT1"]')?.value;
 
-    //     if (
-    //         customerID1validation !== '' &&
-    //         requestdatevalidation !== '' &&
-    //         jobnovalidation !== '' &&
-    //         bayannovalidation !== '' &&
-    //         totalamountvalidation !== '' &&
-    //         charge11validation !== '' &&
-    //         amount11validation !== ''
-    //     ) {
-    //         hasValues1 = true;
-    //     }
-
-    //
-    //     if (hasValues1) {
-    //         const customerSelect = row.querySelector('select[name="CUSTOMERID"]');
-    //         const customerID = customerSelect?.value || '';
-    //         const customerName = customerSelect ? customerSelect.options[customerSelect.selectedIndex].text : '';
-    //         const charge1 = row.querySelector('select[name="CHARGETYPEID"]')?.value;
-    //         const amount1 = row.querySelector('input[name="AMOUNT1"]')?.value;
-    //         const remarks1 = row.querySelector('input[name="REMARKS1"]')?.value || '';
-
-    //         const headerdata = {
-    //             REQUESTDATE: row.querySelector('input[name="REQUESTDATE"]')?.value || '',
-    //             JOBNO: row.querySelector('input[name="JOBNO"]')?.value || '',
-    //             CUSTOMERID: customerID,
-    //             CUSTOMERNAME: customerName,
-    //             BAYANNO: row.querySelector('input[name="BAYANNO"]')?.value || '',
-    //             TOTALREQUESTAMOUNT: row.querySelector('input[name="TOTALREQUESTAMOUNT"]')?.value || '',
-    //             CHARGETYPEID1: charge1,
-    //             AMOUNT1: amount1,
-    //             CHARGETYPEID2: charge2,
-    //             AMOUNT2: amount2,
-    //         };
-    //         headers.push(headerdata);
-    //     }
-    // });
-
-    // async function BindRequest(initialData) {
-
-    //     var table = new DataTable('#requestHdrGrid', {
-    //         data: initialData,
-    //         columns: [
-    //             {
-    //                 title: 'Date',
-    //                 data: null,
-    //                 render: function (data, type, row) {
-    //                     return '<input type="date" name="reviewerComment" class="form-control rounded-0" />';
-    //                 }
-    //             },
-    //             {
-    //                 title: 'Job No', data: null,
-    //                 render: function (data, type, row) {
-    //                     return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
-    //                 }
-    //             },
-    //             {
-    //                 title: 'HAWB', data: null,
-    //                 render: function (data, type, row) {
-    //                     return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
-    //                 }
-    //             },
-    //             {
-    //                 title: 'Customer', data: null,
-    //                 render: function (data, type, row) {
-    //                     var opt = '<select class="status-dropdown chosen-select" style="width: 100px;"onchange="updateSpaceDropdown(this)">';
-    //                     var tmp = CustomerData;
-    //                     opt += '<option value="">Select</option>';
-    //                     tmp.forEach(item => {
-    //                         opt += `<option value="${item.id}">${item.name}</option>`;
-    //                     });
-    //                     opt += '</select>';
-    //                     return opt;
-    //                 }
-    //             },
-    //             {
-    //                 title: 'Currency', data: null,
-    //                 render: function (data, type, row) {
-    //                     var opt = '<select class="status-dropdown chosen-select" style="width: 100px;"onchange="updateSpaceDropdown(this)">';
-    //                     var tmp = CurrencyData;
-    //                     opt += '<option value="">Select</option>';
-    //                     tmp.forEach(item => {
-    //                         opt += `<option value="${item.id}">${item.name}</option>`;
-    //                     });
-    //                     opt += '</select>';
-    //                     return opt;
-    //                 }
-    //             },
-    //             {
-    //                 title: 'Charges 1', data: null,
-    //                 render: function (data, type, row) {
-    //                     var opt = '<select class="status-dropdown chosen-select" style="width: 100px;"onchange="updateSpaceDropdown(this)">';
-    //                     var tmp = CHARGESData;
-    //                     opt += '<option value="">Select</option>';
-    //                     tmp.forEach(item => {
-    //                         opt += `<option value="${item.id}">${item.name}</option>`;
-    //                     });
-    //                     opt += '</select>';
-    //                     return opt;
-    //                 }
-    //             },
-    //             {
-    //                 title: 'Amount 1', data: null,
-    //                 render: function (data, type, row) {
-    //                     return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
-    //                 }
-    //             },
-    //             {
-    //                 title: 'Charges 2', data: null,
-    //                 render: function (data, type, row) {
-    //                     var opt = '<select class="status-dropdown chosen-select" style="width: 100px;"onchange="updateSpaceDropdown(this)">';
-    //                     var tmp = CHARGESData;
-    //                     opt += '<option value="">Select</option>';
-    //                     tmp.forEach(item => {
-    //                         opt += `<option value="${item.id}">${item.name}</option>`;
-    //                     });
-    //                     opt += '</select>';
-    //                     return opt;
-    //                 }
-    //             },
-    //             {
-    //                 title: 'Amount 2', data: null,
-    //                 render: function (data, type, row) {
-    //                     return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
-    //                 }
-    //             },
-    //             {
-    //                 title: 'Total Amount', data: null,
-    //                 render: function (data, type, row) {
-    //                     return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
-    //                 }
-    //             },
-    //             {
-    //                 title: 'Bayan No',
-    //                 orderable: false,
-    //                 data: null,
-    //                 render: function (data, type, row) {
-    //                     return '<input type="text" name="reviewerComment" class="form-control rounded-0 maxLengthValidation" maxlength="@t2TBLength" />';
-    //                 }
-    //             },
-    //             {
-    //                 title: 'Upload Bayan Copy',
-    //                 orderable: false,
-    //                 data: null,
-    //                 render: function (data, type, row) {
-    //                     return '<input type="file" name="file' + row.id + '" data-id="' + row.id + '">';
-    //                 }
-    //             },
-    //         ],
-    //         lengthChange: true,
-    //         autoWidth: false,
-    //         paging: true,
-    //         scrollY: 300,
-    //         pagingType: 'full_numbers',
-    //         search: true,
-    //         destroy: true
-    //     })
-    // }
-    // function addRow() {
-    //     var newRow = {};
-    //     var table = $('#requestHdrGrid').DataTable();
-    //     table.row.add(newRow).draw();
-    //     $('.chosen-select').chosen();
-    // }
+    function Flatpicker(defaultDateValue) {
+        flatpickr("#requestdate", {
+            dateFormat: "@dateFormatForbinding", // Set the desired format for input (YYYY-MM-DD)
+            altInput: true,
+            altFormat: "@dateFormat", // Set the format for the alternative input display (14-Jun-2024)
+            maxDate: new Date(),
+            defaultDate: defaultDateValue // Ensure defaultDate is set to 'YYYY-MM-DD' format
+        });
+    }
 </script>

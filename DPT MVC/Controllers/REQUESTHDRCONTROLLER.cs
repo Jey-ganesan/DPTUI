@@ -109,11 +109,11 @@ namespace DPT.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetAllRequestToview()
+        public async Task<JsonResult> GetRequestToviewByid(int Hdrid)
         {
-            var userId = HttpContext.Session.GetString("UserId");
+            //var userId = HttpContext.Session.GetString("UserId");
             var client = _httpClientFactory.CreateClient("DPTClient");
-            var response = await client.GetAsync("/api/REQUESTHDR/GetAllRequestToview?userId=" + userId);
+            var response = await client.GetAsync("/api/REQUESTHDR/GetAllRequestToview?Hdrid=" + Hdrid);
             var content = await response.Content.ReadAsStringAsync();
             var data = System.Text.Json.JsonSerializer.Deserialize<object>(content);
 
