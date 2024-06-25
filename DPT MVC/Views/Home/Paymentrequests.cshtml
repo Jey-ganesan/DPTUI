@@ -413,9 +413,15 @@
             const amount1 = parseFloat(amount1Input.value) || 0;
             const totalAmount = amount1;
             totalAmountInput.value = totalAmount.toFixed(2);
-        } else {
-            console.error("One or more input fields not found.");
         }
+
+        var regex = /^\d*\.?\d{0,2}$/;
+
+        // If the value doesn't match the regex, remove the last entered character
+        if (!regex.test(amount1Input.value)) {
+            amount1Input.value = amount1Input.value.slice(0, -1);
+        }
+
         inputField.value = inputField.value.replace(/[^0-9.]/g, ''); // Allow digits and decimal points
         if ((inputField.value.match(/\./g) || []).length > 1) {
             inputField.value = inputField.value.slice(0, -1); // Remove the extra decimal point if more than one exists
@@ -436,6 +442,13 @@
             totalAmountInput.value = totalAmount.toFixed(2);
         } else {
             console.error("One or more input fields not found.");
+        }
+
+        var regex = /^\d*\.?\d{0,2}$/;
+
+        // If the value doesn't match the regex, remove the last entered character
+        if (!regex.test(amount2Input.value)) {
+            amount2Input.value = amount2Input.value.slice(0, -1);
         }
         inputField.value = inputField.value.replace(/[^0-9.]/g, ''); // Allow digits and decimal points
         if ((inputField.value.match(/\./g) || []).length > 1) {
@@ -591,7 +604,7 @@
 
     async function loadForm() {
         alert('Record created successfully')
-        loadPageWithParams('GridMastersParam', '', '', '15')
+        loadPageWithParams('GridMastersParam', '', '', '12')
     }
 
     async function uploadFile(headerId, row) {
