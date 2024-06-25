@@ -269,9 +269,30 @@
 </div>
 
 <script type="text/javascript">
+
     $(document).ready(async function () {
         debugger
+        var customerDDData = await $.ajax({
+            url: '@Url.Action("GetCustomers", "Customers")',
+            type: 'Get'
+        });
+        SelectParentDropdown(customerDDData);
+        $('#parentCustomerId').chosen();
         CountryDropdownData();
+        GetCpCValues();
+        function SelectParentDropdown(data) {
+            //$('#parentCustomerId').select2();
+            const dropdown = document.getElementById("parentCustomerId");
+
+            data.forEach(customer => {
+                const option = document.createElement("option");
+                option.value = customer.id;
+                option.text = customer.name + ' - [' + customer.shortName + ']'
+                dropdown.appendChild(option);
+            });
+
+            $('#parentCustomerId').trigger('chosen:updated');
+        }
         if ('@mode' == 'Edit') {
             await BindCutomerData('@ViewBag.paramID');
         }
@@ -343,7 +364,8 @@
             $('#parentCustomerId').val(data.parentCustomerId)
             $('#parentCustomerId').trigger('chosen:updated');
             $('#cpc').trigger('chosen:updated');
-            $('#countryName').val(data.countryName);
+            $('#countryId').trigger('chosen:updated');
+
 
 
         } catch (error) {
@@ -459,4 +481,26 @@
         $('#countryId').chosen();
 
     }
+    async function GetCpCValues() {
+        debugger
+        var countryData = await $.ajax({
+            url: '@Url.Action("GetActiveRequestorFromUsers", "Customers")',
+            type: 'Get'
+        });
+        await GetAllCpcValues(countryData);
+    }
+    function GetAllCpcValues(countryData) {
+        const dropdown = document.getElementById("cpc");
+
+        countryData.forEach(customer => {
+            const option = document.createElement("option");
+            option.value = customer.id;
+            option.text = customer.displayName;
+            dropdown.appendChild(option);
+
+        });
+        $('#cpc').chosen();
+
+    }
+   
 </script>

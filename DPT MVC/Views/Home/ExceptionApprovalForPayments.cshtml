@@ -101,13 +101,13 @@
                 data: data,
                 columns: [
                     {
-                        title: 'PAYMENT REQUEST NO',
+                        title: 'PAYMENT PROCESSING NO',
                         data: 'tranNo',
                         render: (data, type, row) => {
                             return '<input type="text" id="rowId" value="' + row.id + '" hidden /><a href="#"">' + data + '</a>';
                         }
                     },
-                    { title: 'PAYMENT REQUEST DATE', data: 'tranDate' },
+                    { title: 'PAYMENT DATE', data: 'tranDate' },
                     { title: 'PAYMENT TOTAL AMOUNT', data: "receiptAmount" },
                     { title: 'REQUEST NO', data: "requestNo" },
                     { title: 'REQUEST DATE', data: 'requestDate' },
@@ -143,7 +143,7 @@
                     {
                         targets: 1,
                         type: 'moment',
-                        width: '75px',
+                        width: '110px',
                         render: function (data, type, row, meta) {
                             return moment(data).format('DD-MMM-yyyy')
                         }
@@ -151,7 +151,7 @@
                     {
                         targets: 4,
                         type: 'moment',
-                        width: '75px',
+                        width: '110px',
                         render: function (data, type, row, meta) {
                             return moment(data).format('DD-MMM-yyyy')
                         }
