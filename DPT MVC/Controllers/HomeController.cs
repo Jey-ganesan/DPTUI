@@ -238,7 +238,7 @@ namespace DPT.MVC.Controllers
                     param += $"&status={Uri.EscapeDataString(status)}";
                 }
                 var client = _httpClientFactory.CreateClient("DPTClient");
-                var response = await client.GetAsync("/api/masters/gridmaster?id=" + id + "&param1=" + param1);
+                var response = await client.GetAsync("/api/masters/gridmaster?id=" + id + "&param1=" + param1 + "" + param);
                 var content = await response.Content.ReadAsStringAsync();
                 var res = System.Text.Json.JsonSerializer.Deserialize<List<object>>(content);
                 return Json(res);

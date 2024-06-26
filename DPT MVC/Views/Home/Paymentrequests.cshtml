@@ -70,7 +70,7 @@
                         <h4 class="text-lg-start">
                             @if (mode == "View")
                             {
-                                @:VIEW PAYMENT DETAILS
+                                @:VIEW PAYMENT REQUEST DETAILS
                             }
                             else
                             {
@@ -212,7 +212,7 @@
                                 @:<button id="addRowBtn" class="btn btn-primary rounded-0 me-2">Add More Rows</button>
                                 @:<button onclick="SubmitrequestedRecord()" class="btn btn-primary rounded-0 me-2">Submit</button>
                             }
-                            <a class="btn btn-warning rounded-0 me-2" href="#" onclick="loadPageWithParams('GridMastersParam','','',@ViewBag.pageId)">Cancel</a>
+                            <a class="btn btn-warning rounded-0 me-2" href="#" onclick="loadPageWithParams('GridMastersParam','','',@ViewBag.pageId)">Back</a>
                         </div>
                     </div>
                 </div>
