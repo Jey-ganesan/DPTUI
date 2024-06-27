@@ -367,17 +367,22 @@
             <td>
                 <select name="CHARGETYPEID1" class="status-dropdown chosen-select" style="width: 100px;">
                     <option value="">Select</option>
-                    ${CHARGESData.map(item => `<option value="${item.id}">${item.type}</option>`).join('')}
+                        ${CHARGESData.map(item => `<option value="${item.id}">${item.name} - [${item.type}]</option>`).join('')}
                 </select>
             </td>
             <td><input name="AMOUNT1" type="text" name="reviewerComment" oninput="updateTotalAmount1(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
             <td>
                 <select name="CHARGETYPEID2" class="status-dropdown chosen-select" style="width: 100px;">
                     <option value="">Select</option>
-                    ${CHARGESData.map(item => `<option value="${item.id}">${item.type}</option>`).join('')}
+                                ${CHARGESData.map(item => {
+            if (item.id === 3) {
+                return `<option value="${item.id}" selected>${item.name} - [${item.type}]</option>`;
+            }
+            return '';
+            }).join('')}
                 </select>
             </td>
-            <td><input type="text" name="AMOUNT2" oninput="updateTotalAmount2(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
+                <td><input type="text" name="AMOUNT2" value="00.00" oninput="updateTotalAmount2(this);" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"></td>
             <td><input type="text" name="TOTALREQUESTAMOUNT" class="chosen-border form-control rounded-0 maxLengthValidation" maxlength="@t5TBLength"disabled></td>
             <td><input type="text" name="REMARKS1" class="chosen-border form-control toUpperCaseString rounded-0 maxLengthValidation" maxlength="@t4TBLength"></td>
             <td><input type="text" name="BAYANNO" class="chosen-border toUpperCaseString form-control rounded-0 maxLengthValidation" maxlength="@t1TBLength"></td>
