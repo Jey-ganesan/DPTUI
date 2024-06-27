@@ -270,7 +270,7 @@
         var fromDate = $("#dateRange").data("daterangepicker").startDate.format('YYYY-MM-DD');
         var toDate = $("#dateRange").data("daterangepicker").endDate.format('YYYY-MM-DD');
 
-        const queryParams = `id=@pageId&from=${encodeURIComponent(fromDate)}&to=${encodeURIComponent(toDate)}&status=${encodeURIComponent(selectedValue)}`;
+        const queryParams = `id=@pageId&from=${encodeURIComponent(fromDate)}&to=${encodeURIComponent(toDate)}&status=${encodeURIComponent(selectedValue)}&param1=@userId`;
         const url = `/Home/GetGridData?${queryParams}`;
 
         fetch(url)
